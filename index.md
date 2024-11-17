@@ -549,7 +549,7 @@ A technique to transform any static web server into a simulated backend, capable
 
 ---
 
-&copy; Ateş Göral &middot; A GitHub Pages site running on Jekyll: [github.com/atesgoral/magnetiq](https://github.com/atesgoral/magnetiq)
+&copy; Ateş Göral &middot; A GitHub Pages site running on Jekyll: [github.com/atesgoral/ates.dev](https://github.com/atesgoral/ates.dev)
 {: .footer .meta}
 
 <script src="/assets/js/prog.js?bust=1"></script>

@@ -1,4 +1,4 @@
-name: magnetiq
+name: ates.dev
 type: ruby
 up:
   - ruby: 2.7.5
