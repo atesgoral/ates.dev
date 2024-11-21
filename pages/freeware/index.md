@@ -18,7 +18,7 @@ Download [acb2xml20.zip](https://github.com/atesgoral/acb2xml/releases/download/
 
 If you don't already know what color books are, there's the **Custom Colors** dialog which appears when you click the **Custom** button on the **Color Picker** dialog. There, you can pick colors from a variety of color books which represent standard color catalogs like Pantone, Toyo, Trumatch, etc. The color book data is kept in files under the **Presets/Color Books** folder of your Photoshop installation. On Windows, they have the **.acb** extension.
 
-<p class="center">
+<p class="center zoomable">
   <img src="i/custom_colors.jpg" alt="Custom Colors Dialog">
 </p>
 
@@ -86,7 +86,7 @@ This is a programming experiment that dates back to 2002. Having played around w
 
 The **About** tab has an **Check for update** button which takes you back to this site to tell you that you're using the most recent version of Burrito (since I currently don't have any intentions of releasing updates).
 
-<p class="center">
+<p class="center zoomable">
   <img src="i/burrito_idle.jpg" alt="About Tab">
 </p>
 
@@ -94,25 +94,25 @@ In the **Options** tab, you can determine how you'll be passing the POP3 usernam
 
 You can also configure how filenames for individual messages are to be composed. The default is to use the name of the sender, followed by a dash, followed by the message subject. The default file extension is ".eml". After copying files to your local disk, you should be able to simply double click to view them in Outlook Express. Use ".msg" etc. to match whatever e-mail client you're actually using.
 
-<p class="center">
+<p class="center zoomable">
   <img src="i/burrito_options.jpg" alt="Options Tab">
 </p>
 
 By default, Burrito listens on port 21, on all IP addresses. The **Security** tab allows you to tweak the FTP server listen settings.
 
-<p class="center">
+<p class="center zoomable">
   <img src="i/burrito_security.jpg" alt="Security Tab">
 </p>
 
 Here's how a typical FTP client configuration looks like (I use [Total Commander](https://www.ghisler.com/)):
 
-<p class="center">
+<p class="center zoomable">
   <img src="i/burrito_ftpsettings.jpg" alt="FTP Client Settings">
 </p>
 
 And here's how your e-mail messages appear as files in your FTP client:
 
-<p class="center">
+<p class="center zoomable">
   <img src="i/burrito_ftpaction.jpg" alt="FTP Client in Action">
 </p>
 
@@ -130,7 +130,7 @@ E-Res-Q (pronounced "ee rescue") is a very simple, portable POP3 mail reader. It
 
 Download [eresq13.zip](https://github.com/atesgoral/e-res-q/releases/download/v1.3/eresq13.zip)
 
-<p class="center">
+<p class="center zoomable">
   <img src="i/e-res-q-ss.jpg" alt="E-Res-Q Main Window">
 </p>
 
@@ -142,7 +142,7 @@ Win-Res-Q (pronounced "win rescue") is a simple utility that restores (shows) hi
 
 Download [winresq10.zip](https://github.com/atesgoral/win-res-q/releases/download/v1.0/winresq10.zip)
 
-<p class="center">
+<p class="center zoomable">
   <img src="i/win-res-q-ss.gif" alt="Win-Res-Q Main Window">
 </p>
 

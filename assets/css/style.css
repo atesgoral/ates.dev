@@ -130,10 +130,13 @@ footer {
   width: 240px;
   height: 135px;
   margin-right: 16px; /* Get it to 256x144, in 24px vertical rhythm */
+}
+
+.zoomable > img {
   cursor: zoom-in;
 }
 
-.image-240x135 > img.zoomed {
+.zoomable > img.zoomed {
   position: fixed;
   top: 0;
   left: 0;
@@ -421,15 +424,15 @@ html {
     text-shadow: 0 0 5px rgba(255, 164, 132, 0.5);
   }
 
-  .image-240x135 > img {
+  .zoomable > img {
     transition: transform 0.3s ease-in-out;
   }
 
-  .image-240x135 > img.zoomed {
+  .zoomable > img.zoomed {
     transition: none;
   }
 
-  .image-240x135 > img:not(.zoomed):hover {
+  .zoomable > img:not(.zoomed):hover {
     box-shadow: 0 0 10px 2px rgba(255, 164, 132, 0.5);
     transform: scale(1.05);
   }

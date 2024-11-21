@@ -45,7 +45,7 @@ function initializeZoom() {
     }
   }
 
-  const imageEls = document.querySelectorAll(".image-240x135 > img");
+  const imageEls = document.querySelectorAll(".zoomable > img");
 
   for (const imageEl of imageEls) {
     imageEl.addEventListener("click", () => toggleImageZoom(imageEl));
@@ -200,7 +200,7 @@ function initializeThemeToggle() {
   toggle.setAttribute("title", "Toggle theme");
 
   toggleLabel.appendChild(toggle);
-  document.querySelector(".markdown-body").appendChild(toggleLabel);
+  document.querySelector("main").appendChild(toggleLabel);
 
   function applyPrefs() {
     const themeOverride = localStorage.getItem("theme-override");

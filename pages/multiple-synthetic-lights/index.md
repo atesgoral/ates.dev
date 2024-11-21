@@ -21,19 +21,19 @@ This was originally done using [Processing](https://processing.org/), then porte
 
 The images I've used are below. They're taken from [this article about lighting direction](https://web.archive.org/web/20071207230006/www.megapixel.net/html/articles/article-lightdir.php).
 
-<p class="center">
+<p class="center zoomable">
   <img src="i/lighting-11.jpg" alt="Ambient light">
 </p>
 
-<p class="center">
+<p class="center zoomable">
   <img src="i/lighting-09.jpg" alt="Light coming from the left">
 </p>
 
-<p class="center">
+<p class="center zoomable">
   <img src="i/lighting-10.jpg" alt="Light coming from the top">
 </p>
 
-<p class="center">
+<p class="center zoomable">
   <img src="i/lighting-14.jpg" alt="Light coming from the right">
 </p>
 

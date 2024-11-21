@@ -5,7 +5,7 @@ title: Adobe Color Book File Format Specification
 
 Adobe Photoshop's **Color Picker** has a **Custom Colors** dialog that offers a wide variety of colors from several industry-standard color catalogs such as ANPA, DIC, Focoltone and Pantone.
 
-<p class="center">
+<p class="center zoomable">
   <img src="i/custom_colors.jpg" alt="Custom Colors Dialog">
 </p>
 

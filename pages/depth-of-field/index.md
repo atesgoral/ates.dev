@@ -23,11 +23,11 @@ This was originally done using [Processing](https://processing.org/), then porte
 
 The images I've used are below. They're taken from the original article.
 
-<p class="center">
+<p class="center zoomable">
   <img src="i/far_in_focus.gif" alt="Far in focus">
 </p>
 
-<p class="center">
+<p class="center zoomable">
   <img src="i/near_in_focus.gif" alt="Near in focus">
 </p>
 
