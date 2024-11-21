@@ -2,6 +2,8 @@
 
 <div class="markdown-body">
 
+<h1><a href="/">ates.dev</a></h1>
+
 <p class="avatar">
   <img src="i/profile-picture.jpg" alt="Profile picture" title="Side shot of my head">
 </p>
