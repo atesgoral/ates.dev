@@ -1,4 +1,5 @@
 ---
+layout: base.html
 title: Adobe Color Book File Format Specification
 ---
 
@@ -6,8 +7,9 @@ title: Adobe Color Book File Format Specification
 
 Adobe Photoshop's **Color Picker** has a **Custom Colors** dialog that offers a wide variety of colors from several industry-standard color catalogs such as ANPA, DIC, Focoltone and Pantone.
 
-![Custom Colors Dialog](i/custom_colors.jpg)
-{: .center }
+<p class="center">
+  <img src="i/custom_colors.jpg" alt="Custom Colors Dialog">
+</p>
 
 The color catalog data comes from **Adobe Color Book** files. These file have the **.ACB** file extension on Windows and reside inside the ".../Presets/Color Books" folder in a typical installation.
 
@@ -19,7 +21,7 @@ There are three main data types used throughout a color book file. 16-bit and 32
 
 Integers are in [big-endian](http://en.wikipedia.org/wiki/Endianness) arrangement, so make sure you swap the bytes as necessary when reading/writing. I don't know whether they should be treated as signed or unsigned. Signed has worked for me.
 
-Strings are like [Pascal strings](http://en.wikipedia.org/wiki/String_(computer_science)), starting with a 32-bit integer that gives the string length, followed by a sequence of UTF-16 characters (as kindly pointed out by [Spike Grobstein](http://spike.grobste.in/). Strings are not null-terminated therefore the string length gives the exact length of the string (without the length field). The UTF-16 characters are in big-endian order. Again, some byte swapping may be necessary.
+Strings are like [Pascal strings](<http://en.wikipedia.org/wiki/String_(computer_science)>), starting with a 32-bit integer that gives the string length, followed by a sequence of UTF-16 characters (as kindly pointed out by [Spike Grobstein](http://spike.grobste.in/). Strings are not null-terminated therefore the string length gives the exact length of the string (without the length field). The UTF-16 characters are in big-endian order. Again, some byte swapping may be necessary.
 
 ### Header
 
@@ -34,6 +36,7 @@ The file starts with a header that contains general information about the color 
 This is a 16-bit integer denoting the file version. Photoshop 7.0 only opens files of version 1.
 
 #### Book Identifier
+
 A 16-bit integer. This is probably a unique identifier assigned by Adobe to each official color book. The most significant byte always seems to be `0x0b`.
 
 #### Book Title
@@ -68,22 +71,22 @@ The page selector in Photoshop's color picker display a sample color from each p
 
 A 16-bit integer that specifies the color space/library. Values that Photoshop 7.0 recognizes are:
 
-* 0 -- RGB
-* 2 -- CMYK
-* 7 -- Lab
+- 0 -- RGB
+- 2 -- CMYK
+- 7 -- Lab
 
 The rest of the values can be found in the official "Adobe Photoshop 6.0 File Formats Specification", but they apparently don't work for color books. Note that the 6.0 specification has no information on color book files. The full range of color space/library identifier values are:
 
-* 0 -- RGB
-* 1 -- HSB (HSV)
-* 2 -- CMYK
-* 3 -- Pantone
-* 4 -- Focoltone
-* 5 -- Trumatch
-* 6 -- Toyo
-* 7 -- Lab (CIELAB D50)
-* 8 -- Grayscale
-* 10 -- HKS
+- 0 -- RGB
+- 1 -- HSB (HSV)
+- 2 -- CMYK
+- 3 -- Pantone
+- 4 -- Focoltone
+- 5 -- Trumatch
+- 6 -- Toyo
+- 7 -- Lab (CIELAB D50)
+- 8 -- Grayscale
+- 10 -- HKS
 
 ### Color Records
 
@@ -206,11 +209,11 @@ Next, the length of the title string is reported to be 0x23 (35) wide characters
 
 The following 0x012c gives us the number of colors in this book (300). There will be a maximum of 6 colors per page with a page offset of 5, which in turn means that the right-hand page selector in Photoshop's color picker will use the last color of each page. The color space is 7 (Lab).
 
-The color records start here. The first color name is 4 characters long: "71-1". This should be concatenated with the prefix and suffix we saw earlier to produce the full color name: "ANPA 71-1 AdPro". The 6-character short name for this color is: " 71-1D". Notice the padding space at the left. The lightness component reads 0xf8 (248). This rounds down to a percentage of 248 / 255 * 100 = 97. The a and b chrominance values are both 0x7b (123). Subtracting 128 gives -5 for both components.
+The color records start here. The first color name is 4 characters long: "71-1". This should be concatenated with the prefix and suffix we saw earlier to produce the full color name: "ANPA 71-1 AdPro". The 6-character short name for this color is: " 71-1D". Notice the padding space at the left. The lightness component reads 0xf8 (248). This rounds down to a percentage of 248 / 255 \* 100 = 97. The a and b chrominance values are both 0x7b (123). Subtracting 128 gives -5 for both components.
 
 Immediately after this, the second color record starts. The name length is again 4, etc...
 
 ### See Also
 
-* [Adobe Photoshop Color File Format](http://www.nomodes.com/aco.html) by [Larry Tesler](http://www.nomodes.com/)
-* [ACB2XML](/pages/freeware#acb2xml) -- Tool for exporting color book data as XML
+- [Adobe Photoshop Color File Format](http://www.nomodes.com/aco.html) by [Larry Tesler](http://www.nomodes.com/)
+- [ACB2XML](/pages/freeware#acb2xml) -- Tool for exporting color book data as XML

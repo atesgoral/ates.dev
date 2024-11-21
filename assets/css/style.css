@@ -118,7 +118,9 @@ a:active {
 
 /* Layout */
 
-.markdown-body {
+header,
+main,
+footer {
   max-width: 50rem;
   margin: auto;
 }

@@ -1,4 +1,5 @@
 ---
+layout: base.html
 title: Morphing Depth of Field
 ---
 
@@ -24,11 +25,13 @@ This was originally done using [Processing](https://processing.org/), then porte
 
 The images I've used are below. They're taken from the original article.
 
-![Far in focus](i/far_in_focus.gif)
-{: .center}
+<p class="center">
+  <img src="i/far_in_focus.gif" alt="Far in focus">
+</p>
 
-![Near in focus](i/near_in_focus.gif)
-{: .center}
+<p class="center">
+  <img src="i/near_in_focus.gif" alt="Near in focus">
+</p>
 
 <script src="https://cdn.jsdelivr.net/npm/p5@1.7.0/lib/p5.js"></script>
 <script src="sketch.js"></script>

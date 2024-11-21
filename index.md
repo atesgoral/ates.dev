@@ -1,8 +1,7 @@
-<link rel="stylesheet" href="/assets/css/style.css">
-
-<div class="markdown-body">
-
-<h1><a href="/">ates.dev</a></h1>
+---
+layout: base.html
+title: Home
+---
 
 <p class="avatar">
   <img src="i/profile-picture.jpg" alt="Profile picture" title="Side shot of my head">
@@ -642,14 +641,3 @@ A talk about my [Doorbell Ringer project](#doorbell-ringeran-intentionally-compl
 </p>
 
 A technique to transform any static web server into a simulated backend, capable of emulating various HTTP methods, generating different HTTP response codes, and mimicking latency.
-
----
-
-<p class="footer meta">
-  &copy; Ateş Göral &middot; A GitHub Pages site running on Eleventy:
-  <a href="https://github.com/atesgoral/ates.dev">github.com/atesgoral/ates.dev</a>
-</p>
-
-</div>
-
-<script src="/assets/js/prog.js?bust=1"></script>
