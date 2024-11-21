@@ -1,9 +1,7 @@
 ---
-layout: base.html
+layout: layouts/page
 title: Freeware
 ---
-
-## Freeware
 
 There are a couple of freeware tools that I wrote over the years. Some of them are outdated/obsolete, but here they are anyway:
 
