@@ -1,5 +1,10 @@
-![Profile picture](i/profile-picture.jpg "Side shot of my head")
-{: .avatar}
+<link rel="stylesheet" href="/assets/css/style.css">
+
+<div class="markdown-body">
+
+<p class="avatar">
+  <img src="i/profile-picture.jpg" alt="Profile picture" title="Side shot of my head">
+</p>
 
 Hi! I'm **Ateş Göral**. I enjoy writing code, tinkering with graphics, experimenting with electronics, and executing ambitious DIY projects.
 
@@ -9,8 +14,12 @@ I'm currently working at [Shopify](https://www.shopify.com) on AI integration ([
 
 Past: [Orium](https://orium.com/) (Myplanet), [Genesys](https://www.genesys.com/) (Alcatel-Lucent, VoiceGenie), PhonoClick, Turk Nokta Net. And a whole bunch of odd jobs.
 
-Jump to: [Projects](#projects) &middot; [Blog Posts](#blog-posts) &middot; [Talks](#talks)
-{: .meta}
+<p class="meta">
+  Jump to:
+  <a href="#projects">Projects</a> &middot;
+  <a href="#blog-posts">Blog Posts</a> &middot;
+  <a href="#talks">Talks</a>
+</p>
 
 ## Elsewhere
 
@@ -27,45 +36,67 @@ Jump to: [Projects](#projects) &middot; [Blog Posts](#blog-posts) &middot; [Talk
 
 Finished (mostly personal) projects in reverse chronological order.
 
-Jump to: [2021](#2021) &middot; [2020](#2020) &middot; [2018](#2018) &middot; [2017](#2017) &middot; [2016](#2016) &middot; [2015](#2015) &middot; [2013](#2013) &middot; [2009](#2009) &middot; [2005](#2005) &middot; [2003](#2003) &middot; [2002](#2002) &middot; [2000](#2000) &middot; [1998](#1998) &middot; [1992](#1992) &middot; [Blog Posts](#blog-posts) &middot; [Talks](#talks)
-{: .meta}
+<p class="meta">
+  Jump to:
+  <a href="#2021">2021</a> &middot;
+  <a href="#2020">2020</a> &middot;
+  <a href="#2018">2018</a> &middot;
+  <a href="#2017">2017</a> &middot;
+  <a href="#2016">2016</a> &middot;
+  <a href="#2015">2015</a> &middot;
+  <a href="#2013">2013</a> &middot;
+  <a href="#2009">2009</a> &middot;
+  <a href="#2005">2005</a> &middot;
+  <a href="#2003">2003</a> &middot;
+  <a href="#2002">2002</a> &middot;
+  <a href="#2000">2000</a> &middot;
+  <a href="#1998">1998</a> &middot;
+  <a href="#1992">1992</a> &middot;
+  <a href="#blog-posts">Blog Posts</a> &middot;
+  <a href="#talks">Talks</a>
+</p>
 
 ---
 
-{: .year}
-
-### 2023
+<h3 class="year">2023</h3>
 
 #### event_stream_parser gem
 
-[event_stream_parser](https://rubygems.org/gems/event_stream_parser)
-{: .meta}
+<p class="meta">
+  <a href="https://rubygems.org/gems/event_stream_parser">event_stream_parser</a>
+</p>
 
 Noticing a lack of a spec-compliant Ruby gem for parsing event streams (aka Server-Sent Events), I published this gem as part of my AI plumbing job at Shopify.
 
 #### IKEA OBEGRÄNSAD Hack
 
-![IKEA OBEGRÄNSAD Hack](i/obegransad-hack.jpg "Collage showing electronics, a Mario scene, and a metaballs scene")
-{: .image-240x135}
+<p class="image-240x135">
+  <img src="i/obegransad-hack.jpg" alt="IKEA OBEGRÄNSAD Hack" title="Collage showing electronics, a Mario
+scene, and a metaballs scene">
+</p>
 
-[github.com/atesgoral/obegraensad-hack](https://github.com/atesgoral/obegraensad-hack) &middot; 2023
-{: .meta}
+<p class="meta">
+  <a href="https://github.com/atesgoral/obegraensad-hack">github.com/atesgoral/obegraensad-hack</a> &middot;
+  2023
+</p>
 
 I hacked an IKEA OBEGRÄNSAD LED wall lamp to replace its graphics chip with an ESP32 and wrote some C++, JavaScript and WebAssembly to run my own graphics on it.
 
 ---
 
-{: .year}
-
-### 2021
+<h3 class="year">2021</h3>
 
 #### Airgap—True Analog Glitching by Transmitting Pixel Data Through Air
 
-![Airgap](i/airgap.jpg "Photo of a laptop screen with a piece of aluminum over the camera, showing an image being transmitted through reflection")
-{: .image-240x135}
+<p class="image-240x135">
+  <img src="i/airgap.jpg" alt="Airgap" title="Photo of a laptop screen with a piece of aluminum over the
+camera, showing an image being transmitted through reflection">
+</p>
 
-[atesgoral.github.io/airgap](https://atesgoral.github.io/airgap/) &middot; 2021
-{: .meta}
+<p class="meta">
+  <a href="http://atesgoral.github.io/hrm-solutions/">http://atesgoral.github.io/hrm-solutions</a> &middot;
+  2015
+</p>
 
 Can we really get true analog/chaotic glitching with an entirely digital device? Using the screen as a signal source and the camera as a receiver, I experimented with transmitting a digital signal through the air, bouncing off random surfaces.
 
@@ -73,17 +104,20 @@ A source image is scanned pixel-by-pixel and the pixel value is drawn as a large
 
 ---
 
-{: .year}
-
-### 2020
+<h3 class="year">2020</h3>
 
 #### IKEA FREKVENS Hack
 
-![IKEA FREKVENS Hack](i/frekvens-hack.jpg "Collage showing the original cube, electronics, and some scenes")
-{: .image-240x135}
+<p class="image-240x135">
+  <img src="i/frekvens-hack.jpg" alt="IKEA FREKVENS Hack" title="Collage showing the original cube,
+electronics, and some scenes">
+</p>
 
-[hackaday.io/project/171034-frekvens-fjrrkontroll](https://hackaday.io/project/171034-frekvens-fjrrkontroll) &middot; [github.com/atesgoral/node-omega-frekvens](https://github.com/atesgoral/node-omega-frekvens) &middot; 2020
-{: .meta}
+<p class="meta">
+  <a href="https://hackaday.io/project/171034-frekvens-fjrrkontroll">hackaday.io/project/171034-frekvens-fjrrkontroll</a> &middot;
+  <a href="https://github.com/atesgoral/node-omega-frekvens">github.com/atesgoral/node-omega-frekvens</a> &middot;
+  2020
+</p>
 
 I hacked an IKEA FREKVENS LED cube lamp to replace its graphics chip with an Onion Omega 2+ and wrote some C++, JavaScript to run my own graphics on it.
 
@@ -91,43 +125,48 @@ I hacked an IKEA FREKVENS LED cube lamp to replace its graphics chip with an Oni
 
 #### Binary Versioning
 
-![Binary Versioning](i/binver.png "Screenshot of binver.org")
-{: .image-240x135}
+<p class="image-240x135">
+  <img src="i/binver.png" alt="Binary Versioning" title="Screenshot of binver.org">
+</p>
 
-[binver.org](https://binver.org/) &middot; 2020
-{: .meta}
+<p class="meta">
+  <a href="https://binver.org/">binver.org</a> &middot;
+  2020
+</p>
 
 A humourous spin on [Semantic Versioning](https://semver.org/). I apparently had too much free time on my hands (and disposable income to buy a new domain).
 
 ---
 
-{: .year}
-
-### 2018
+<h3 class="year">2018</h3>
 
 #### MIDNIGHT TACTIX 3000
 
-![Binary Versioning](i/midnight-tactix-3000.jpg "Screenshot of the game")
-{: .image-240x135}
+<p class="image-240x135">
+  <img src="i/midnight-tactix-3000.jpg" alt="MIDNIGHT TACTIX 3000" title="Screenshot of the game">
+</p>
 
-[github.com/psygnoscapes3000/midnight-tactix-3000](https://github.com/psygnoscapes3000/midnight-tactix-3000) &middot; 2018
-{: .meta}
+<p class="meta">
+  <a href="https://github.com/psygnoscapes3000/midnight-tactix-3000">github.com/psygnoscapes3000/midnight-tactix-3000</a>
+ &middot;
+  2018
+</p>
 
 A multiplayer turn-based retro racing game we made with my friend [Nick Matantsev](https://unframework.com/) during [Toronto Game Jam (TOJam)](https://www.tojam.ca/) 13. Using mobile phones as controllers over time-synched WebSocket connections, with the game rendered in GLSL.
 
 ---
 
-{: .year}
-
-### 2017
+<h3 class="year">2017</h3>
 
 #### JavaScript Libraries for Mobile Telecommunication Protocols
 
-![MILENAGE](i/milenage.png "Diagram of MILENAGE functions")
-{: .image-240x135}
+<p class="image-240x135">
+  <img src="i/milenage.png" alt="MILENAGE" title="Diagram of MILENAGE functions">
+</p>
 
-2017
-{: .meta}
+<p class="meta">
+  2017
+</p>
 
 While working at Myplanet (now [Orium](https://orium.com/)), I had the unique and exciting opportunity to implement major components of a cloud-based iMVNO solution for one of Canada's largest mobile carriers, subsequently open-sourcing several JavaScript packages with the client's consent. This endeavor focused on creating critical telecommunication components, bridging both Diameter and SS7/SIGTRAN through a narrow waist of JSON structures.
 
@@ -147,11 +186,14 @@ The JavaScript libraries I published encapsulate functionality for manipulating 
 
 #### put.io Starry Night
 
-![Starry Night](i/starry-night.png "The Starry Night animation of put.io")
-{: .image-240x135}
+<p class="image-240x135">
+  <img src="i/starry-night.png" alt="Starry Night" title="The Starry Night animation of put.io">
+</p>
 
-[put.io Starry Night](https://atesgoral.github.io/put.io.starry.night/) &middot; 2017
-{: .meta}
+<p class="meta">
+  <a href="https://atesgoral.github.io/put.io.starry.night/">put.io Starry Night</a> &middot;
+  2017
+</p>
 
 This is a canvas-based animation I created to replace a large MP4 movie on the landing page of [put.io](https://put.io/). The project was a freelance commission by put.io.
 
@@ -161,11 +203,14 @@ I developed a tweakable version for the client to fine-tune the animation to the
 
 #### Dweet Player
 
-![Dweet Player](i/dweet-player.png "UI showing a dweet along with its code")
-{: .image-240x135}
+<p class="image-240x135">
+  <img src="i/dweet-player.png" alt="Dweet Player" title="UI showing a dweet along with its code">
+</p>
 
-[dweetplayer.net](https://dweetplayer.net) &middot; 2017
-{: .meta}
+<p class="meta">
+  <a href="https://dweetplayer.net">dweetplayer.net</a> &middot;
+  2017
+</p>
 
 [Dweet Player](https://dweetplayer.net) is an audiovisual sequencer for [dweets](https://www.dwitter.net) (visual effects in 140 characters of JavaScript, in the [demoscene](https://en.wikipedia.org/wiki/Demoscene) spirit).
 
@@ -179,27 +224,33 @@ I gave [a talk](#dweet-player-1) about this project.
 
 #### BD1K
 
-![BD1K](i/bd1k.png "Screenshot from the game")
-{: .image-240x135}
+<p class="image-240x135">
+  <img src="i/bd1k.png" alt="BD1K" title="Screenshot from the game">
+</p>
 
-[atesgoral.github.io/bd1k](https://atesgoral.github.io/bd1k/) &middot; 2017
-{: .meta}
+<p class="meta">
+  <a href="https://atesgoral.github.io/bd1k/">atesgoral.github.io/bd1k</a> &middot;
+  2017
+</p>
 
 A Boulder Dash clone in 1024 bytes of JavaScript (including the sprites from the original game). My contribution to [JS1k 2017 - Magic](https://js1k.com/2017-magic/).
 
 ---
 
-{: .year}
-
-### 2016
+<h3 class="year">2016</h3>
 
 #### Doorbell Ringer—An Intentionally Complex IoT Project
 
-![Doorbell Ringer](i/doorbell-ringer.jpg "A doorbell, a mobile phone, and an Onion Omega")
-{: .image-240x135}
+<p class="image-240x135">
+  <img src="i/doorbell-ringer.jpg" alt="Doorbell Ringer" title="A doorbell, a mobile phone, and an Onion
+Omega">
+</p>
 
-[github.com/atesgoral/doorbell-ringer](https://github.com/atesgoral/doorbell-ringer) &middot; [github.com/atesgoral/doorbell-nudger](https://github.com/atesgoral/doorbell-nudger) &middot; 2016
-{: .meta }
+<p class="meta">
+  <a href="https://github.com/atesgoral/doorbell-ringer">github.com/atesgoral/doorbell-ringer</a> &middot;
+  <a href="https://github.com/atesgoral/doorbell-nudger">github.com/atesgoral/doorbell-nudger</a> &middot;
+  2016
+</p>
 
 A very roundabout way of ringing a doorbell through a mixture of: electronics hacking, Onion Omega, Python, Node.js, Twitter streaming API, QR codes, TOTP, Travis CI. A story of learning through self-inflicted problems.
 
@@ -207,17 +258,19 @@ I gave [a talk](#doorbell-ringeran-intentionally-complex-iot-project-1) about th
 
 ---
 
-{: .year}
-
-### 2015
+<h3 class="year">2015</h3>
 
 #### Human Resource Machine Solutions
 
-![Human Resource Machine Solutions](i/human-resource-machine.png "A screenshot from the game, Human Resource Machine")
-{: .image-240x135}
+<p class="image-240x135">
+  <img src="i/human-resource-machine.png" alt="Human Resource Machine Solutions" title="A screenshot from the
+game, Human Resource Machine">
+</p>
 
-[http://atesgoral.github.io/hrm-solutions](http://atesgoral.github.io/hrm-solutions/) &middot; 2015
-{: .meta}
+<p class="meta">
+  <a href="http://atesgoral.github.io/hrm-solutions/">http://atesgoral.github.io/hrm-solutions</a> &middot;
+  2015
+</p>
 
 [Human Resource Machine](https://tomorrowcorporation.com/humanresourcemachine) is a fun, little, dark-humoured puzzle game that can either teach you assembly from the ground up, or allow you to apply your existing assembly knowledge in order to devise speed/size-optimized solutions to increasingly challenging problems.
 
@@ -227,11 +280,17 @@ This project started with me [publishing my own solutions](https://github.com/at
 
 #### Autonomous Cockroach
 
-![Autonomous Cockroach](i/autonomous-cockroach.jpg "A collage showing LEGO, electronics, and an IKEA lamp.")
-{: .image-240x135}
+<p class="image-240x135">
+  <img src="i/autonomous-cockroach.jpg" alt="Autonomous Cockroach" title="A collage showing LEGO,
+electronics, and an IKEA lamp.">
+</p>
 
-[hackaday.io/project/171720-cockroach](https://hackaday.io/project/171720-cockroach) &middot; [github.com/atesgoral/autonomous-cockroach](https://github.com/atesgoral/autonomous-cockroach) &middot; 2015
-{: .meta}
+<p class="meta">
+  <a href="https://hackaday.io/project/171720-cockroach">hackaday.io/project/171720-cockroach</a> &middot;
+  <a href="https://github.com/atesgoral/autonomous-cockroach">github.com/atesgoral/autonomous-cockroach</a>
+&middot;
+  2015
+</p>
 
 This is the very first microcontroller (and IKEA lamp hack) project I did with an Arduino starter kit and (mostly) found parts. A LEGO drivetrain + two motors controlled by an Arduino Uno.
 
@@ -239,11 +298,13 @@ This is the very first microcontroller (and IKEA lamp hack) project I did with a
 
 #### AngularJS Modules
 
-![AngularJS Modules](i/angular-modules.png "Screenshots of several components")
-{: .image-240x135}
+<p class="image-240x135">
+  <img src="i/angular-modules.png" alt="AngularJS Modules" title="Screenshots of several components">
+</p>
 
-2015
-{: .meta}
+<p class="meta">
+  2015
+</p>
 
 While working at Myplanet (now [Orium](https://orium.com/)), I wrote or co-wrote several AngularJS modules that we published as packages. They are all pure CSS & JS and are compatible with IE8+.
 
@@ -259,33 +320,37 @@ I also created their live documentation and demo pages.
 
 ---
 
-{: .year}
-
-### 2013
+<h3 class="year">2013</h3>
 
 #### #direnturkce
 
-![#direnturkce](i/diren-turkce.png "Screenshot of the website")
-{: .image-240x135}
+<p class="image-240x135">
+  <img src="i/diren-turkce.png" alt="#direnturkce" title="Screenshot of the website">
+</p>
 
-[direnturkce.org](https://direnturkce.org) &middot; 2013
-{: .meta}
+<p class="meta">
+  <a href="https://direnturkce.org">direnturkce.org</a> &middot;
+  2013
+</p>
 
 I have many pet peeves. I created a quick reference page for the most common misspellings in Turkish.
 
 ---
 
-{: .year}
-
-### 2009
+<h3 class="year">2009</h3>
 
 #### jsUnity
 
-![jsUnity.com](i/jsunity.png "jsUnity logo")
-{: .image-240x135}
+<p class="image-240x135">
+  <img src="i/jsunity.png" alt="jsUnity.com" title="jsUnity logo">
+</p>
 
-[jsunity.com capture](https://web.archive.org/web/20120822153729/http://jsunity.com:80/) &middot; [github.com/atesgoral/jsunity](https://github.com/atesgoral/jsunity) &middot; 2009
-{: .meta}
+<p class="meta">
+  <a href="https://web.archive.org/web/20120822153729/http://jsunity.com:80/">jsunity.com capture</a>
+&middot;
+  <a href="https://github.com/atesgoral/jsunity">github.com/atesgoral/jsunity</a> &middot;
+  2009
+</p>
 
 jsUnity is a lightweight, environment-agnostic JavaScript testing framework: It doesn’t rely on any browser capabilities and therefore can be used in any client-side or server-side JavaScript environment.
 
@@ -293,17 +358,18 @@ There were already several unit testing frameworks for JavaScript that were brow
 
 ---
 
-{: .year}
-
-### 2005
+<h3 class="year">2005</h3>
 
 #### browsersize.com
 
-![browsersize.com](i/browsersize.png "Screenshot of the website")
-{: .image-240x135}
+<p class="image-240x135">
+  <img src="i/browsersize.png" alt="browsersize.com" title="Screenshot of the website">
+</p>
 
-[browsersize.com](https://browsersize.com) &middot; 2005
-{: .meta}
+<p class="meta">
+  <a href="https://browsersize.com">browsersize.com</a> &middot;
+  2005
+</p>
 
 Browser resizing utility to aid in responsive web development.
 
@@ -311,17 +377,19 @@ It needs to be either updated or archived, as modern browsers have become more r
 
 ---
 
-{: .year}
-
-### 2003
+<h3 class="year">2003</h3>
 
 #### The Unofficial Adobe Color Book File Format Specification
 
-![Photoshop Color Picker](i/custom-colors.png "The color picker dialog of Adobe Photoshop")
-{: .image-240x135}
+<p class="image-240x135">
+  <img src="i/custom-colors.png" alt="Photoshop Color Picker" title="The color picker dialog of Adobe
+Photoshop">
+</p>
 
-[Adobe Color Book File Format Specification](pages/acb-spec) &middot; 2003
-{: .meta}
+<p class="meta">
+  <a href="pages/acb-spec">Adobe Color Book File Format Specification</a> &middot;
+  2003
+</p>
 
 Adobe Photoshop's **Color Picker** has a **Custom Colors** dialog that offers a wide variety of colors from several industry-standard color catalogs such as ANPA, DIC, Focoltone and Pantone. The color catalog data comes from **Adobe Color Book** files.
 
@@ -331,43 +399,50 @@ Partly out of curiosity and partly because I needed the color data for a job, I 
 
 #### GRAFICA Obscura Experiments
 
-![GRAFICA Obscura Experiments](i/grafica-obscura.png "Screenshots of two p5.js experiments")
-{: .image-240x135}
+<p class="image-240x135">
+  <img src="i/grafica-obscura.png" alt="GRAFICA Obscura Experiments" title="Screenshots of two p5.js
+experiments">
+</p>
 
-[Morphing Depth of Field](pages/depth-of-field) &middot; [Multiple Synthetic Lights](pages/multiple-synthetic-lights) &middot; 2003
-{: .meta}
+<p class="meta">
+  <a href="pages/depth-of-field">Morphing Depth of Field</a> &middot;
+  <a href="pages/multiple-synthetic-lights">Multiple Synthetic Lights</a> &middot;
+  2003
+</p>
 
 Two [Processing](https://processing.org/) (ported to [p5.js](https://p5js.org/)) experiments building on [GRAFICA Obscura](https://www.graficaobscura.com/) articles by [Paul Haeberli](https://en.wikipedia.org/wiki/Paul_Haeberli).
 
 ---
 
-{: .year}
-
-### 2002
+<h3 class="year">2002</h3>
 
 #### Burrito
 
-![Burrito](i/burrito.png "Screenshot of the app")
-{: .image-240x135}
+<p class="image-240x135">
+  <img src="i/burrito.png" alt="Burrito" title="Screenshot of the app">
+</p>
 
-[Download Burrito 1.0 beta Installer](downloads/burrito10b.exe) &middot; 2002
-{: .meta}
+<p class="meta">
+  <a href="downloads/burrito10b.exe">Download Burrito 1.0 beta Installer</a> &middot;
+  2002
+</p>
 
 With Burrito you can read and manage your e-mails with any FTP client! It acts as a POP3/FTP protocol translator -- it's actually an FTP server that translates FTP commands to POP3 commands and serves your e-mail messages as individual files. You can view, delete and copy your e-mail messages as if they were files on an FTP server.
 
 ---
 
-{: .year}
-
-### 2000
+<h3 class="year">2000</h3>
 
 #### Twofifty
 
-![Twofifty](i/twofifty.png "Screenshot of the website")
-{: .image-240x135}
+<p class="image-240x135">
+  <img src="i/twofifty.png" alt="Twofifty" title="Screenshot of the website">
+</p>
 
-[twofifty.net](https://twofifty.net) &middot; 2000
-{: .meta}
+<p class="meta">
+  <a href="https://twofifty.net">twofifty.net</a> &middot;
+  2000
+</p>
 
 Constraints stoke creativity. In that spirit, this is a showcase of digital art, strictly 250x250 pixels in dimensions, contributed by many different artists. (My own works are published as "MaGnA".)
 
@@ -379,17 +454,18 @@ This is a static snapshot of the once PHP+MySQL-powered website.
 
 ---
 
-{: .year}
-
-### 1998
+<h3 class="year">1998</h3>
 
 #### Win-Res-Q
 
-![Win-Res-Q](i/win-res-q.png "Screenshot of the app")
-{: .image-240x135}
+<p class="image-240x135">
+  <img src="i/win-res-q.png" alt="Win-Res-Q" title="Screenshot of the app">
+</p>
 
-[Download Win-Res-Q 1.0](downloads/WinResQ10.zip) &middot; 1998
-{: .meta}
+<p class="meta">
+  <a href="downloads/WinResQ10.zip">Download Win-Res-Q 1.0</a> &middot;
+  1998
+</p>
 
 Win-Res-Q (pronounced "win rescue") is a simple utility that restores (shows) hidden windows. It can be used for bringing back your "lost" applications after their taskbar icons disappear following Explorer crashes that used to frequently occur on Windows 98. It's also useful for exposing strange, hidden windows lurking around your desktop.
 
@@ -397,11 +473,14 @@ Win-Res-Q (pronounced "win rescue") is a simple utility that restores (shows) hi
 
 #### E-Res-Q
 
-![E-Res-Q](i/e-res-q.png "Screenshot of the app")
-{: .image-240x135}
+<p class="image-240x135">
+  <img src="i/e-res-q.png" alt="E-Res-Q" title="Screenshot of the app">
+</p>
 
-[Download E-Res-Q 1.3](downloads/EResQ13.zip) &middot; 1998
-{: .meta}
+<p class="meta">
+  <a href="downloads/EResQ13.zip">Download E-Res-Q 1.3</a> &middot;
+  1998
+</p>
 
 E-Res-Q (pronounced "ee rescue") is a very simple, portable POP3 email reader. It enables you to selectively read and delete messages without having to download them all. It's ideal for getting rid of large messages that clog up your mailbox or getting rid of spam messages without even downloading them.
 
@@ -409,17 +488,19 @@ This small program has proved very useful back in the times when most of us stil
 
 ---
 
-{: .year}
-
-### 1992
+<h3 class="year">1992</h3>
 
 #### Bootsector Columns
 
-![Bootsector Columns](i/columns.png "Screenshot of the app")
-{: .image-240x135}
+<p class="image-240x135">
+  <img src="i/columns.png" alt="Bootsector Columns" title="Screenshot of the app">
+</p>
 
-[github.com/atesgoral/bootsector-columns](https://github.com/atesgoral/bootsector-columns) &middot; 1992
-{: .meta}
+<p class="meta">
+  <a href="https://github.com/atesgoral/bootsector-columns">github.com/atesgoral/bootsector-columns</a>
+&middot;
+  1992
+</p>
 
 A [Columns](http://en.wikipedia.org/wiki/Columns_%28video_game%29) clone in 68000 assembly, for the Atari ST.
 
@@ -435,33 +516,35 @@ I don't have my own blog, but I occasionally write posts for other blogs.
 
 ---
 
-{: .year}
-
-### 2023
+<h3 class="year">2023</h3>
 
 #### Sidekick’s Improved Streaming Experience
 
-![Sidekick](i/sidekick.jpg "Sidekick logo")
-{: .image-240x135}
+<p class="image-240x135">
+  <img src="i/sidekick.jpg" alt="Sidekick" title="Sidekick logo">
+</p>
 
-August 1, 2023 &middot; [Shopify Engineering Blog](https://shopify.engineering/sidekicks-improved-streaming)
-{: .meta }
+<p class="meta">
+  August 1, 2023 &middot;
+  <a href="https://shopify.engineering/sidekicks-improved-streaming">Shopify Engineering Blog</a>
+</p>
 
 How to improve LLM chatbot UX by utilizing a stateful markdown stream processor.
 
 ---
 
-{: .year}
-
-### 2017
+<h3 class="year">2017</h3>
 
 #### A JavaScript Interview Question and a Digression into XOR
 
-![Find the missing number](i/missing-item-with-xor.png "A grid of numbers")
-{: .image-240x135}
+<p class="image-240x135">
+  <img src="i/missing-item-with-xor.png" alt="Find the missing number" title="A grid of numbers">
+</p>
 
-April 6, 2017 &middot; [HackerNoon](https://hackernoon.com/a-javascript-interview-question-and-a-digression-into-xor-3f88bb5ab3be)
-{: .meta }
+<p class="meta">
+  April 6, 2017 &middot;
+  <a href="https://hackernoon.com/a-javascript-interview-question-and-a-digression-into-xor-3f88bb5ab3be">HackerNoon</a>
+</p>
 
 An intriguing JavaScript interview question about finding a missing number in an array of integers without sorting, and the unexpected elegance of a solution utilizing XOR.
 
@@ -473,49 +556,55 @@ While I'm not a frequent public speaker, I have had the opportunity to present a
 
 ---
 
-{: .year}
-
-### 2018
+<h3 class="year">2018</h3>
 
 #### Killing Characters while Making Art
 
-![Killing Characters while Making Art](i/dweet-talk.jpg "Photo of me presenting")
-{: .image-240x135}
+<p class="image-240x135">
+  <img src="i/dweet-talk.jpg" alt="Killing Characters while Making Art" title="Photo of me presenting">
+</p>
 
-July 25, 2018 &middot; [CreateInTO](https://www.meetup.com/createinto/) &middot; [Slides](https://speakerdeck.com/atesgoral/killing-characters-while-making-art)
-{: .meta }
+<p class="meta">
+  July 25, 2018 &middot;
+  <a href="https://www.meetup.com/createinto/">CreateInTO</a> &middot;
+  <a href="https://speakerdeck.com/atesgoral/killing-characters-while-making-art">Slides</a>
+</p>
 
 A talk about [Dwitter](https://www.dwitter.net/), JavaScript golfing, and dweet rendering techniques.
 
 ---
 
-{: .year}
-
-### 2017
+<h3 class="year">2017</h3>
 
 #### Dweet Player
 
-![Dweet Player](i/dweet-player.png "Screenshot of Dweet Player")
-{: .image-240x135}
+<p class="image-240x135">
+  <img src="i/dweet-player.png" alt="Dweet Player" title="Screenshot of Dweet Player">
+</p>
 
-October 17, 2017 &middot; [Toronto Hack && Tell](https://www.meetup.com/Toronto-Hack-and-Tell/) &middot; [Slides](https://speakerdeck.com/atesgoral/dweet-player)
-{: .meta }
+<p class="meta">
+  October 17, 2017 &middot;
+  <a href="https://www.meetup.com/Toronto-Hack-and-Tell/">Toronto Hack && Tell</a> &middot;
+  <a href="https://speakerdeck.com/atesgoral/dweet-player">Slides</a>
+</p>
 
 A talk about my [Dweet Player project](#dweet-player). I won a Raspberry Pi as an audience award.
 
 ---
 
-{: .year}
-
-### 2016
+<h3 class="year">2016</h3>
 
 #### Unit Testing—The Whys, Whens and Hows
 
-![Unit Testing—The Whys, Whens and Hows](i/unit-testing.jpg "Photo of me presenting")
-{: .image-240x135}
+<p class="image-240x135">
+  <img src="i/unit-testing.jpg" alt="Unit Testing—The Whys, Whens and Hows" title="Photo of me presenting">
+</p>
 
-October 11, 2016 &middot; [Toronto Node.js](https://www.meetup.com/toronto-node-js/) &middot; [Slides](https://speakerdeck.com/atesgoral/unit-testing-the-whys-whens-and-hows)
-{: .meta }
+<p class="meta">
+  October 11, 2016 &middot;
+  <a href="https://www.meetup.com/toronto-node-js/">Toronto Node.js</a> &middot;
+  <a href="https://speakerdeck.com/atesgoral/unit-testing-the-whys-whens-and-hows">Slides</a>
+</p>
 
 Talking about some best practices for unit testing in Node.js.
 
@@ -523,33 +612,42 @@ Talking about some best practices for unit testing in Node.js.
 
 #### Doorbell Ringer—An Intentionally Complex IoT Project
 
-![Doorbell Ringer](i/doorbell-ringer-talk.jpg "Photo of me presenting")
-{: .image-240x135}
+<p class="image-240x135">
+  <img src="i/doorbell-ringer-talk.jpg" alt="Doorbell Ringer" title="Photo of me presenting">
+</p>
 
-June 7, 2016 &middot; [Toronto Hack && Tell](https://www.meetup.com/Toronto-Hack-and-Tell/) &middot; [Slides](https://speakerdeck.com/atesgoral/doorbell-ringer)
-{: .meta }
+<p class="meta">
+  June 7, 2016 &middot;
+  <a href="https://www.meetup.com/Toronto-Hack-and-Tell/">Toronto Hack && Tell</a> &middot;
+  <a href="https://speakerdeck.com/atesgoral/doorbell-ringer">Slides</a>
+</p>
 
 A talk about my [Doorbell Ringer project](#doorbell-ringeran-intentionally-complex-iot-project). I won a Raspberry Pi as an audience award.
 
 ---
 
-{: .year}
-
-### 2014
+<h3 class="year">2014</h3>
 
 #### Backend-less UI Development using Demock
 
-![Backend-less UI Development using Demock](i/demock.jpg "Photo of me presenting")
-{: .image-240x135}
+<p class="image-240x135">
+  <img src="i/demock.jpg" alt="Backend-less UI Development using Demock" title="Photo of me presenting">
+</p>
 
-March 16, 2014 &middot; jQueryTO &middot; [Slides](https://speakerdeck.com/atesgoral/backend-less-ui-development)
-{: .meta }
+<p class="meta">
+  March 16, 2014 &middot; jQueryTO &middot;
+  <a href="https://speakerdeck.com/atesgoral/backend-less-ui-development">Slides</a>
+</p>
 
 A technique to transform any static web server into a simulated backend, capable of emulating various HTTP methods, generating different HTTP response codes, and mimicking latency.
 
 ---
 
-&copy; Ateş Göral &middot; A GitHub Pages site running on Jekyll: [github.com/atesgoral/ates.dev](https://github.com/atesgoral/ates.dev)
-{: .footer .meta}
+<p class="footer meta">
+  &copy; Ateş Göral &middot; A GitHub Pages site running on Eleventy:
+  <a href="https://github.com/atesgoral/ates.dev">github.com/atesgoral/ates.dev</a>
+</p>
+
+</div>
 
 <script src="/assets/js/prog.js?bust=1"></script>

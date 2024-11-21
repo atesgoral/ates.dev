@@ -1,4 +1,7 @@
 name: ates-dev
-type: ruby
+type: node
 up:
-  - ruby
+  - node:
+      version: v20.14.0
+      pnpm: 8.15.5
+      package_manager: pnpm@8.15.5

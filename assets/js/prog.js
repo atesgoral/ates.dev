@@ -66,7 +66,7 @@ function initializeTrails() {
   trailsCanvas.setAttribute("id", "trails");
 
   trailsContainer.appendChild(trailsCanvas);
-  document.querySelector(".markdown-body").appendChild(trailsContainer);
+  document.querySelector("body").appendChild(trailsContainer);
 
   const dpr = window.devicePixelRatio;
 
