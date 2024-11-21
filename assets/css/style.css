@@ -151,28 +151,6 @@ a:active {
   margin-right: 16px; /* Get it to 256x144, in 24px vertical rhythm */
 }
 
-@media (max-width: 40rem) {
-  .avatar {
-    text-align: center;
-  }
-
-  .avatar > img {
-    float: none;
-    margin-right: 0;
-  }
-
-  h1 {
-    text-align: center;
-  }
-
-  .image-240x135 > img {
-    float: none;
-    width: 100%;
-    height: auto;
-    margin-right: 0;
-  }
-}
-
 hr {
   clear: left;
   border: 0;
@@ -212,26 +190,6 @@ h6:before {
   height: 2px;
   border-radius: 1px;
   background-color: #84ddff;
-}
-
-@media (min-width: 64rem) {
-  .avatar > img {
-    position: absolute;
-    width: 4rem;
-    height: 4rem;
-    border-radius: 2rem;
-    margin-left: -6rem;
-  }
-
-  h3.year {
-    position: absolute;
-    margin-left: -6rem;
-    text-align: right;
-  }
-
-  h3.year:before {
-    display: none;
-  }
 }
 
 body {
@@ -411,6 +369,48 @@ html {
 #theme-toggle-label > #theme-toggle:checked:after {
   background-color: black;
   border-color: black;
+}
+
+@media (min-width: 64rem) {
+  .avatar > img {
+    position: absolute;
+    width: 4rem;
+    height: 4rem;
+    border-radius: 2rem;
+    margin-left: -6rem;
+  }
+
+  h3.year {
+    position: absolute;
+    margin-left: -6rem;
+    text-align: right;
+  }
+
+  h3.year:before {
+    display: none;
+  }
+}
+
+@media (max-width: 40rem) {
+  .avatar {
+    text-align: center;
+  }
+
+  .avatar > img {
+    float: none;
+    margin-right: 0;
+  }
+
+  h1 {
+    text-align: center;
+  }
+
+  .image-240x135 > img {
+    float: none;
+    width: 100%;
+    height: auto;
+    margin-right: 0;
+  }
 }
 
 @media (hover: hover) {
