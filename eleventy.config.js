@@ -1,4 +1,5 @@
 import markdownItAnchor from "markdown-it-anchor";
+import * as sass from "sass";
 
 export default function (eleventyConfig) {
   eleventyConfig
@@ -28,4 +29,13 @@ export default function (eleventyConfig) {
   eleventyConfig.addCollection("pages", (collectionApi) =>
     collectionApi.getFilteredByGlob("pages/**/*.md")
   );
+
+  eleventyConfig.addTemplateFormats("scss");
+  eleventyConfig.addExtension("scss", {
+    outputFileExtension: "css",
+    compile: async function (inputContent) {
+      let result = sass.compileString(inputContent);
+      return async () => result.css;
+    },
+  });
 }

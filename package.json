@@ -1,6 +1,6 @@
 {
   "name": "ates.dev",
-  "version": "1.0.0",
+  "version": "0.0.0",
   "type": "module",
   "description": "My personal website, running on GitHub Pages, because simple is good.",
   "main": "index.js",
@@ -12,6 +12,7 @@
   "license": "ISC",
   "dependencies": {
     "@11ty/eleventy": "^3.0.0",
-    "markdown-it-anchor": "^9.2.0"
+    "markdown-it-anchor": "^9.2.0",
+    "sass": "^1.81.0"
   }
 }
