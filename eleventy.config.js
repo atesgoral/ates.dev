@@ -9,9 +9,9 @@ export default function (eleventyConfig) {
     .addFilter("debug", (value) => Object.keys(value));
 
   eleventyConfig.addCollection("posts", (collectionApi) =>
-    collectionApi.getFilteredByGlob("_posts/**/*.md")
+    collectionApi.getFilteredByGlob("posts/**/*.md")
   );
   eleventyConfig.addCollection("pages", (collectionApi) =>
-    collectionApi.getFilteredByGlob("_pages/**/*.md")
+    collectionApi.getFilteredByGlob("pages/**/*.md")
   );
 }
