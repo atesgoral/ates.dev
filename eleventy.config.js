@@ -1,6 +1,7 @@
 import markdownItAnchor from "markdown-it-anchor";
 import * as sass from "sass";
 import path from "path";
+import { wrap } from "module";
 
 export default function (eleventyConfig) {
   eleventyConfig
@@ -16,8 +17,12 @@ export default function (eleventyConfig) {
   eleventyConfig.amendLibrary("md", (mdLib) => {
     mdLib.use(markdownItAnchor, {
       permalink: true,
-      permalinkClass: "header-anchor",
+      permalinkBefore: false,
       permalinkSymbol: "#",
+      // permalinks: markdownItAnchor.permalink.headerLink({
+      //   // symbol: "#",
+      //   // placement: "after",
+      // }),
       slugify: (text) => {
         const slug = text
           .toLowerCase()

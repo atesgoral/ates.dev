@@ -1,0 +1,15 @@
+.permalink {
+  float: left;
+  margin-left: -20px;
+  text-decoration: none;
+  opacity: 0;
+}
+
+h1:hover .permalink,
+h2:hover .permalink,
+h3:hover .permalink,
+h4:hover .permalink,
+h5:hover .permalink,
+h6:hover .permalink {
+  opacity: 1;
+}
