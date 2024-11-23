@@ -1,9 +1,11 @@
 import markdownItAnchor from "markdown-it-anchor";
 import * as sass from "sass";
+import path from "path";
 
 export default function (eleventyConfig) {
   eleventyConfig
-    .addPassthroughCopy("assets/**/*")
+    .addPassthroughCopy("assets/**/*.woff*")
+    .addPassthroughCopy("assets/**/*.js")
     .addPassthroughCopy("i/**/*")
     .addPassthroughCopy("downloads/**/*")
     .addPassthroughCopy("pages/*/i/*")
@@ -33,9 +35,19 @@ export default function (eleventyConfig) {
   eleventyConfig.addTemplateFormats("scss");
   eleventyConfig.addExtension("scss", {
     outputFileExtension: "css",
-    compile: async function (inputContent) {
-      let result = sass.compileString(inputContent);
-      return async () => result.css;
+    compile: function (inputContent, inputPath) {
+      let parsed = path.parse(inputPath);
+
+      let result = sass.compileString(inputContent, {
+        loadPaths: [parsed.dir || "."],
+      });
+
+      // Register any Sass dependencies for incremental builds
+      this.addDependencies(inputPath, result.loadedUrls);
+
+      return async (data) => {
+        return result.css;
+      };
     },
   });
 }

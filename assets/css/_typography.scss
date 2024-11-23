@@ -1,0 +1,62 @@
+@font-face {
+  font-family: "Varela Round";
+  src: url("varelaround-regular-webfont.woff2") format("woff2"),
+    url("varelaround-regular-webfont.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+body {
+  font-family: "Varela Round", Arial, sans-serif;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+h1 {
+  font-size: 2rem;
+  line-height: 1.5rem;
+}
+
+h2 {
+  font-size: 1.75rem;
+  line-height: 1.714rem;
+}
+
+h3 {
+  font-size: 1.5rem;
+  line-height: 2rem;
+}
+
+h4 {
+  font-size: 1.25rem;
+  line-height: 1.2rem;
+}
+
+h5 {
+  font-size: 1rem;
+  line-height: 1.5rem;
+}
+
+h6 {
+  font-size: 0.875rem;
+  line-height: 1.714rem;
+}
+
+p,
+li,
+dd {
+  font-size: 1rem;
+  line-height: 1.5rem;
+}
+
+dt {
+  font-size: 1rem;
+  line-height: 1.5rem;
+  font-weight: bold;
+}
+
+.meta {
+  font-size: 0.875rem;
+  line-height: 1.714rem;
+}

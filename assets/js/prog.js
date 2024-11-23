@@ -191,6 +191,7 @@ function initializeThemeToggle() {
   const toggleLabel = document.createElement("label");
 
   toggleLabel.setAttribute("id", "theme-toggle-label");
+  toggleLabel.setAttribute("class", "hoverable");
   toggleLabel.appendChild(document.createTextNode("Toggle theme"));
 
   const toggle = document.createElement("input");

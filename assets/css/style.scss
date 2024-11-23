@@ -1,90 +1,6 @@
-/* Typography */
-
-@font-face {
-  font-family: "Varela Round";
-  src: url("varelaround-regular-webfont.woff2") format("woff2"),
-    url("varelaround-regular-webfont.woff") format("woff");
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
-
-body {
-  font-family: "Varela Round", Arial, sans-serif;
-}
-
-/* Colors */
-
-body {
-  background-color: #1a091a;
-  color: #f5ddf5;
-  transition: color 0.3s ease-in-out, background-color 0.3s ease-in-out;
-}
-
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  color: #84ddff;
-  transition: color 0.3s ease-in-out;
-}
-
-/* Sizes */
-
-body {
-  font-size: 1rem;
-  line-height: 1.5;
-}
-
-h1 {
-  font-size: 2rem;
-  line-height: 1.5rem;
-}
-
-h2 {
-  font-size: 1.75rem;
-  line-height: 1.714rem;
-}
-
-h3 {
-  font-size: 1.5rem;
-  line-height: 2rem;
-}
-
-h4 {
-  font-size: 1.25rem;
-  line-height: 1.2rem;
-}
-
-h5 {
-  font-size: 1rem;
-  line-height: 1.5rem;
-}
-
-h6 {
-  font-size: 0.875rem;
-  line-height: 1.714rem;
-}
-
-p,
-li,
-dd {
-  font-size: 1rem;
-  line-height: 1.5rem;
-}
-
-dt {
-  font-size: 1rem;
-  line-height: 1.5rem;
-  font-weight: bold;
-}
-
-.meta {
-  font-size: 0.875rem;
-  line-height: 1.714rem;
-}
+@use "typography";
+@use "colors";
+@use "theme-toggle";
 
 /* Spacing */
 
@@ -303,79 +219,6 @@ html {
   scroll-behavior: smooth;
 }
 
-#theme-toggle-label {
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
-  cursor: pointer;
-  width: 2.5rem;
-  height: 1.5rem;
-  border-radius: 0.75rem;
-  background-color: #84ddff;
-  color: transparent;
-  user-select: none;
-  transition: background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
-  box-shadow: 0 0 10px 2px rgba(255, 255, 255, 0.1);
-  text-indent: -9999px;
-}
-
-#theme-toggle-label:has(#theme-toggle:checked) {
-  background-color: black;
-}
-
-#theme-toggle-label > #theme-toggle {
-  position: absolute;
-  margin: 0;
-  top: -2rem;
-  left: 0;
-  cursor: pointer;
-}
-
-#theme-toggle-label > #theme-toggle:before {
-  position: absolute;
-  top: 2rem;
-  left: 0;
-  content: "";
-  display: block;
-  width: 1.5rem;
-  height: 1.5rem;
-  border-radius: 0.75rem;
-  background: white;
-  box-shadow: 0 0 10px 2px rgba(255, 255, 0, 0.1);
-  box-sizing: border-box;
-  border: 3px solid #84ddff;
-  transition: transform 0.3s ease-in-out, border-color 0.3s ease-in-out,
-    background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
-}
-
-#theme-toggle-label > #theme-toggle:after {
-  position: absolute;
-  content: "";
-  display: block;
-  width: 1rem;
-  height: 1rem;
-  border-radius: 0.5rem;
-  box-sizing: border-box;
-  border: 3px solid #84ddff;
-  background-color: #84ddff;
-  top: 2.25rem;
-  left: 0;
-  transform: translateX(1.5rem);
-  transition: border-color 0.3s ease-in-out, background-color 0.3s ease-in-out;
-}
-
-#theme-toggle-label > #theme-toggle:checked:before {
-  transform: translateX(1rem);
-  background-color: white;
-  box-shadow: 0 0 10px 2px rgba(255, 255, 255, 0.1);
-  border-color: black;
-}
-
-#theme-toggle-label > #theme-toggle:checked:after {
-  background-color: black;
-  border-color: black;
-}
-
 @media (min-width: 64rem) {
   .avatar > img {
     position: absolute;
@@ -437,10 +280,6 @@ html {
     transform: scale(1.05);
   }
 
-  #theme-toggle-label:hover {
-    box-shadow: 0 0 10px 2px rgba(255, 164, 132, 0.5);
-  }
-
   body.light-mode a:hover {
     color: #ff8356;
     text-shadow: 0 0 5px rgba(255, 131, 86, 0.5);
@@ -450,7 +289,7 @@ html {
     box-shadow: 0 0 10px 2px rgba(255, 131, 86, 0.5);
   }
 
-  body.light-mode #theme-toggle-label:hover {
+  body.light-mode .hoverable:hover {
     box-shadow: 0 0 10px 2px rgba(255, 131, 86, 0.5);
   }
 }
