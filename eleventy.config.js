@@ -15,6 +15,9 @@ export default function (eleventyConfig) {
 
   eleventyConfig.amendLibrary("md", (mdLib) => {
     mdLib.use(markdownItAnchor, {
+      permalink: true,
+      permalinkClass: "header-anchor",
+      permalinkSymbol: "#",
       slugify: (text) => {
         const slug = text
           .toLowerCase()
