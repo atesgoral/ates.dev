@@ -39,27 +39,27 @@ Finished (mostly personal) projects in reverse chronological order.
 
 <p class="meta">
   Jump to:
-  <a href="#2021">2021</a> &middot;
-  <a href="#2020">2020</a> &middot;
-  <a href="#2018">2018</a> &middot;
-  <a href="#2017">2017</a> &middot;
-  <a href="#2016">2016</a> &middot;
-  <a href="#2015">2015</a> &middot;
-  <a href="#2013">2013</a> &middot;
-  <a href="#2009">2009</a> &middot;
-  <a href="#2005">2005</a> &middot;
-  <a href="#2003">2003</a> &middot;
-  <a href="#2002">2002</a> &middot;
-  <a href="#2000">2000</a> &middot;
-  <a href="#1998">1998</a> &middot;
-  <a href="#1992">1992</a> &middot;
+  <a href="#year-2021">2021</a> &middot;
+  <a href="#year-2020">2020</a> &middot;
+  <a href="#year-2018">2018</a> &middot;
+  <a href="#year-2017">2017</a> &middot;
+  <a href="#year-2016">2016</a> &middot;
+  <a href="#year-2015">2015</a> &middot;
+  <a href="#year-2013">2013</a> &middot;
+  <a href="#year-2009">2009</a> &middot;
+  <a href="#year-2005">2005</a> &middot;
+  <a href="#year-2003">2003</a> &middot;
+  <a href="#year-2002">2002</a> &middot;
+  <a href="#year-2000">2000</a> &middot;
+  <a href="#year-1998">1998</a> &middot;
+  <a href="#year-1992">1992</a> &middot;
   <a href="#blog-posts">Blog Posts</a> &middot;
   <a href="#talks">Talks</a>
 </p>
 
 ---
 
-<h3 class="year">2023</h3>
+### 2023
 
 #### event_stream_parser gem
 
@@ -85,7 +85,7 @@ I hacked an IKEA OBEGRÄNSAD LED wall lamp to replace its graphics chip with an 
 
 ---
 
-<h3 class="year">2021</h3>
+### 2021
 
 #### Airgap—True Analog Glitching by Transmitting Pixel Data Through Air
 
@@ -105,7 +105,7 @@ A source image is scanned pixel-by-pixel and the pixel value is drawn as a large
 
 ---
 
-<h3 class="year">2020</h3>
+### 2020
 
 #### IKEA FREKVENS Hack
 
@@ -139,7 +139,7 @@ A humourous spin on [Semantic Versioning](https://semver.org/). I apparently had
 
 ---
 
-<h3 class="year">2018</h3>
+### 2018
 
 #### MIDNIGHT TACTIX 3000
 
@@ -157,7 +157,7 @@ A multiplayer turn-based retro racing game we made with my friend [Nick Matantse
 
 ---
 
-<h3 class="year">2017</h3>
+### 2017
 
 #### JavaScript Libraries for Mobile Telecommunication Protocols
 
@@ -238,7 +238,7 @@ A Boulder Dash clone in 1024 bytes of JavaScript (including the sprites from the
 
 ---
 
-<h3 class="year">2016</h3>
+### 2016
 
 #### Doorbell Ringer—An Intentionally Complex IoT Project
 
@@ -259,7 +259,7 @@ I gave [a talk](#doorbell-ringeran-intentionally-complex-iot-project-1) about th
 
 ---
 
-<h3 class="year">2015</h3>
+### 2015
 
 #### Human Resource Machine Solutions
 
@@ -321,7 +321,7 @@ I also created their live documentation and demo pages.
 
 ---
 
-<h3 class="year">2013</h3>
+### 2013
 
 #### #direnturkce
 
@@ -338,7 +338,7 @@ I have many pet peeves. I created a quick reference page for the most common mis
 
 ---
 
-<h3 class="year">2009</h3>
+### 2009
 
 #### jsUnity
 
@@ -359,7 +359,7 @@ There were already several unit testing frameworks for JavaScript that were brow
 
 ---
 
-<h3 class="year">2005</h3>
+### 2005
 
 #### browsersize.com
 
@@ -378,7 +378,7 @@ It needs to be either updated or archived, as modern browsers have become more r
 
 ---
 
-<h3 class="year">2003</h3>
+### 2003
 
 #### The Unofficial Adobe Color Book File Format Specification
 
@@ -415,7 +415,7 @@ Two [Processing](https://processing.org/) (ported to [p5.js](https://p5js.org/))
 
 ---
 
-<h3 class="year">2002</h3>
+### 2002
 
 #### Burrito
 
@@ -432,7 +432,7 @@ With Burrito you can read and manage your e-mails with any FTP client! It acts a
 
 ---
 
-<h3 class="year">2000</h3>
+### 2000
 
 #### Twofifty
 
@@ -455,7 +455,7 @@ This is a static snapshot of the once PHP+MySQL-powered website.
 
 ---
 
-<h3 class="year">1998</h3>
+### 1998
 
 #### Win-Res-Q
 
@@ -489,7 +489,7 @@ This small program has proved very useful back in the times when most of us stil
 
 ---
 
-<h3 class="year">1992</h3>
+### 1992
 
 #### Bootsector Columns
 
@@ -517,7 +517,7 @@ I don't have my own blog, but I occasionally write posts for other blogs.
 
 ---
 
-<h3 class="year">2023</h3>
+### 2023
 
 #### Sidekick’s Improved Streaming Experience
 
@@ -534,7 +534,7 @@ How to improve LLM chatbot UX by utilizing a stateful markdown stream processor.
 
 ---
 
-<h3 class="year">2017</h3>
+### 2017
 
 #### A JavaScript Interview Question and a Digression into XOR
 
@@ -557,7 +557,7 @@ While I'm not a frequent public speaker, I have had the opportunity to present a
 
 ---
 
-<h3 class="year">2018</h3>
+### 2018
 
 #### Killing Characters while Making Art
 
@@ -575,7 +575,7 @@ A talk about [Dwitter](https://www.dwitter.net/), JavaScript golfing, and dweet 
 
 ---
 
-<h3 class="year">2017</h3>
+### 2017
 
 #### Dweet Player
 
@@ -593,7 +593,7 @@ A talk about my [Dweet Player project](#dweet-player). I won a Raspberry Pi as a
 
 ---
 
-<h3 class="year">2016</h3>
+### 2016
 
 #### Unit Testing—The Whys, Whens and Hows
 
@@ -627,7 +627,7 @@ A talk about my [Doorbell Ringer project](#doorbell-ringeran-intentionally-compl
 
 ---
 
-<h3 class="year">2014</h3>
+### 2014
 
 #### Backend-less UI Development using Demock
 
