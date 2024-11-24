@@ -74,19 +74,21 @@ function initializeTrails() {
   trailsCanvas.height = trailsCanvas.clientHeight * dpr;
 
   let lastTrailsMove = null;
-  let trailsX = null;
-  let trailsY = null;
+  const trails = {
+    x: null,
+    y: null,
+  };
 
   function moveTrails(x, y) {
     lastTrailsMove = performance.now();
-    trailsX = x;
-    trailsY = y;
+    trails.x = x;
+    trails.y = y;
 
     trailsCanvas.style.left = `${
-      trailsX - trailsCanvas.clientWidth / 2 + window.scrollX
+      trails.x - trailsCanvas.clientWidth / 2 + window.scrollX
     }px`;
     trailsCanvas.style.top = `${
-      trailsY - trailsCanvas.clientHeight / 2 + window.scrollY
+      trails.y - trailsCanvas.clientHeight / 2 + window.scrollY
     }px`;
   }
 
@@ -107,7 +109,7 @@ function initializeTrails() {
   });
 
   window.addEventListener("scroll", () => {
-    moveTrails(trailsX, trailsY);
+    moveTrails(trails.x, trails.y);
   });
 
   const trailsCtx = trailsCanvas.getContext("2d");
@@ -141,7 +143,7 @@ function initializeTrails() {
       trailsCtx.fillStyle = "#fff";
       trailsCtx.font = "40px sans-serif";
       trailsCtx.fillText(`window.scrollY: ${window.scrollY}`, 20, 60);
-      trailsCtx.fillText(`trailsY: ${trailsY}`, 20, 120);
+      trailsCtx.fillText(`trailsY: ${trails.y}`, 20, 120);
     }
 
     trailsCtx.scale(scale, scale);
@@ -158,9 +160,9 @@ function initializeTrails() {
     for (let i = 0; i < subs; i++) {
       for (let j = 0; j < subs; j++) {
         const x =
-          i / subs - 0.5 - (trailsX % spacing) / trailsCanvas.clientWidth;
+          i / subs - 0.5 - (trails.x % spacing) / trailsCanvas.clientWidth;
         const y =
-          j / subs - 0.5 - (trailsY % spacing) / trailsCanvas.clientWidth;
+          j / subs - 0.5 - (trails.y % spacing) / trailsCanvas.clientWidth;
 
         const distance = Math.hypot(x, y);
         const distanceAlpha = 1 - Math.min(distance, 0.5) / 0.5;
