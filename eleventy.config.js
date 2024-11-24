@@ -15,7 +15,9 @@ export default function (eleventyConfig) {
 
   eleventyConfig.amendLibrary("md", (mdLib) => {
     mdLib.use(markdownItAnchor, {
-      permalink: markdownItAnchor.permalink.headerLink(),
+      permalink: markdownItAnchor.permalink.headerLink({
+        class: "permalink",
+      }),
       slugify: (text) => {
         const slug = text
           .toLowerCase()
@@ -51,4 +53,10 @@ export default function (eleventyConfig) {
       };
     },
   });
+
+  return {
+    dir: {
+      input: "src",
+    },
+  };
 }

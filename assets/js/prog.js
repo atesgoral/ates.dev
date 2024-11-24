@@ -151,7 +151,7 @@ function initializeTrails() {
 
     trailsCtx.fillStyle = "#a484ff";
 
-    const subs = 15;
+    const subs = 16;
     const spacing = trailsCanvas.clientWidth / subs;
     const size = 2;
 

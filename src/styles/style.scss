@@ -1,14 +1,8 @@
+@use "rhythm";
 @use "typography";
 @use "colors";
 @use "theme-toggle";
 @use "permalinks";
-
-/* Spacing */
-
-body {
-  margin: 0;
-  padding: 2rem;
-}
 
 ul,
 ol {
@@ -63,14 +57,6 @@ footer {
   z-index: 30;
   cursor: zoom-out;
   background-color: #1a091a;
-}
-
-.avatar > img {
-  float: left;
-  width: 6rem;
-  height: 6rem;
-  border-radius: 3rem;
-  margin-right: 16px; /* Get it to 256x144, in 24px vertical rhythm */
 }
 
 hr {
@@ -130,8 +116,8 @@ body {
 
 #trails-container > #trails {
   position: absolute;
-  width: 25rem;
-  height: 25rem;
+  width: 16rlh;
+  height: 16rlh;
 }
 
 .footer {
@@ -223,10 +209,10 @@ html {
 @media (min-width: 64rem) {
   .avatar > img {
     position: absolute;
-    width: 4rem;
-    height: 4rem;
-    border-radius: 2rem;
-    margin-left: -6rem;
+    width: 3rlh;
+    height: 3rlh;
+    border-radius: 1.5rlh;
+    margin-left: -4rlh;
   }
 
   h3[id^="year-"] {
