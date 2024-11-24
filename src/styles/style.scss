@@ -38,9 +38,10 @@ footer {
 
 .image-240x135 > img {
   float: left;
-  width: 240px;
-  height: 135px;
-  margin-right: 16px; /* Get it to 256x144, in 24px vertical rhythm */
+  aspect-ratio: 240 / 135;
+  height: 6rlh;
+  margin-right: 1rlh;
+  margin-bottom: 0.5rlh;
 }
 
 .zoomable > img {
