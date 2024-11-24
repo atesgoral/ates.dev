@@ -8,46 +8,46 @@ html {
 
 body {
   margin: 0;
-  padding: 1rlh;
+  padding: 1.25rlh;
   background-image: repeating-linear-gradient(
     rgba(255, 255, 255, 0.1) 0 0.5px,
     transparent 0.5px 0.5rlh
   );
 }
 
-h1 {
-  font-size: 2rlh;
-  line-height: 2.5rlh;
-  margin: 0.5rlh 0 0.5rlh;
-}
-
-h2 {
-  font-size: 1.25rlh;
-  line-height: 1.5rlh;
+h1, h2, h3, h4, h5 {
   margin: 0.5rlh 0;
 }
 
+h1 {
+  font-size: 2rlh;
+  line-height: 2.5rlh;
+}
+
+h2 {
+  font-size: 1.5rlh;
+  line-height: 2rlh;
+}
+
 h3 {
-  font-size: 1.5rem;
-  line-height: 2rem;
+  font-size: 1.25rlh;
+  line-height: 1.5rlh;
 }
 
 h4 {
-  font-size: 1.25rem;
-  line-height: 1.2rem;
+  font-size: 1rlh;
+  line-height: 1.5rlh;
 }
 
 h5 {
-  font-size: 1rem;
-  line-height: 1.5rem;
+  color: red;
 }
 
 h6 {
-  font-size: 0.875rem;
-  line-height: 1.714rem;
+  color: red;
 }
 
-p {
+p, ul, ol {
   margin: 0.5rlh 0;
 }
 
@@ -69,5 +69,4 @@ dt {
 
 .meta {
   font-size: 0.875rem;
-  line-height: 1.714rem;
 }
