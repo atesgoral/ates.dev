@@ -36,14 +36,6 @@ footer {
   margin: auto;
 }
 
-.image-240x135 > img {
-  float: left;
-  aspect-ratio: 240 / 135;
-  height: 6rlh;
-  margin-right: 1rlh;
-  margin-bottom: 0.5rlh;
-}
-
 .zoomable > img {
   cursor: zoom-in;
 }
@@ -174,7 +166,7 @@ body.light-mode img {
   box-shadow: 0 0 10px 2px rgba(0, 0, 0, 0.1);
 }
 
-body.light-mode .image-240x135 > img.zoomed {
+body.light-mode .project-thumbnail > img.zoomed {
   background-color: #fff;
 }
 
@@ -240,13 +232,6 @@ html {
   h1 {
     text-align: center;
   }
-
-  .image-240x135 > img {
-    float: none;
-    width: 100%;
-    height: auto;
-    margin-right: 0;
-  }
 }
 
 @media (hover: hover) {
@@ -273,7 +258,7 @@ html {
     text-shadow: 0 0 5px rgba(255, 131, 86, 0.5);
   }
 
-  body.light-mode .image-240x135 > img:hover {
+  body.light-mode .project-thumbnail > img:hover {
     box-shadow: 0 0 10px 2px rgba(255, 131, 86, 0.5);
   }
 
