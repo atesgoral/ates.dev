@@ -220,13 +220,9 @@ html {
 }
 
 @media (max-width: 40rem) {
-  .avatar {
-    text-align: center;
-  }
-
   .avatar > img {
     float: none;
-    margin-right: 0;
+    margin: 0 auto;
   }
 
   h1 {

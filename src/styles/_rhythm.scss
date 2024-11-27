@@ -60,11 +60,12 @@ dt {
 }
 
 .avatar > img {
+  display: block;
   float: left;
   width: 3rlh;
   height: 3rlh;
-  border-radius: 3rem;
-  margin-right: 0.5rlh;
+  border-radius: 3rlh;
+  margin-right: 1rlh;
 }
 
 .meta {
@@ -81,7 +82,6 @@ dt {
   }
 
   @media (max-width: 40rem) {
-
     & > img {
       float: none;
       width: 100%;
