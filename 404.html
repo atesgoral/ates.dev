@@ -1,0 +1,48 @@
+<p>Page not found.</p>
+<script>
+var redirections = [{
+  url: '/pages/acb-spec',
+  patterns: [ /^acb-spec|acb_format|PhotoshopColorBook|photoshopcolorbook/ ]
+}, {
+  url: '/pages/freeware',
+  patterns: [ /programs|^freeware/, /acb2xml/, /burr?ito/, /e-?res-?q/, /win-?res-?q/ ]
+}, {
+  url: 'https://atesgoral.github.io/html-polygon/',
+  patterns: [ /poly/ ]
+}, {
+  url: 'https://atesgoral.github.io/subpixel-scrolltext/',
+  patterns: [ /spst/ ]
+}, {
+  url: 'https://atesgoral.github.io/rockford-the-invincible/',
+  patterns: [ /bd20/ ]
+}, {
+  url: function (path) {
+    return 'https://web.archive.org/web/20170410104939/http://blog.magnetiq.com:80' + path.replace(/\/tumblr/, '');
+  },
+  patterns: [ /tumblr/ ]
+}];
+
+function matchPath(path) {
+  for (var i = 0; i < redirections.length; i++) {
+    var redirection = redirections[i];
+
+    for (var j = 0; j < redirection.patterns.length; j++) {
+      if (redirection.patterns[j].test(path)) {
+        return redirection.url instanceof Function
+          ? redirection.url(path)
+          : redirection.url;
+      }
+    }
+  }
+}
+
+document.body.style.visibility = 'hidden';
+
+var url = matchPath(document.location.pathname);
+
+if (url) {
+  document.location.replace(url);
+} else {
+  document.body.style.visibility = 'visible';
+}
+</script>
