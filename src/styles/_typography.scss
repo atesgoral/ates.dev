@@ -12,3 +12,22 @@ body {
 dt {
   font-weight: bold;
 }
+
+code {
+  font-size: 1rlh;
+  background: #cf2f9728;
+  border-radius: 4px;
+  padding: 0 0.125rlh;
+}
+
+pre > code {
+  background: none;
+  font-size: inherit;
+}
+
+pre {
+  font-size: 0.875rlh;
+  background: #cf2f9728;
+  padding: 0 0.5rlh;
+  border-radius: 4px;
+}
