@@ -66,6 +66,7 @@ dt {
   height: 3rlh;
   border-radius: 3rlh;
   margin-right: 1rlh;
+  margin-bottom: 0.5rlh;
 }
 
 .meta {
@@ -81,7 +82,7 @@ dt {
     margin-bottom: 0.5rlh;
   }
 
-  @media (max-width: 40rem) {
+  @media (max-width: 35rlh) {
     & > img {
       float: none;
       width: 100%;
