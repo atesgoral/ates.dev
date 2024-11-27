@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ates.dev &middot; Morphing Depth of Field</title>
+    <link rel="stylesheet" href="/styles/style.css" />
+    <script src="/assets/js/prog.js?bust=1"></script>
+  </head>
+  <body>
+    <header>
+      <h1><a href="/">ates.dev</a></h1>
+    </header>
+
+    <main>
+<article>
+  <h2>Morphing Depth of Field</h2>
+
+  <div class="content"><p>Two (or more) photographs of the same scene and that have different focal distances can be joined together to create an image where both distant and close objects can be in focus.</p>
+<p>Quoting from <a href="https://www.graficaobscura.com/depth/index.html">A Multifocus Method for Controlling Depth of Field</a> by Paul Haeberli:</p>
+<blockquote>
+<p>When a photograph is taken with a camera, the lens is focused at a particular distance. Objects nearer or farther than this focal distance will appear blurred. By changing the focus of the lens, near objects or distant objects can be made to appear in sharp focus. If you want to create an image where distant objects as well as close objects are in focus, two or more images can be merged together to make an image with increased depth of field...</p>
+</blockquote>
+<p>Instead of creating a single, in-focus image from two images, I wanted to see how a smooth morphing effect would look like.</p>
+<main>
+</main>
+{: .center}
+<p>Hovering over the image controls how much each of the two images contributes to the final image. Vertical movement controls the contribution amount of the image where the bottle at the front in-focus. Horizontal movement controls the image where the bottle at the back is in-focus.</p>
+<p>To get a natural, focus-back-and-forth experience, move the mouse from the top right corner to the bottom left corner and back.</p>
+<p>This was originally done using <a href="https://processing.org/">Processing</a>, then ported to Processing.js (deprecated) and I've recently ported it to <a href="https://p5js.org/">p5.js</a> with GPT-4. You can download the original <a href="multi_focus.pde">PDE file</a> or the ported <a href="sketch.js">p5.js file</a>.</p>
+<p>The images I've used are below. They're taken from the original article.</p>
+<p class="center zoomable">
+  <img src="i/far_in_focus.gif" alt="Far in focus">
+</p>
+<p class="center zoomable">
+  <img src="i/near_in_focus.gif" alt="Near in focus">
+</p>
+<script src="https://cdn.jsdelivr.net/npm/p5@1.7.0/lib/p5.js"></script>
+<script src="sketch.js"></script>
+</div>
+</article>
+</main>
+
+    <footer>
+      <hr />
+      <p class="footer meta">
+        &copy; Ateş Göral &middot; A GitHub Pages site running on Eleventy:
+        <a href="https://github.com/atesgoral/ates.dev"
+          >github.com/atesgoral/ates.dev</a
+        >
+      </p>
+    </footer>
+  </body>
+</html>

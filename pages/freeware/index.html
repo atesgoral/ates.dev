@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ates.dev &middot; Freeware</title>
+    <link rel="stylesheet" href="/styles/style.css" />
+    <script src="/assets/js/prog.js?bust=1"></script>
+  </head>
+  <body>
+    <header>
+      <h1><a href="/">ates.dev</a></h1>
+    </header>
+
+    <main>
+<article>
+  <h2>Freeware</h2>
+
+  <div class="content"><p>There are a couple of freeware tools that I wrote over the years. Some of them are outdated/obsolete, but here they are anyway:</p>
+<ul>
+<li><a href="#acb2xml">ACB2XML</a> -- Convert Photoshop Color Books to XML</li>
+<li><a href="#burrito">Burrito</a> -- FTP-to-POP3 protocol translator</li>
+<li><a href="#e-res-q">E-Res-Q</a> -- Simple, portable POP3 client</li>
+<li><a href="#win-res-q">Win-Res-Q</a> -- Reveal hidden windows</li>
+</ul>
+<h3 id="acb2xml" tabindex="-1"><a class="permalink" href="#acb2xml">ACB2XML</a></h3>
+<p>Here's a freeware tool that I had written back in 2003, shortly after reverse-engineering the <a href="/pages/acb-spec">Adobe Color Book Format</a>. This command-line Windows application extracts color data from color book files and generates XML. Once the color data is safely in XML domain, the rest is up to your imagination...</p>
+<p>Download <a href="https://github.com/atesgoral/acb2xml/releases/download/v2.0/acb2xml20.zip">acb2xml20.zip</a></p>
+<p>If you don't already know what color books are, there's the <strong>Custom Colors</strong> dialog which appears when you click the <strong>Custom</strong> button on the <strong>Color Picker</strong> dialog. There, you can pick colors from a variety of color books which represent standard color catalogs like Pantone, Toyo, Trumatch, etc. The color book data is kept in files under the <strong>Presets/Color Books</strong> folder of your Photoshop installation. On Windows, they have the <strong>.acb</strong> extension.</p>
+<p class="center zoomable">
+  <img src="i/custom_colors.jpg" alt="Custom Colors Dialog">
+</p>
+<p>To extract data, just pass in the filename of a color book. The resulting XML will go to standard output. To capture to a file, just redirect the output:</p>
+<pre><code class="language-shell">acb2xml focoltone.acb &gt; focoltone.xml
+</code></pre>
+<p>For long filenames or filenames with spaces, quote the filenames:</p>
+<pre><code class="language-shell">acb2xml &quot;PANTONE process coated.acb&quot; &gt; &quot;PANTONE process coated.xml&quot;
+</code></pre>
+<p>The resulting output will look something like this:</p>
+<pre><code class="language-xml">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;color-book version=&quot;1.0&quot; xmlns=&quot;http://magnetiq.com/ns/2007/05/colorbook&quot;&gt;
+    &lt;version&gt;1&lt;/version&gt;
+    &lt;id&gt;0bb9&lt;/id&gt;
+    &lt;title&gt;&lt;![CDATA[$$$/colorbook/FOCOLTONE/title=FOCOLTONE]]&gt;&lt;/title&gt;
+    &lt;prefix&gt;&lt;![CDATA[$$$/colorbook/FOCOLTONE/prefix=FOCOLTONE ]]&gt;&lt;/prefix&gt;
+    &lt;postfix&gt;&lt;![CDATA[$$$/colorbook/FOCOLTONE/postfix=]]&gt;&lt;/postfix&gt;
+    &lt;description&gt;&lt;![CDATA[$$$/colorbook/FOCOLTONE/description=]]&gt;&lt;/description&gt;
+    &lt;colors&gt;860&lt;/colors&gt;
+    &lt;page-size&gt;5&lt;/page-size&gt;
+    &lt;page-offset&gt;2&lt;/page-offset&gt;
+    &lt;color-space&gt;CMYK&lt;/color-space&gt;
+    &lt;color&gt;
+        &lt;name&gt;1070&lt;/name&gt;
+        &lt;alias&gt;&lt;![CDATA[1070  ]]&gt;&lt;/alias&gt;
+        &lt;cyan&gt;100&lt;/cyan&gt;
+        &lt;magenta&gt;0&lt;/magenta&gt;
+        &lt;yellow&gt;0&lt;/yellow&gt;
+        &lt;black&gt;0&lt;/black&gt;
+    &lt;/color&gt;
+    &lt;color&gt;
+        &lt;name&gt;1071&lt;/name&gt;
+        &lt;alias&gt;&lt;![CDATA[1071  ]]&gt;&lt;/alias&gt;
+        &lt;cyan&gt;0&lt;/cyan&gt;
+        &lt;magenta&gt;100&lt;/magenta&gt;
+        &lt;yellow&gt;0&lt;/yellow&gt;
+        &lt;black&gt;0&lt;/black&gt;
+    &lt;/color&gt;
+    ...
+</code></pre>
+<p>ACB2XML currently supports CMYK, RGB and Lab color spaces.</p>
+<h4 id="known-issues" tabindex="-1"><a class="permalink" href="#known-issues">Known Issues</a></h4>
+<ul>
+<li>Some textual information is enclosed in CDATA blocks, instead of doing proper XML escaping. While this has no harm whatsoever, I may fix it in the future.</li>
+</ul>
+<h3 id="burrito" tabindex="-1"><a class="permalink" href="#burrito">Burrito</a></h3>
+<p>With Burrito you can read and manage your e-mails with any FTP client! It acts as a POP3/FTP protocol translator -- it's actually an FTP server that translates FTP commands to POP3 commands and serves your e-mail messages as individual files. You can view, delete and copy your e-mail messages as if they were files on an FTP server.</p>
+<p>Download <a href="https://github.com/atesgoral/burrito/releases/download/v1.0b/burrito10b.exe">burrito10b.exe</a></p>
+<p>This is a programming experiment that dates back to 2002. Having played around with POP3 for a while (see <a href="#e-res-q">E-Res-Q</a>), I just wanted to prove to myself that POP3/FTP protocol translation could work (and I guess I also had more free time back then). Burrito is certainly not a utility that would appeal to the general public, due to its obscure function. The only real-life scenario I can think of is an employee trying to circumvent the company firewall that blocks POP3 traffic (which is something I've experienced first-hand).</p>
+<h4 id="very-brief-usage-instructions" tabindex="-1"><a class="permalink" href="#very-brief-usage-instructions">Very Brief Usage Instructions</a></h4>
+<p>The <strong>About</strong> tab has an <strong>Check for update</strong> button which takes you back to this site to tell you that you're using the most recent version of Burrito (since I currently don't have any intentions of releasing updates).</p>
+<p class="center zoomable">
+  <img src="i/burrito_idle.jpg" alt="About Tab">
+</p>
+<p>In the <strong>Options</strong> tab, you can determine how you'll be passing the POP3 username and server to your FTP server. The password that you use for the FTP connection is used as the POP3 server password, so Burrito doesn't have to know your password in advance. However, the POP3 username and password must be combined and used as the FTP username. You can change the username-server separator here (defaults to &quot;&quot;).</p>
+<p>You can also configure how filenames for individual messages are to be composed. The default is to use the name of the sender, followed by a dash, followed by the message subject. The default file extension is &quot;.eml&quot;. After copying files to your local disk, you should be able to simply double click to view them in Outlook Express. Use &quot;.msg&quot; etc. to match whatever e-mail client you're actually using.</p>
+<p class="center zoomable">
+  <img src="i/burrito_options.jpg" alt="Options Tab">
+</p>
+<p>By default, Burrito listens on port 21, on all IP addresses. The <strong>Security</strong> tab allows you to tweak the FTP server listen settings.</p>
+<p class="center zoomable">
+  <img src="i/burrito_security.jpg" alt="Security Tab">
+</p>
+<p>Here's how a typical FTP client configuration looks like (I use <a href="https://www.ghisler.com/">Total Commander</a>):</p>
+<p class="center zoomable">
+  <img src="i/burrito_ftpsettings.jpg" alt="FTP Client Settings">
+</p>
+<p>And here's how your e-mail messages appear as files in your FTP client:</p>
+<p class="center zoomable">
+  <img src="i/burrito_ftpaction.jpg" alt="FTP Client in Action">
+</p>
+<p>For every FTP connection you establish with Burrito, it will typically open a POP3 connection to the server that specified in the FTP username. It has a connection sharing feature for when multiple FTP clients access the same POP3 account.</p>
+<p>Because Burrito doesn't download entire messages until you attempt to do an FTP-copy, simply listing and deleting messages are typically faster than a normal POP3 client. Therefore, it can actually be used for cleaning up a POP3 account after it gets choked by a huge messages or spam.</p>
+<h4 id="known-issues-1" tabindex="-1"><a class="permalink" href="#known-issues-1">Known Issues</a></h4>
+<ul>
+<li>After the system wakes up from hibernation/suspension, the FTP listen port becomes unresponsive. Momentarily chaning the <strong>FTP server listen mode</strong> in the <strong>Security</strong> tab to some other mode may (depending on the mode change) reset the listen port.</li>
+</ul>
+<h3 id="e-res-q" tabindex="-1"><a class="permalink" href="#e-res-q">E-Res-Q</a></h3>
+<p>E-Res-Q (pronounced &quot;ee rescue&quot;) is a very simple, portable POP3 mail reader. It enables you to selectively read and delete messages without having to download them all. It's ideal for getting rid of large messages that clog up your mailbox or getting rid of spam messages without even downloading them.</p>
+<p>Download <a href="https://github.com/atesgoral/e-res-q/releases/download/v1.3/eresq13.zip">eresq13.zip</a></p>
+<p class="center zoomable">
+  <img src="i/e-res-q-ss.jpg" alt="E-Res-Q Main Window">
+</p>
+<p>This small program has proved very useful back in the times when most of us still had dial-up connections. It's still a very useful utility for setting up quick access to your POP3 mailbox when you're temporarily using someone else's computer. The fact that it doesn't require installation is a plus. You just download the zip file, extract the binary and run it, punch in your account settings and you're ready to go!</p>
+<h3 id="win-res-q" tabindex="-1"><a class="permalink" href="#win-res-q">Win-Res-Q</a></h3>
+<p>Win-Res-Q (pronounced &quot;win rescue&quot;) is a simple utility that restores (shows) hidden windows. It can be used for bringing back your &quot;lost&quot; applications after their taskbar icons disappear following Explorer crashes that abundantly occur on Windows 98. It's also useful for exposing strange, hidden windows lurking around your desktop.</p>
+<p>Download <a href="https://github.com/atesgoral/win-res-q/releases/download/v1.0/winresq10.zip">winresq10.zip</a></p>
+<p class="center zoomable">
+  <img src="i/win-res-q-ss.gif" alt="Win-Res-Q Main Window">
+</p>
+<p>This was one of the first Windows applications that I had written using Delphi. I forgot exactly when I wrote it but the file date hints that it's around August 1998. Back then, I was still using the nickname &quot;HeaT&quot; and I also thought that splash screens were cool. When you launch the program, an annoying splash screen pops up with the name &quot;HeaT&quot; on it . It automatically goes away after a few seconds or as soon as you click on it. An installer is not available since it's only a single executable (and I was lazy).</p>
+<p>You should be cautious when getting weird system windows shown since it might not be possible to re-hide them unless you restart Windows.</p>
+<p>For a more comprehensive taskbar icon rescue solution, you can use <a href="http://www.mlin.net/TraySaver.shtml">TraySaver</a> by <a href="http://www.mlin.net/">Mike Lin</a>.</p>
+</div>
+</article>
+</main>
+
+    <footer>
+      <hr />
+      <p class="footer meta">
+        &copy; Ateş Göral &middot; A GitHub Pages site running on Eleventy:
+        <a href="https://github.com/atesgoral/ates.dev"
+          >github.com/atesgoral/ates.dev</a
+        >
+      </p>
+    </footer>
+  </body>
+</html>

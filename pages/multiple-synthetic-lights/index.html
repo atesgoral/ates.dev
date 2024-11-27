@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ates.dev &middot; Multiple Synthetic Lights</title>
+    <link rel="stylesheet" href="/styles/style.css" />
+    <script src="/assets/js/prog.js?bust=1"></script>
+  </head>
+  <body>
+    <header>
+      <h1><a href="/">ates.dev</a></h1>
+    </header>
+
+    <main>
+<article>
+  <h2>Multiple Synthetic Lights</h2>
+
+  <div class="content"><p>Multiple photographs taken with different light sources can be blended together to create images that appear to have all the light sources simultaneously active. The light sources can be attributed arbitrary colors as well, allowing the creation of an infinite number of synthetic scenes.</p>
+<p>Quoting from <a href="https://www.graficaobscura.com/synth/">Synthetic Lighting for Photography</a> by Paul Haeberli:</p>
+<blockquote>
+<p>Light from different light sources add together to illuminate objects in a scene. We can use this super-position principle to modify the lighting of a scene after it has been photographed...</p>
+</blockquote>
+<p>I've created an interactive application with three light sources with different colors.</p>
+<main>
+</main>
+{: .center}
+<p>Hover over the image to change the intensities of the three light sources.</p>
+<p>This was originally done using <a href="https://processing.org/">Processing</a>, then ported to Processing.js (deprecated) and I've recently ported it to <a href="https://p5js.org/">p5.js</a> with GPT-4. You can download the original <a href="multi_focus.pde">PDE file</a> or the ported <a href="sketch.js">p5.js file</a>.</p>
+<p>The images I've used are below. They're taken from <a href="https://web.archive.org/web/20071207230006/www.megapixel.net/html/articles/article-lightdir.php">this article about lighting direction</a>.</p>
+<p class="center zoomable">
+  <img src="i/lighting-11.jpg" alt="Ambient light">
+</p>
+<p class="center zoomable">
+  <img src="i/lighting-09.jpg" alt="Light coming from the left">
+</p>
+<p class="center zoomable">
+  <img src="i/lighting-10.jpg" alt="Light coming from the top">
+</p>
+<p class="center zoomable">
+  <img src="i/lighting-14.jpg" alt="Light coming from the right">
+</p>
+<script src="https://cdn.jsdelivr.net/npm/p5@1.7.0/lib/p5.js"></script>
+<script src="sketch.js"></script>
+</div>
+</article>
+</main>
+
+    <footer>
+      <hr />
+      <p class="footer meta">
+        &copy; Ateş Göral &middot; A GitHub Pages site running on Eleventy:
+        <a href="https://github.com/atesgoral/ates.dev"
+          >github.com/atesgoral/ates.dev</a
+        >
+      </p>
+    </footer>
+  </body>
+</html>

@@ -45,7 +45,7 @@ function initializeZoom() {
     }
   }
 
-  const imageEls = document.querySelectorAll(".image-240x135 > img");
+  const imageEls = document.querySelectorAll(".zoomable > img");
 
   for (const imageEl of imageEls) {
     imageEl.addEventListener("click", () => toggleImageZoom(imageEl));
@@ -66,7 +66,7 @@ function initializeTrails() {
   trailsCanvas.setAttribute("id", "trails");
 
   trailsContainer.appendChild(trailsCanvas);
-  document.querySelector(".markdown-body").appendChild(trailsContainer);
+  document.querySelector("body").appendChild(trailsContainer);
 
   const dpr = window.devicePixelRatio;
 
@@ -74,19 +74,21 @@ function initializeTrails() {
   trailsCanvas.height = trailsCanvas.clientHeight * dpr;
 
   let lastTrailsMove = null;
-  let trailsX = null;
-  let trailsY = null;
+  const trails = {
+    x: null,
+    y: null,
+  };
 
   function moveTrails(x, y) {
     lastTrailsMove = performance.now();
-    trailsX = x;
-    trailsY = y;
+    trails.x = x;
+    trails.y = y;
 
     trailsCanvas.style.left = `${
-      trailsX - trailsCanvas.clientWidth / 2 + window.scrollX
+      trails.x - trailsCanvas.clientWidth / 2 + window.scrollX
     }px`;
     trailsCanvas.style.top = `${
-      trailsY - trailsCanvas.clientHeight / 2 + window.scrollY
+      trails.y - trailsCanvas.clientHeight / 2 + window.scrollY
     }px`;
   }
 
@@ -107,7 +109,7 @@ function initializeTrails() {
   });
 
   window.addEventListener("scroll", () => {
-    moveTrails(trailsX, trailsY);
+    moveTrails(trails.x, trails.y);
   });
 
   const trailsCtx = trailsCanvas.getContext("2d");
@@ -141,7 +143,7 @@ function initializeTrails() {
       trailsCtx.fillStyle = "#fff";
       trailsCtx.font = "40px sans-serif";
       trailsCtx.fillText(`window.scrollY: ${window.scrollY}`, 20, 60);
-      trailsCtx.fillText(`trailsY: ${trailsY}`, 20, 120);
+      trailsCtx.fillText(`trailsY: ${trails.y}`, 20, 120);
     }
 
     trailsCtx.scale(scale, scale);
@@ -151,16 +153,16 @@ function initializeTrails() {
 
     trailsCtx.fillStyle = "#a484ff";
 
-    const subs = 15;
+    const subs = 16;
     const spacing = trailsCanvas.clientWidth / subs;
     const size = 2;
 
     for (let i = 0; i < subs; i++) {
       for (let j = 0; j < subs; j++) {
         const x =
-          i / subs - 0.5 - (trailsX % spacing) / trailsCanvas.clientWidth;
+          i / subs - 0.5 - (trails.x % spacing) / trailsCanvas.clientWidth;
         const y =
-          j / subs - 0.5 - (trailsY % spacing) / trailsCanvas.clientWidth;
+          j / subs - 0.5 - (trails.y % spacing) / trailsCanvas.clientWidth;
 
         const distance = Math.hypot(x, y);
         const distanceAlpha = 1 - Math.min(distance, 0.5) / 0.5;
@@ -191,6 +193,7 @@ function initializeThemeToggle() {
   const toggleLabel = document.createElement("label");
 
   toggleLabel.setAttribute("id", "theme-toggle-label");
+  toggleLabel.setAttribute("class", "hoverable");
   toggleLabel.appendChild(document.createTextNode("Toggle theme"));
 
   const toggle = document.createElement("input");
@@ -200,7 +203,7 @@ function initializeThemeToggle() {
   toggle.setAttribute("title", "Toggle theme");
 
   toggleLabel.appendChild(toggle);
-  document.querySelector(".markdown-body").appendChild(toggleLabel);
+  document.querySelector("main").appendChild(toggleLabel);
 
   function applyPrefs() {
     const themeOverride = localStorage.getItem("theme-override");

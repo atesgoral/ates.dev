@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ates.dev &middot; Adobe Color Book File Format Specification</title>
+    <link rel="stylesheet" href="/styles/style.css" />
+    <script src="/assets/js/prog.js?bust=1"></script>
+  </head>
+  <body>
+    <header>
+      <h1><a href="/">ates.dev</a></h1>
+    </header>
+
+    <main>
+<article>
+  <h2>Adobe Color Book File Format Specification</h2>
+
+  <div class="content"><p>Adobe Photoshop's <strong>Color Picker</strong> has a <strong>Custom Colors</strong> dialog that offers a wide variety of colors from several industry-standard color catalogs such as ANPA, DIC, Focoltone and Pantone.</p>
+<p class="center zoomable">
+  <img src="i/custom_colors.jpg" alt="Custom Colors Dialog">
+</p>
+<p>The color catalog data comes from <strong>Adobe Color Book</strong> files. These file have the <strong>.ACB</strong> file extension on Windows and reside inside the &quot;.../Presets/Color Books&quot; folder in a typical installation.</p>
+<p>Partly out of curiosity and partly because I needed the color data for a job, I went through reverse-engineering the file format since an official file format specification wasn't readily available. I have put together what I've come up with into an unofficial file format specification.</p>
+<h3 id="data-types" tabindex="-1"><a class="permalink" href="#data-types">Data Types</a></h3>
+<p>There are three main data types used throughout a color book file. 16-bit and 32-bit integers and strings.</p>
+<p>Integers are in <a href="http://en.wikipedia.org/wiki/Endianness">big-endian</a> arrangement, so make sure you swap the bytes as necessary when reading/writing. I don't know whether they should be treated as signed or unsigned. Signed has worked for me.</p>
+<p>Strings are like <a href="http://en.wikipedia.org/wiki/String_(computer_science)">Pascal strings</a>, starting with a 32-bit integer that gives the string length, followed by a sequence of UTF-16 characters (as kindly pointed out by <a href="http://spike.grobste.in/">Spike Grobstein</a>. Strings are not null-terminated therefore the string length gives the exact length of the string (without the length field). The UTF-16 characters are in big-endian order. Again, some byte swapping may be necessary.</p>
+<h3 id="header" tabindex="-1"><a class="permalink" href="#header">Header</a></h3>
+<p>The file starts with a header that contains general information about the color book. The fields in the header are:</p>
+<h4 id="signature" tabindex="-1"><a class="permalink" href="#signature">Signature</a></h4>
+<p>4 consecutive characters that always read &quot;8BCB&quot;. This probably stands for &quot;8B Color Book&quot;.</p>
+<h4 id="book-version" tabindex="-1"><a class="permalink" href="#book-version">Book Version</a></h4>
+<p>This is a 16-bit integer denoting the file version. Photoshop 7.0 only opens files of version 1.</p>
+<h4 id="book-identifier" tabindex="-1"><a class="permalink" href="#book-identifier">Book Identifier</a></h4>
+<p>A 16-bit integer. This is probably a unique identifier assigned by Adobe to each official color book. The most significant byte always seems to be <code>0x0b</code>.</p>
+<h4 id="book-title" tabindex="-1"><a class="permalink" href="#book-title">Book Title</a></h4>
+<p>A string. The title of the color book as it appears in Photoshop's color picker. A &quot;^R&quot; within the string stands for a registered trademark (®) symbol.</p>
+<h4 id="color-name-prefix" tabindex="-1"><a class="permalink" href="#color-name-prefix">Color Name Prefix</a></h4>
+<p>This string is prepended to the beginning of the name of each color in the book.</p>
+<h4 id="color-name-suffix" tabindex="-1"><a class="permalink" href="#color-name-suffix">Color Name Suffix</a></h4>
+<p>This string is appended to the end of the name of each color in the book.</p>
+<h4 id="book-description" tabindex="-1"><a class="permalink" href="#book-description">Book Description</a></h4>
+<p>This string usually contains copyright information. A &quot;^C&quot; stands for the copyright symbol (©). &quot;^R&quot; is for the registered trademark symbol (®). I don't know if there are any other special sequences.</p>
+<h4 id="color-count" tabindex="-1"><a class="permalink" href="#color-count">Color Count</a></h4>
+<p>A 16-bit integer. This can be more than the colors visible within Photoshop. Some color records can be dummy records (see <a href="#color-name">Color Name</a>) that are used as padding in order to control how colors get grouped in pages.</p>
+<h4 id="page-size" tabindex="-1"><a class="permalink" href="#page-size">Page Size</a></h4>
+<p>A 16-bit integer that specifies the maximum number of colors that can appear on a page.</p>
+<h4 id="page-selector-offset" tabindex="-1"><a class="permalink" href="#page-selector-offset">Page Selector Offset</a></h4>
+<p>The page selector in Photoshop's color picker display a sample color from each page. This offset specifies which of the colors on a page will be used as the page sample. &quot;0&quot; means the first (topmost) color. &quot;1&quot; means the second one and so on. If the offset exceeds or is equal to the number of colors on the page, the last color is used.</p>
+<h4 id="color-spacelibrary-identifier" tabindex="-1"><a class="permalink" href="#color-spacelibrary-identifier">Color Space/Library Identifier</a></h4>
+<p>A 16-bit integer that specifies the color space/library. Values that Photoshop 7.0 recognizes are:</p>
+<ul>
+<li>0 -- RGB</li>
+<li>2 -- CMYK</li>
+<li>7 -- Lab</li>
+</ul>
+<p>The rest of the values can be found in the official &quot;Adobe Photoshop 6.0 File Formats Specification&quot;, but they apparently don't work for color books. Note that the 6.0 specification has no information on color book files. The full range of color space/library identifier values are:</p>
+<ul>
+<li>0 -- RGB</li>
+<li>1 -- HSB (HSV)</li>
+<li>2 -- CMYK</li>
+<li>3 -- Pantone</li>
+<li>4 -- Focoltone</li>
+<li>5 -- Trumatch</li>
+<li>6 -- Toyo</li>
+<li>7 -- Lab (CIELAB D50)</li>
+<li>8 -- Grayscale</li>
+<li>10 -- HKS</li>
+</ul>
+<h3 id="color-records" tabindex="-1"><a class="permalink" href="#color-records">Color Records</a></h3>
+<p>Immediately following the header are the individual color records. There are exactly as many color records as there was specified by the <a href="#color-count">Color Count</a> field.</p>
+<p>Photoshop may display fewer colors then there are in the color book file because some color records are dummy records used for padding purposes. When a page has to contain fewer colors than the number specified by <a href="#page-size">Page Size</a>, dummy records are inserted. Photoshop doesn't display these records.</p>
+<p>The structure of a single color record is as follows:</p>
+<h4 id="color-name" tabindex="-1"><a class="permalink" href="#color-name">Color Name</a></h4>
+<p>A string. Concatenating the <a href="#color-name-prefix">Color Name Prefix</a>, the Color Name and the <a href="#color-name-suffix">Color Name Suffix</a> gives us the full name of a color as it appears in Photoshop's color picker. If the length of this string is zero, the entire color record is for padding (see <a href="#color-count">Color Count</a>.) The remaining fields of the color record are ignored.</p>
+<h4 id="color-code" tabindex="-1"><a class="permalink" href="#color-code">Color Code</a></h4>
+<p>6 consecutive characters. This is probably a catalog code or short name. Sometimes they are padded with spaces on either side. Photoshop doesn't seem to be displaying this information to the user at all.</p>
+<h4 id="color-components" tabindex="-1"><a class="permalink" href="#color-components">Color Components</a></h4>
+<p>Depending on the color space, there can be 3 or 4 bytes, one byte for each color component:</p>
+<h5 id="rgb" tabindex="-1"><a class="permalink" href="#rgb">RGB</a></h5>
+<p>A byte for each of the Red, Green and Blue components. Each byte value directly translates to the corresponding level.</p>
+<pre><code>r = r_byte; // 0 thru 255
+g = g_byte; // 0 thru 255
+b = b_byte; // 0 thru 255
+</code></pre>
+<h5 id="cmyk" tabindex="-1"><a class="permalink" href="#cmyk">CMYK</a></h5>
+<p>A byte for each of the Cyan, Magenta, Yellow and Black components. Each is an unsigned value ranging from 0 to 255, representing 100 minus the intensity percentage, quantized to 255. To calculate the corresponding intensity percentage, subtract a byte value from 255, divide by 2.55 and then round to the nearest integer.</p>
+<pre><code>c = (255 - c_byte) / 2.55 + 0.5; // 0% thru 100%
+m = (255 - m_byte) / 2.55 + 0.5; // 0% thru 100%
+y = (255 - y_byte) / 2.55 + 0.5; // 0% thru 100%
+b = (255 - b_byte) / 2.55 + 0.5; // 0% thru 100%
+</code></pre>
+<h5 id="lab" tabindex="-1"><a class="permalink" href="#lab">Lab</a></h5>
+<p>A byte for each of the Lightness, a chrominance and b chrominance components. The lightness percentage is quantized to 255. To get the lightness level percentage, divide the byte value by 2.55 and round to the nearest integer. The a and b chrominance values are offset by 128. To calculate their values, subtract 128 from the corresponding byte values.</p>
+<pre><code>l = l_byte / 2.55 + 0.5; // 0% thru 100%
+a = a_byte - 128; // -128 thru 127
+b = b_byte - 128; // -128 thru 127
+</code></pre>
+<h3 id="spotprocess-identifier" tabindex="-1"><a class="permalink" href="#spotprocess-identifier">Spot/Process Identifier</a></h3>
+<p>This field was probably added in Photoshop CS and beyond. 8 characters (bytes), &quot;spflspot&quot; for spot colors and &quot;spflproc&quot; for process colors. This just identifies the color book as a spot/process color book. (Thanks to Olivier for alerting me about the presence of these extra bytes in CS.)</p>
+<h3 id="illustrated-example" tabindex="-1"><a class="permalink" href="#illustrated-example">Illustrated Example</a></h3>
+<p>Below is a portion from the beginning of &quot;ANPA Color.acb&quot; that ships with Adobe Photoshop 7.0 for Windows. Separate fields have been enclosed inside rectangles. A verbal walk-through will follow.</p>
+<pre><code>
+          +-----------+-----+-----+-----------+------------
+00000000h:|38 42 43 42|00 01|0B B8|00 00 00 23|00 24 00 24 ; 8BCB.......#.$.$
+          +-----------+-----+-----+-----------+------------
+00000010h: 00 24 00 2F 00 63 00 6F 00 6C 00 6F 00 72 00 62 ; .$./.c.o.l.o.r.b
+          -------------------------------------------------
+00000020h: 00 6F 00 6F 00 6B 00 2F 00 41 00 4E 00 50 00 41 ; .o.o.k./.A.N.P.A
+          -------------------------------------------------
+00000030h: 00 2F 00 74 00 69 00 74 00 6C 00 65 00 3D 00 41 ; ./.t.i.t.l.e.=.A
+          -------------------------------------------------
+00000040h: 00 4E 00 50 00 41 00 20 00 43 00 6F 00 6C 00 6F ; .N.P.A. .C.o.l.o
+          ------+-----------+------------------------------
+00000050h: 00 72|00 00 00 1F|00 24 00 24 00 24 00 2F 00 63 ; .r.....$.$.$./.c
+          ------+-----------+------------------------------
+00000060h: 00 6F 00 6C 00 6F 00 72 00 62 00 6F 00 6F 00 6B ; .o.l.o.r.b.o.o.k
+          -------------------------------------------------
+00000070h: 00 2F 00 41 00 4E 00 50 00 41 00 2F 00 70 00 72 ; ./.A.N.P.A./.p.r
+          -------------------------------------------------
+00000080h: 00 65 00 66 00 69 00 78 00 3D 00 41 00 4E 00 50 ; .e.f.i.x.=.A.N.P
+          ------------+-----------+------------------------
+00000090h: 00 41 00 20|00 00 00 21|00 24 00 24 00 24 00 2F ; .A. ...!.$.$.$./
+          ------------+-----------+------------------------
+000000a0h: 00 63 00 6F 00 6C 00 6F 00 72 00 62 00 6F 00 6F ; .c.o.l.o.r.b.o.o
+          -------------------------------------------------
+000000b0h: 00 6B 00 2F 00 41 00 4E 00 50 00 41 00 2F 00 70 ; .k./.A.N.P.A./.p
+          -------------------------------------------------
+000000c0h: 00 6F 00 73 00 74 00 66 00 69 00 78 00 3D 00 20 ; .o.s.t.f.i.x.=.
+          ------------------------------+-----------+------
+000000d0h: 00 41 00 64 00 50 00 72 00 6F|00 00 00 1F|00 24 ; .A.d.P.r.o.....$
+          ------------------------------+-----------+------
+000000e0h: 00 24 00 24 00 2F 00 63 00 6F 00 6C 00 6F 00 72 ; .$.$./.c.o.l.o.r
+          -------------------------------------------------
+000000f0h: 00 62 00 6F 00 6F 00 6B 00 2F 00 41 00 4E 00 50 ; .b.o.o.k./.A.N.P
+          -------------------------------------------------
+00000100h: 00 41 00 2F 00 64 00 65 00 73 00 63 00 72 00 69 ; .A./.d.e.s.c.r.i
+          ------------------------------------+-----+-----+
+00000110h: 00 70 00 74 00 69 00 6F 00 6E 00 3D|01 2C|00 06|; .p.t.i.o.n.=.,..
+          +-----+-----+-----------+-----------+-----+-----+
+00000120h:|00 05|00 07|00 00 00 04|00 37 00 31 00 2D 00 31|; .........7.1.-.1
+          +-----+-----+-----+--+--+--+-----------+--------+
+00000130h:|20 37 31 2D 31 44|F8|7B|7B|00 00 00 04|00 37 00 ;  71-1Dø{{.....7.
+          +--------------+--+--+--+--+-----+--+--+--+------
+00000140h: 31 00 2D 00 32|20 37 31 2D 32 44|F1|78|78|00 00 ; 1.-.2 71-2Dñxx..
+          ------+--------+--------------+--+--+--+--+-----+          /\    /
+00000150h: 00 04|00 37 00 31 00 2D 00 34|20 37 31 2D 34 44|;/\..7.1./  \71/
+          +--+--+--+-----------+--------+------------/\+--+/  \    /    \/
+00000160h:|E3|72|7/\00 00 00 04|00 37 00 31 00 2D 00/  \20/    \../
+          +--+--+/  \----/\-+--+--+----/\----/\----/    \/      \/
+00000170/\ 37 31/    \ 4/  \|68|67|00 /  \0 /  \0 /
+ /\    /  \----/      \/    \--+-/\--/    \/    \/
+/  \01/    \0 /              \1 /  \/
+    \/      \/                \/
+
+</code></pre>
+<p>The file starts with the mandatory &quot;8BCB&quot; signature. Following that, the file version comes. The version must be 1 for Photoshop 7.0 to open the file. Then comes the unique color book identifier: 0x0bb8.</p>
+<p>Next, the length of the title string is reported to be 0x23 (35) wide characters long. The title string is: &quot;$$$/colorbook/ANPA/title=ANPA Color&quot;. The 31- character prefix string is: &quot;$$$/colorbook/ANPA/prefix=ANPA &quot;. Note the extra space character at the end. The suffix, &quot;$$$/colorbook/ANPA/postfix= AdPro&quot; is 33 characters long. This also has an extra space just after the equal sign. This file has no description, but the description string is there anyway. Having a length of 31 characters, it reads: &quot;$$$/colorbook/ANPA/description=&quot;. I don't know what this path scheme is all about.</p>
+<p>The following 0x012c gives us the number of colors in this book (300). There will be a maximum of 6 colors per page with a page offset of 5, which in turn means that the right-hand page selector in Photoshop's color picker will use the last color of each page. The color space is 7 (Lab).</p>
+<p>The color records start here. The first color name is 4 characters long: &quot;71-1&quot;. This should be concatenated with the prefix and suffix we saw earlier to produce the full color name: &quot;ANPA 71-1 AdPro&quot;. The 6-character short name for this color is: &quot; 71-1D&quot;. Notice the padding space at the left. The lightness component reads 0xf8 (248). This rounds down to a percentage of 248 / 255 * 100 = 97. The a and b chrominance values are both 0x7b (123). Subtracting 128 gives -5 for both components.</p>
+<p>Immediately after this, the second color record starts. The name length is again 4, etc...</p>
+<h3 id="see-also" tabindex="-1"><a class="permalink" href="#see-also">See Also</a></h3>
+<ul>
+<li><a href="http://www.nomodes.com/aco.html">Adobe Photoshop Color File Format</a> by <a href="http://www.nomodes.com/">Larry Tesler</a></li>
+<li><a href="/pages/freeware#acb2xml">ACB2XML</a> -- Tool for exporting color book data as XML</li>
+</ul>
+</div>
+</article>
+</main>
+
+    <footer>
+      <hr />
+      <p class="footer meta">
+        &copy; Ateş Göral &middot; A GitHub Pages site running on Eleventy:
+        <a href="https://github.com/atesgoral/ates.dev"
+          >github.com/atesgoral/ates.dev</a
+        >
+      </p>
+    </footer>
+  </body>
+</html>

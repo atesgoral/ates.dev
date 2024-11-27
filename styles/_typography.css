@@ -1,0 +1,31 @@
+@font-face {
+  font-family: "Varela Round";
+  src: url("../assets/fonts/varelaround-regular-webfont.woff2") format("woff2");
+  font-display: swap;
+}
+body {
+  font-family: "Varela Round", Arial, sans-serif;
+}
+
+dt {
+  font-weight: bold;
+}
+
+code {
+  font-size: 1rlh;
+  background: rgba(207, 47, 151, 0.1568627451);
+  border-radius: 4px;
+  padding: 0 0.125rlh;
+}
+
+pre > code {
+  background: none;
+  font-size: inherit;
+}
+
+pre {
+  font-size: 0.875rlh;
+  background: rgba(207, 47, 151, 0.1568627451);
+  padding: 0 0.5rlh;
+  border-radius: 4px;
+}

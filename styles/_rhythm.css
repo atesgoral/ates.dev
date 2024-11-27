@@ -1,0 +1,88 @@
+html, body {
+  font-size: 100%;
+}
+
+html {
+  line-height: 1.5;
+}
+
+body {
+  margin: 0;
+  padding: 1.25rlh;
+}
+
+h1, h2, h3, h4, h5 {
+  margin: 0.5rlh 0;
+}
+
+h1 {
+  font-size: 1.5rlh;
+  line-height: 2.5rlh;
+}
+
+h2 {
+  font-size: 1.125rlh;
+  line-height: 2rlh;
+}
+
+h3 {
+  font-size: 1rlh;
+  line-height: 1.5rlh;
+}
+
+h4 {
+  font-size: 0.75rlh;
+  line-height: 1.5rlh;
+}
+
+h5 {
+  font-size: 0.625rlh;
+  line-height: 1.25rlh;
+}
+
+h6 {
+  font-size: 0.5rlh;
+  line-height: 1rlh;
+}
+
+p, ul, ol {
+  margin: 0.5rlh 0;
+}
+
+p,
+li,
+dd,
+dt {
+  font-size: 0.75rlh;
+  line-height: 1rlh;
+}
+
+.avatar > img {
+  display: block;
+  float: left;
+  width: 3rlh;
+  height: 3rlh;
+  border-radius: 3rlh;
+  margin-right: 1rlh;
+  margin-bottom: 0.5rlh;
+}
+
+.meta {
+  font-size: 0.625rlh;
+}
+
+.project-thumbnail > img {
+  float: left;
+  aspect-ratio: 240/135;
+  height: 6rlh;
+  margin-right: 1rlh;
+  margin-bottom: 0.5rlh;
+}
+@media (max-width: 35rlh) {
+  .project-thumbnail > img {
+    float: none;
+    width: 100%;
+    height: auto;
+    margin-right: 0;
+  }
+}

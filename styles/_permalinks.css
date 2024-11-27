@@ -1,0 +1,7 @@
+.permalink {
+  color: #84ddff;
+  transition: color 0.3s ease-in-out;
+}
+.permalink:visited, .permalink:active {
+  color: #84ddff;
+}
