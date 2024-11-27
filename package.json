@@ -5,6 +5,8 @@
   "description": "My personal website, running on GitHub Pages, because simple is good.",
   "main": "index.js",
   "scripts": {
+    "serve": "eleventy --serve",
+    "build": "eleventy",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
