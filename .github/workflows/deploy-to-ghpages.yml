@@ -14,18 +14,23 @@ jobs:
     concurrency:
       group: ${{ github.workflow }}-${{ github.ref }}
     steps:
-      - uses: actions/checkout@v3
+      - name: Check out
+        uses: actions/checkout@v3
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+          run_install: false
 
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: "20"
+          node-version: 20
+          cache: pnpm
 
-      # - name: Persist npm cache
-      #   uses: actions/cache@v3
-      #   with:
-      #     path: ~/.npm
-      #     key: ${{ runner.os }}-node-${{ hashFiles('**/package.json') }}
+      - name: Install dependencies
+        run: pnpm install
 
       - name: Persist Eleventy .cache
         uses: actions/cache@v3
@@ -33,7 +38,6 @@ jobs:
           path: ./.cache
           key: ${{ runner.os }}-eleventy-fetch-cache
 
-      - run: pnpm install
       - run: pnpm build
 
       - name: Deploy
