@@ -20,22 +20,22 @@ h1, h2, h3, h4, h5 {
 }
 
 h1 {
-  font-size: 2rlh;
+  font-size: 1.5rlh;
   line-height: 2.5rlh;
 }
 
 h2 {
-  font-size: 1.5rlh;
+  font-size: 1.125rlh;
   line-height: 2rlh;
 }
 
 h3 {
-  font-size: 1.25rlh;
+  font-size: 1rlh;
   line-height: 1.5rlh;
 }
 
 h4 {
-  font-size: 1rlh;
+  font-size: 0.75rlh;
   line-height: 1.5rlh;
 }
 
@@ -55,8 +55,8 @@ p,
 li,
 dd,
 dt {
-  font-size: 1rem;
-  line-height: 1.5rem;
+  font-size: 0.75rlh;
+  line-height: 1rlh;
 }
 
 .avatar > img {
@@ -69,7 +69,7 @@ dt {
 }
 
 .meta {
-  font-size: 0.875rem;
+  font-size: 0.625rlh;
 }
 
 .project-thumbnail {
