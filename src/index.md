@@ -4,7 +4,7 @@ title: Home
 ---
 
 <p class="avatar">
-  <img src="assets/i/profile-picture.jpg" alt="Profile picture" title="Side shot of my head">
+  <img src="/assets/i/profile-picture.jpg" alt="Profile picture" title="Side shot of my head">
 </p>
 
 Hi! I'm **Ateş Göral**. I enjoy writing code, tinkering with graphics, experimenting with electronics, and executing ambitious DIY projects.
@@ -72,7 +72,7 @@ Noticing a lack of a spec-compliant Ruby gem for parsing event streams (aka Serv
 #### IKEA OBEGRÄNSAD Hack
 
 <p class="project-thumbnail zoomable">
-  <img src="assets/i/obegransad-hack.jpg" alt="IKEA OBEGRÄNSAD Hack" title="Collage showing electronics, a Mario
+  <img src="/assets/i/obegransad-hack.jpg" alt="IKEA OBEGRÄNSAD Hack" title="Collage showing electronics, a Mario
 scene, and a metaballs scene">
 </p>
 
@@ -90,7 +90,7 @@ I hacked an IKEA OBEGRÄNSAD LED wall lamp to replace its graphics chip with an 
 #### Airgap—True Analog Glitching by Transmitting Pixel Data Through Air
 
 <p class="project-thumbnail zoomable">
-  <img src="assets/i/airgap.jpg" alt="Airgap" title="Photo of a laptop screen with a piece of aluminum over the
+  <img src="/assets/i/airgap.jpg" alt="Airgap" title="Photo of a laptop screen with a piece of aluminum over the
 camera, showing an image being transmitted through reflection">
 </p>
 
@@ -110,7 +110,7 @@ A source image is scanned pixel-by-pixel and the pixel value is drawn as a large
 #### IKEA FREKVENS Hack
 
 <p class="project-thumbnail zoomable">
-  <img src="assets/i/frekvens-hack.jpg" alt="IKEA FREKVENS Hack" title="Collage showing the original cube,
+  <img src="/assets/i/frekvens-hack.jpg" alt="IKEA FREKVENS Hack" title="Collage showing the original cube,
 electronics, and some scenes">
 </p>
 
@@ -127,7 +127,7 @@ I hacked an IKEA FREKVENS LED cube lamp to replace its graphics chip with an Oni
 #### Binary Versioning
 
 <p class="project-thumbnail zoomable">
-  <img src="assets/i/binver.png" alt="Binary Versioning" title="Screenshot of binver.org">
+  <img src="/assets/i/binver.png" alt="Binary Versioning" title="Screenshot of binver.org">
 </p>
 
 <p class="meta">
@@ -144,7 +144,7 @@ A humourous spin on [Semantic Versioning](https://semver.org/). I apparently had
 #### MIDNIGHT TACTIX 3000
 
 <p class="project-thumbnail zoomable">
-  <img src="assets/i/midnight-tactix-3000.jpg" alt="MIDNIGHT TACTIX 3000" title="Screenshot of the game">
+  <img src="/assets/i/midnight-tactix-3000.jpg" alt="MIDNIGHT TACTIX 3000" title="Screenshot of the game">
 </p>
 
 <p class="meta">
@@ -162,7 +162,7 @@ A multiplayer turn-based retro racing game we made with my friend [Nick Matantse
 #### JavaScript Libraries for Mobile Telecommunication Protocols
 
 <p class="project-thumbnail zoomable">
-  <img src="assets/i/milenage.png" alt="MILENAGE" title="Diagram of MILENAGE functions">
+  <img src="/assets/i/milenage.png" alt="MILENAGE" title="Diagram of MILENAGE functions">
 </p>
 
 <p class="meta">
@@ -188,7 +188,7 @@ The JavaScript libraries I published encapsulate functionality for manipulating 
 #### put.io Starry Night
 
 <p class="project-thumbnail zoomable">
-  <img src="assets/i/starry-night.png" alt="Starry Night" title="The Starry Night animation of put.io">
+  <img src="/assets/i/starry-night.png" alt="Starry Night" title="The Starry Night animation of put.io">
 </p>
 
 <p class="meta">
@@ -205,7 +205,7 @@ I developed a tweakable version for the client to fine-tune the animation to the
 #### Dweet Player
 
 <p class="project-thumbnail zoomable">
-  <img src="assets/i/dweet-player.png" alt="Dweet Player" title="UI showing a dweet along with its code">
+  <img src="/assets/i/dweet-player.png" alt="Dweet Player" title="UI showing a dweet along with its code">
 </p>
 
 <p class="meta">
@@ -226,7 +226,7 @@ I gave [a talk](#dweet-player-1) about this project.
 #### BD1K
 
 <p class="project-thumbnail zoomable">
-  <img src="assets/i/bd1k.png" alt="BD1K" title="Screenshot from the game">
+  <img src="/assets/i/bd1k.png" alt="BD1K" title="Screenshot from the game">
 </p>
 
 <p class="meta">
@@ -243,7 +243,7 @@ A Boulder Dash clone in 1024 bytes of JavaScript (including the sprites from the
 #### Doorbell Ringer—An Intentionally Complex IoT Project
 
 <p class="project-thumbnail zoomable">
-  <img src="assets/i/doorbell-ringer.jpg" alt="Doorbell Ringer" title="A doorbell, a mobile phone, and an Onion
+  <img src="/assets/i/doorbell-ringer.jpg" alt="Doorbell Ringer" title="A doorbell, a mobile phone, and an Onion
 Omega">
 </p>
 
@@ -264,7 +264,7 @@ I gave [a talk](#doorbell-ringeran-intentionally-complex-iot-project-1) about th
 #### Human Resource Machine Solutions
 
 <p class="project-thumbnail zoomable">
-  <img src="assets/i/human-resource-machine.png" alt="Human Resource Machine Solutions" title="A screenshot from the
+  <img src="/assets/i/human-resource-machine.png" alt="Human Resource Machine Solutions" title="A screenshot from the
 game, Human Resource Machine">
 </p>
 
@@ -282,7 +282,7 @@ This project started with me [publishing my own solutions](https://github.com/at
 #### Autonomous Cockroach
 
 <p class="project-thumbnail zoomable">
-  <img src="assets/i/autonomous-cockroach.jpg" alt="Autonomous Cockroach" title="A collage showing LEGO,
+  <img src="/assets/i/autonomous-cockroach.jpg" alt="Autonomous Cockroach" title="A collage showing LEGO,
 electronics, and an IKEA lamp.">
 </p>
 
@@ -300,7 +300,7 @@ This is the very first microcontroller (and IKEA lamp hack) project I did with a
 #### AngularJS Modules
 
 <p class="project-thumbnail zoomable">
-  <img src="assets/i/angular-modules.png" alt="AngularJS Modules" title="Screenshots of several components">
+  <img src="/assets/i/angular-modules.png" alt="AngularJS Modules" title="Screenshots of several components">
 </p>
 
 <p class="meta">
@@ -326,7 +326,7 @@ I also created their live documentation and demo pages.
 #### #direnturkce
 
 <p class="project-thumbnail zoomable">
-  <img src="assets/i/diren-turkce.png" alt="#direnturkce" title="Screenshot of the website">
+  <img src="/assets/i/diren-turkce.png" alt="#direnturkce" title="Screenshot of the website">
 </p>
 
 <p class="meta">
@@ -343,7 +343,7 @@ I have many pet peeves. I created a quick reference page for the most common mis
 #### jsUnity
 
 <p class="project-thumbnail zoomable">
-  <img src="assets/i/jsunity.png" alt="jsUnity.com" title="jsUnity logo">
+  <img src="/assets/i/jsunity.png" alt="jsUnity.com" title="jsUnity logo">
 </p>
 
 <p class="meta">
@@ -364,7 +364,7 @@ There were already several unit testing frameworks for JavaScript that were brow
 #### browsersize.com
 
 <p class="project-thumbnail zoomable">
-  <img src="assets/i/browsersize.png" alt="browsersize.com" title="Screenshot of the website">
+  <img src="/assets/i/browsersize.png" alt="browsersize.com" title="Screenshot of the website">
 </p>
 
 <p class="meta">
@@ -383,7 +383,7 @@ It needs to be either updated or archived, as modern browsers have become more r
 #### The Unofficial Adobe Color Book File Format Specification
 
 <p class="project-thumbnail zoomable">
-  <img src="assets/i/custom-colors.png" alt="Photoshop Color Picker" title="The color picker dialog of Adobe
+  <img src="/assets/i/custom-colors.png" alt="Photoshop Color Picker" title="The color picker dialog of Adobe
 Photoshop">
 </p>
 
@@ -401,7 +401,7 @@ Partly out of curiosity and partly because I needed the color data for a job, I 
 #### GRAFICA Obscura Experiments
 
 <p class="project-thumbnail zoomable">
-  <img src="assets/i/grafica-obscura.png" alt="GRAFICA Obscura Experiments" title="Screenshots of two p5.js
+  <img src="/assets/i/grafica-obscura.png" alt="GRAFICA Obscura Experiments" title="Screenshots of two p5.js
 experiments">
 </p>
 
@@ -420,7 +420,7 @@ Two [Processing](https://processing.org/) (ported to [p5.js](https://p5js.org/))
 #### Burrito
 
 <p class="project-thumbnail zoomable">
-  <img src="assets/i/burrito.png" alt="Burrito" title="Screenshot of the app">
+  <img src="/assets/i/burrito.png" alt="Burrito" title="Screenshot of the app">
 </p>
 
 <p class="meta">
@@ -437,7 +437,7 @@ With Burrito you can read and manage your e-mails with any FTP client! It acts a
 #### Twofifty
 
 <p class="project-thumbnail zoomable">
-  <img src="assets/i/twofifty.png" alt="Twofifty" title="Screenshot of the website">
+  <img src="/assets/i/twofifty.png" alt="Twofifty" title="Screenshot of the website">
 </p>
 
 <p class="meta">
@@ -460,7 +460,7 @@ This is a static snapshot of the once PHP+MySQL-powered website.
 #### Win-Res-Q
 
 <p class="project-thumbnail zoomable">
-  <img src="assets/i/win-res-q.png" alt="Win-Res-Q" title="Screenshot of the app">
+  <img src="/assets/i/win-res-q.png" alt="Win-Res-Q" title="Screenshot of the app">
 </p>
 
 <p class="meta">
@@ -475,7 +475,7 @@ Win-Res-Q (pronounced "win rescue") is a simple utility that restores (shows) hi
 #### E-Res-Q
 
 <p class="project-thumbnail zoomable">
-  <img src="assets/i/e-res-q.png" alt="E-Res-Q" title="Screenshot of the app">
+  <img src="/assets/i/e-res-q.png" alt="E-Res-Q" title="Screenshot of the app">
 </p>
 
 <p class="meta">
@@ -494,7 +494,7 @@ This small program has proved very useful back in the times when most of us stil
 #### Bootsector Columns
 
 <p class="project-thumbnail zoomable">
-  <img src="assets/i/columns.png" alt="Bootsector Columns" title="Screenshot of the app">
+  <img src="/assets/i/columns.png" alt="Bootsector Columns" title="Screenshot of the app">
 </p>
 
 <p class="meta">
@@ -522,7 +522,7 @@ I don't have my own blog, but I occasionally write posts for other blogs.
 #### Sidekick’s Improved Streaming Experience
 
 <p class="project-thumbnail zoomable">
-  <img src="assets/i/sidekick.jpg" alt="Sidekick" title="Sidekick logo">
+  <img src="/assets/i/sidekick.jpg" alt="Sidekick" title="Sidekick logo">
 </p>
 
 <p class="meta">
@@ -539,7 +539,7 @@ How to improve LLM chatbot UX by utilizing a stateful markdown stream processor.
 #### A JavaScript Interview Question and a Digression into XOR
 
 <p class="project-thumbnail zoomable">
-  <img src="assets/i/missing-item-with-xor.png" alt="Find the missing number" title="A grid of numbers">
+  <img src="/assets/i/missing-item-with-xor.png" alt="Find the missing number" title="A grid of numbers">
 </p>
 
 <p class="meta">
@@ -562,7 +562,7 @@ While I'm not a frequent public speaker, I have had the opportunity to present a
 #### Killing Characters while Making Art
 
 <p class="project-thumbnail zoomable">
-  <img src="assets/i/dweet-talk.jpg" alt="Killing Characters while Making Art" title="Photo of me presenting">
+  <img src="/assets/i/dweet-talk.jpg" alt="Killing Characters while Making Art" title="Photo of me presenting">
 </p>
 
 <p class="meta">
@@ -580,7 +580,7 @@ A talk about [Dwitter](https://www.dwitter.net/), JavaScript golfing, and dweet 
 #### Dweet Player
 
 <p class="project-thumbnail zoomable">
-  <img src="assets/i/dweet-player.png" alt="Dweet Player" title="Screenshot of Dweet Player">
+  <img src="/assets/i/dweet-player.png" alt="Dweet Player" title="Screenshot of Dweet Player">
 </p>
 
 <p class="meta">
@@ -598,7 +598,7 @@ A talk about my [Dweet Player project](#dweet-player). I won a Raspberry Pi as a
 #### Unit Testing—The Whys, Whens and Hows
 
 <p class="project-thumbnail zoomable">
-  <img src="assets/i/unit-testing.jpg" alt="Unit Testing—The Whys, Whens and Hows" title="Photo of me presenting">
+  <img src="/assets/i/unit-testing.jpg" alt="Unit Testing—The Whys, Whens and Hows" title="Photo of me presenting">
 </p>
 
 <p class="meta">
@@ -614,7 +614,7 @@ Talking about some best practices for unit testing in Node.js.
 #### Doorbell Ringer—An Intentionally Complex IoT Project
 
 <p class="project-thumbnail zoomable">
-  <img src="assets/i/doorbell-ringer-talk.jpg" alt="Doorbell Ringer" title="Photo of me presenting">
+  <img src="/assets/i/doorbell-ringer-talk.jpg" alt="Doorbell Ringer" title="Photo of me presenting">
 </p>
 
 <p class="meta">
@@ -632,7 +632,7 @@ A talk about my [Doorbell Ringer project](#doorbell-ringeran-intentionally-compl
 #### Backend-less UI Development using Demock
 
 <p class="project-thumbnail zoomable">
-  <img src="assets/i/demock.jpg" alt="Backend-less UI Development using Demock" title="Photo of me presenting">
+  <img src="/assets/i/demock.jpg" alt="Backend-less UI Development using Demock" title="Photo of me presenting">
 </p>
 
 <p class="meta">
