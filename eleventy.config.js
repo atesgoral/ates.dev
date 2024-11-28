@@ -9,9 +9,11 @@ export default function (eleventyConfig) {
     .addPassthroughCopy("assets/**/*.js")
     .addPassthroughCopy("i/**/*")
     .addPassthroughCopy("downloads/**/*")
-    .addPassthroughCopy("pages/*/i/*")
-    .addPassthroughCopy("pages/*/*.js")
-    .addPassthroughCopy("pages/*/*.pde")
+    .addPassthroughCopy("src/pages/*/i/*")
+    .addPassthroughCopy("src/pages/*/*.js")
+    .addPassthroughCopy("src/pages/*/*.pde")
+    .addPassthroughCopy("src/posts/*/i/*")
+    .addPassthroughCopy("src/posts/*/*.js")
     .addFilter("debug", (value) => Object.keys(value));
 
   eleventyConfig.amendLibrary("md", (mdLib) => {
@@ -30,10 +32,10 @@ export default function (eleventyConfig) {
   });
 
   eleventyConfig.addCollection("posts", (collectionApi) =>
-    collectionApi.getFilteredByGlob("posts/**/*.md")
+    collectionApi.getFilteredByGlob("src/posts/**/*.md")
   );
   eleventyConfig.addCollection("pages", (collectionApi) =>
-    collectionApi.getFilteredByGlob("pages/**/*.md")
+    collectionApi.getFilteredByGlob("src/pages/**/*.md")
   );
 
   eleventyConfig.addTemplateFormats("scss");
