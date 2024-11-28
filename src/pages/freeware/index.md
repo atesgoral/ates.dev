@@ -1,6 +1,7 @@
 ---
 layout: layouts/page
 title: Freeware
+image: i/e-res-q-ss.jpg
 ---
 
 There are a couple of freeware tools that I wrote over the years. Some of them are outdated/obsolete, but here they are anyway:

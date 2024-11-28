@@ -1,7 +1,6 @@
 ---
 layout: layouts/page
 title: Adobe Color Book File Format Specification
-type: article
 image: i/custom_colors.jpg
 ---
 
