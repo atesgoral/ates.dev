@@ -6,6 +6,11 @@
     <meta property="og:title" content="We Have a Corner Problem" />
     <meta property="og:type" content="article" />
     
+    <meta
+      property="og:image"
+      content="https://ates.dev/posts/2024-11-22-corner-problem/i/corner.png"
+    />
+    
     <meta property="og:locale" content="en_CA" />
     <meta property="og:site_name" content="ates.dev" />
     <title>ates.dev &middot; We Have a Corner Problem</title>
@@ -20,9 +25,79 @@
     <main>
 <article>
   <h2>We Have a Corner Problem</h2>
-  <p class="meta">Posted on November 22, 2024</p>
+  <p class="meta">Posted on November 28, 2024</p>
 
-  <div class="content"><p>Heya</p>
+  <div class="content"><p>The movement constraints of all 8 drag handles of a crop rectangle can be implemented by reusing the implementation of one corner.</p>
+<h3 id="the-complexity-of-a-crop-rectangle" tabindex="-1"><a class="permalink" href="#the-complexity-of-a-crop-rectangle">The complexity of a crop rectangle</a></h3>
+<p>Oh man. Have you ever tried implementing a draggable crop rectangle from scratch? To give it all the flexibility you'd expect from a mature crop rectangle implementation there are many constraints to solve:</p>
+<ul>
+<li>Drag the rectangle itself around by starting the dragging inside. Keep the rectangle inside the image. This is the easiest to implement.</li>
+<li>Resize the rectangle by dragging any of the four corner drag handles. Each drag handle changes different properties of the rectangle:
+<ul>
+<li>Top left changes the x, y, width, and height.</li>
+<li>Top right changes the y, width, and height.</li>
+<li>Bottom left changes the x, width, and height.</li>
+<li>Bottom right only changes the width and height.</li>
+<li>Keep the corners inside the image.</li>
+</ul>
+</li>
+<li>Resize the rectangle by dragging any of the four side drag handles. Again, each drag handle changes different properties of the rectangle. Keep the sides inside the image.</li>
+<li>Don't allow the rectangle to go smaller than a minimum width and height.</li>
+<li>Easy so far.</li>
+<li>Now add optional aspect ratio enforcement while doing all of the above.</li>
+<li>Make the aspect-ratio-enforced dragging feel natural instead of letting the handles jump around weirdly while trying to follow weird pointer movements. (Solution: project the pointer movement delta vector onto the aspect ratio vector.)</li>
+<li>Corner drag handles should stay within the image by smartly clamping their x/y coordinates to obey the aspect ratio enforcement.</li>
+<li>Side drag handles move the sides, but actually move the two adjacent corners symmetrically. Now we have not one but two corners to simultaneously keep inside the image while enforcing the aspect ratio.</li>
+</ul>
+<h3 id="looking-at-things-from-a-different-angle" tabindex="-1"><a class="permalink" href="#looking-at-things-from-a-different-angle">Looking at things from a different angle</a></h3>
+<p>What do the four corner drag handles have in common? They're the same corner if you tilt your head at increments of 90 degrees. So all I had to do was to rotate the frame of reference by the appropriate multiple of 90 degrees, apply corner logic for only one of the corners, and rotate back the frame of reference. And which corner do we pick? The simplest one, of course. The bottom right corner only changes the width and height of the rectangle!</p>
+<p>Here's all that's involved in implementing the bottom right corner drag handle:</p>
+<p class="center zoomable">
+  <img src="i/corner.png" alt="The vectors involved in moving the bottom right corner of a crop rectangle while obeying the aspect ratio constraint">
+</p>
+<ol>
+<li>From the pointer down to the pointer move event, get the pointer movement delta vector: (dx, dy).</li>
+<li>Project the pointer delta vector onto the aspect ratio vector: (width, height).</li>
+<li>Clamp the projected vector to the image boundaries while preserving aspect ratio.</li>
+</ol>
+<p>And the frame of reference rotation trick for the bottom right corner looks like this:</p>
+<p class="center zoomable">
+  <img src="i/rotate.png" alt="">
+</p>
+<p>Once we have a moveCorner method that handles the bottom right corner, and a withFrameOfReference wrapper, the implementation of e.g. the top right corner becomes just:</p>
+<pre><code class="language-javascript">export const moveTopRightCorner = withFrameOfReference(moveCorner, Math.PI / 2);
+</code></pre>
+<p>The corners are reduced to a single corner problem.</p>
+<h3 id="reflecting-on-things" tabindex="-1"><a class="permalink" href="#reflecting-on-things">Reflecting on things</a></h3>
+<p>What about the sides? A side drag handle can be seen as not dragging the side at all, but causing the dragging of the two adjacent corners while preserving the overall aspect ratio of the rectangle. There's symmetry across the middle.</p>
+<p class="center zoomable">
+  <img src="i/side.png" alt="">
+</p>
+<p>If we forget about the two corners and the symmetry among them, and just focus on one of the corners, we're back to just dealing with the same old bottom right corner.</p>
+<p>Here's the first tweak. We have yet another frame of reference: We're now operating in a squished coordinate system. The aspect ratio that we enforce on the drag handle is half of the original aspect ratio: (width, height / 2):</p>
+<p class="center zoomable">
+  <img src="i/half.png" alt="">
+</p>
+<p>However, there's another edge case (oh, the puns!) that we must deal with. The bottom right corner might be free to move vertically more then it's top right counterpart:</p>
+<p class="center zoomable">
+  <img src="i/side-oob.png" alt="">
+</p>
+<p>To overcome this issue, here's the second tweak. We reflect the bounding rectangle (the rectangle representing the image itself) along the axis of symmetry and then intersect the two bounding rectangles to derive a smaller bounding rectangle that keeps both corners within the image:</p>
+<p class="center zoomable">
+  <img src="i/bounds.png" alt="">
+</p>
+<p>Once we have a moveEdge method that internally uses the moveCorner method, we put our withFrameOfReference wrapper to good use to implement all side drag handles:</p>
+<pre><code class="language-javascript">export const moveTopEdge = withFrameOfReference(moveEdge, Math.PI / 2);
+</code></pre>
+<h3 id="not-a-corner-problem" tabindex="-1"><a class="permalink" href="#not-a-corner-problem">Not a corner problem</a></h3>
+<p>One last piece of the puzzle is to prevent the crop rectangle from being shrunk beyond dimensions that would break the UX. To do this, the only thing we need to do is to clip the bounding rectangle:</p>
+<p class="center zoomable">
+  <img src="i/minimums.png" alt="">
+</p>
+<h3 id="but-so-much-math" tabindex="-1"><a class="permalink" href="#but-so-much-math">But so much math!</a></h3>
+<p>This is one of those problem domains where throwing conditional logic (e.g. a boatload of if statements) might have done the job. Might. I doubt it, because there's only so much you can do by sidestepping vector math in a vector problem domain. Also, reduction of this problem to a few math principles allows us to just rely on well-established math.</p>
+<p>Another advantage of the reduction of all drag handles into a single corner drag handle problem is, if the implementation of the bottom right corner is right, then everything else is right. You will not find a bug with any of the 8 drag handles if you can't find a bug with the bottom right corner!</p>
+<p>We now only have a single corner problem!</p>
 </div>
 </article>
 </main>
