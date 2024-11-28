@@ -1,6 +1,7 @@
 ---
 layout: layouts/page
 title: Morphing Depth of Field
+image: i/near_in_focus.gif
 ---
 
 Two (or more) photographs of the same scene and that have different focal distances can be joined together to create an image where both distant and close objects can be in focus.
