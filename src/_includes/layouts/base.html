@@ -6,7 +6,10 @@
     <meta property="og:title" content="{{ title }}" />
     <meta property="og:type" content="{{ type | default: 'website' }}" />
     {% if image %}
-    <meta property="og:image" content="{{ image }}" />
+    <meta
+      property="og:image"
+      content="{{ baseUrl }}{{ page.url }}{{ image }}"
+    />
     {% endif %}
     <meta property="og:locale" content="en_CA" />
     <meta property="og:site_name" content="ates.dev" />

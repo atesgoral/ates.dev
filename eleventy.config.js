@@ -56,6 +56,8 @@ export default function (eleventyConfig) {
     },
   });
 
+  eleventyConfig.addGlobalData("baseUrl", "https://ates.dev");
+
   return {
     dir: {
       input: "src",
