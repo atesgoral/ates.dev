@@ -249,7 +249,7 @@ html {
 
   .zoomable > img:not(.zoomed):hover {
     box-shadow: 0 0 10px 2px rgba(255, 164, 132, 0.5);
-    transform: scale(1.05);
+    transform: scale(1.01);
   }
 
   body.light-mode a:hover {
