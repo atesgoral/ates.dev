@@ -4,10 +4,7 @@ import path from "path";
 
 export default function (eleventyConfig) {
   eleventyConfig
-    .addPassthroughCopy("assets/**/*.woff*")
-    .addPassthroughCopy("assets/**/*.js")
-    .addPassthroughCopy("i/**/*")
-    .addPassthroughCopy("downloads/**/*")
+    .addPassthroughCopy("assets/**/*")
     .addPassthroughCopy("src/pages/*/i/*")
     .addPassthroughCopy("src/pages/*/*.js")
     .addPassthroughCopy("src/pages/*/*.pde")
