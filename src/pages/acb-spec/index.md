@@ -214,5 +214,5 @@ Immediately after this, the second color record starts. The name length is again
 
 ### See Also
 
-- [Adobe Photoshop Color File Format](http://www.nomodes.com/aco.html) by [Larry Tesler](http://www.nomodes.com/)
+- [Adobe Photoshop Color File Format](https://www.nomodes.com/larry-tesler-personal/aco) by [Larry Tesler](https://www.nomodes.com/)
 - [ACB2XML](/pages/freeware#acb2xml) -- Tool for exporting color book data as XML
