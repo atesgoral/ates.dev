@@ -3,12 +3,17 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta property="og:title" content="All Posts" />
+    <meta property="og:title" content="Responsive Canvas" />
     <meta property="og:type" content="article" />
+    
+    <meta
+      property="og:image"
+      content="https://ates.dev/posts/2024-12-01-responsive-canvas/i/responsive-canvas.png"
+    />
     
     <meta property="og:locale" content="en_CA" />
     <meta property="og:site_name" content="ates.dev" />
-    <title>ates.dev &middot; All Posts</title>
+    <title>ates.dev &middot; Responsive Canvas</title>
     <link
       rel="icon"
       type="image/png"
@@ -34,12 +39,38 @@
 
     <main>
 <article>
-  <h2>All Posts</h2>
+  <h2>Responsive Canvas</h2>
+  <p class="meta">Posted on December 01, 2024</p>
 
-  <div class="content"><ul>
-<li><a href="/posts/2024-11-28-corner-problem/">We Have a Corner Problem</a></li>
-<li><a href="/posts/2024-12-01-responsive-canvas/">Responsive Canvas</a></li>
-</ul>
+  <div class="content"><p>Be responsible.</p>
+<script>
+function render(id, {init, draw}) {
+  const canvas = document.querySelector(`#${id}`);
+  const ctx = canvas.getContext("2d");
+
+  init && init(canvas, ctx);
+
+  function raf(draw) {
+    requestAnimationFrame((t) => {
+      raf(draw);
+      draw(ctx, t);
+    });
+  }
+
+  draw && raf(draw);
+}
+</script>
+<p><canvas id="canvas-1"></canvas></p>
+<script>
+render('canvas-1', {
+  init(canvas) {
+    //
+  },
+  draw(ctx, t) {
+    ctx.fillRect(10, 10, 10, 10);
+  }
+});
+</script>
 </div>
 </article>
 </main>
