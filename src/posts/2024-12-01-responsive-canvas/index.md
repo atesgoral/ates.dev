@@ -43,9 +43,9 @@ factors:
 Also, how to compose a scene (i.e. define the dimensions of elements) while
 taking 1-3 into consideration, without getting into an unmaintainable mess.
 
-This is not a comprehensive tutorial that aims to teach canvas rendering from
+This is not a comprehensive tutorial that aims to teach on canvas rendering from
 scratch. Code excerpts are partial, only highlighting key changes from the
-previous example. Knowledge of JavaScript, and some algebra is assummed. This
+previous example. Knowledge of JavaScript and some algebra is assumed. This
 will progressively get more complicated, fast.
 
 [1]: https://en.wikipedia.org/wiki/Responsive_web_design
@@ -187,7 +187,7 @@ render('canvas-with-square-fit-fix', {
 
 ### Crisp rendering
 
-Next, let's switch to rendering a circle to get the edges anti-aliased. And let's
+Next, let's switch to rendering a circle to achieve anti-aliased edges. And let's
 also print your browser's DPR (Device Pixel Ratio), and a reference 10x10 square
 which will become significant soon.
 
@@ -230,7 +230,7 @@ render('canvas-with-circle', {
 </script>
 
 The CSS dimensions we set on the canvas are the logical pixel dimensions.
-If your DPR is higher than `1.0`, the physical pixel density is higher than the
+If your DPR is higher than `1.0`, the physical pixel density exceeds the
 logical pixel density, and therefore we're not rendering this circle in the
 crispiest way possible. To fix this, we apply the DPR as a multiplier to the
 canvas dimensions:
@@ -250,7 +250,7 @@ ctx.beginPath();
 ctx.arc(
   canvas.width / 2,
   canvas.height / 2,
-  SIZE / 2 / dpr, // Adjust for DPR
+  (SIZE / 2) * dpr, // Adjust for DPR
   0,
   Math.PI * 2
 );
@@ -295,7 +295,7 @@ render('canvas-with-circle-dpr', {
 </script>
 
 If your DPR is greater than `1.0`, you should see the 10x10 pixel reference
-square get rendered as something smaller than 10x10 while our circle remains the
+square rendered as something smaller than 10x10 while our circle remains the
 same size. And the anti-aliased edges of the circle should now look as crisp as
 physically possible on your screen (without getting into subpixel rendering).
 
