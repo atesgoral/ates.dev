@@ -58,6 +58,36 @@ function render(id, {init, draw}) {
 
   draw && raf(draw);
 }
+
+function initDprDemo(canvas, ctx, forceDpr) {
+  const dpr = window.devicePixelRatio;
+  const usedDpr = forceDpr || dpr;
+
+  canvas.width = canvas.clientWidth * usedDpr;
+  canvas.height = canvas.clientHeight * usedDpr;
+
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  const SIZE = 100;
+
+  ctx.fillStyle = 'white';
+  ctx.beginPath();
+  ctx.arc(
+    canvas.width / 2,
+    canvas.height / 2,
+    SIZE / 2 * usedDpr,
+    0,
+    Math.PI * 2
+  );
+  ctx.fill();
+
+  // Display DPR
+  ctx.font = '1em monospace';
+  ctx.fillText(dpr.toFixed(1), 10, 20);
+
+  // 10x10 pixel reference square
+  ctx.fillRect(10, 30, 10, 10);
+}
 </script>
 <p>&quot;Responsive&quot; in web development pertains to, in a nutshell, layout: Adjusting the
 layout of a page based on the dimensions of the renderable area. A more formal
@@ -196,34 +226,19 @@ which will become significant soon.</p>
 ctx.arc(canvas.width / 2, canvas.height / 2, SIZE / 2, 0, Math.PI * 2);
 ctx.fill();
 
+// Display DPR
 ctx.font = &quot;1em monospace&quot;;
 ctx.fillText(window.devicePixelRatio.toFixed(1), 10, 20);
+
+// 10x10 pixel reference square
+ctx.fillRect(10, 30, 10, 10);
 </code></pre>
 <p class="canvas-container">
   <canvas id="canvas-with-circle" class="fit"></canvas>
 </p>
 <script>
 render('canvas-with-circle', {
-  init(canvas, ctx) {
-    canvas.width = canvas.clientWidth;
-    canvas.height = canvas.clientHeight;
-
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-    const SIZE = 100;
-
-    ctx.fillStyle = 'white';
-    ctx.beginPath();
-    ctx.arc(canvas.width / 2, canvas.height / 2, SIZE / 2, 0, Math.PI * 2);
-    ctx.fill();
-
-    // Display DPR
-    ctx.font = '1em monospace';
-    ctx.fillText(window.devicePixelRatio.toFixed(1), 10, 20);
-
-    // 10x10 pixel reference square
-    ctx.fillRect(10, 30, 10, 10);
-  },
+  init: (canvas, ctx) => initDprDemo(canvas, ctx, 1)
 });
 </script>
 <p>The CSS dimensions we set on the canvas are the logical pixel dimensions.
@@ -253,44 +268,28 @@ ctx.fill();
 </p>
 <script>
 render('canvas-with-circle-dpr', {
-  init(canvas, ctx) {
-    const dpr = window.devicePixelRatio;
-
-    canvas.width = canvas.clientWidth * dpr;
-    canvas.height = canvas.clientHeight * dpr;
-
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-    const SIZE = 100;
-
-    ctx.fillStyle = 'white';
-    ctx.beginPath();
-    ctx.arc(
-      canvas.width / 2,
-      canvas.height / 2,
-      SIZE / 2 * dpr, // Adjust for DPR
-      0,
-      Math.PI * 2
-    );
-    ctx.fill();
-
-    // Display DPR
-    ctx.font = '1em monospace';
-    ctx.fillText(window.devicePixelRatio.toFixed(1), 10, 20);
-
-    // 10x10 pixel reference square
-    ctx.fillRect(10, 30, 10, 10);
-  },
+  init: (canvas, ctx) => initDprDemo(canvas, ctx)
 });
 </script>
 <p>If your DPR is greater than <code>1.0</code>, you should see the 10x10 pixel reference
 square rendered as something smaller than 10x10 while our circle remains the
 same size. And the anti-aliased edges of the circle should now look as crisp as
 physically possible on your screen (without getting into subpixel rendering).</p>
-<p>In case your DPR is <code>1.0</code>, here's what the comparison would have looked like:</p>
-<blockquote>
-<p><em>collage of before &amp; after, along with zooms on the edges</em></p>
-</blockquote>
+<p>In case your DPR is <code>1.0</code>, and you don't see a difference above, here's what the
+comparison would have looked like:</p>
+<p class="canvas-container rows">
+  <canvas id="canvas-no-dpr"></canvas>
+  <canvas id="canvas-dpr"></canvas>
+</p>
+<script>
+render('canvas-no-dpr', {
+  init: (canvas, ctx) => initDprDemo(canvas, ctx, 1)
+});
+
+render('canvas-dpr', {
+  init: (canvas, ctx) => initDprDemo(canvas, ctx)
+});
+</script>
 <p>TO BE CONTINUED</p>
 </div>
 </article>
