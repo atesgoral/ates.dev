@@ -265,3 +265,22 @@ html {
     box-shadow: 0 0 10px 2px rgba(255, 131, 86, 0.5);
   }
 }
+
+.canvas-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 7rlh;
+  background: #d084ff10;
+  border-radius: 4px;
+}
+
+canvas.bordered {
+  border: 1px solid #d084ff82;
+}
+
+canvas.fit {
+  width: 100%;
+  height: 150px;
+}
