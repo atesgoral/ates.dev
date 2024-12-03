@@ -276,6 +276,16 @@ html {
   border-radius: 4px;
 }
 
+.canvas-container.rows {
+  flex-direction: row;
+  gap: 0.5rlh;
+
+  > canvas {
+    width: 300px;
+    height: 150px;
+  }
+}
+
 canvas.bordered {
   border: 1px solid #d084ff82;
 }
