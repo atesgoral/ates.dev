@@ -21,6 +21,7 @@ code {
 pre > code {
   background: none;
   font-size: inherit;
+  padding: 0;
 }
 
 pre {

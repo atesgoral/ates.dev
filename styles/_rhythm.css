@@ -11,6 +11,11 @@ body {
   padding: 1.25rlh;
 }
 
+pre {
+  line-height: 1rlh;
+  margin: 0.5rlh 0;
+}
+
 h1, h2, h3, h4, h5 {
   margin: 0.5rlh 0;
   line-height: 1rlh;
@@ -49,6 +54,10 @@ h6 {
 
 p, ul, ol {
   margin: 0.5rlh 0;
+}
+
+blockquote {
+  margin: 0.5rlh 0 0.5rlh 2rlh;
 }
 
 p,
