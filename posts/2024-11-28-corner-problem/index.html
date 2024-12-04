@@ -80,7 +80,7 @@
   <img src="i/rotate.png" alt="">
 </p>
 <p>Once we have a moveCorner method that handles the bottom right corner, and a withFrameOfReference wrapper, the implementation of e.g. the top right corner becomes just:</p>
-<pre><code class="language-javascript">export const moveTopRightCorner = withFrameOfReference(moveCorner, Math.PI / 2);
+<pre><code class="language-js">export const moveTopRightCorner = withFrameOfReference(moveCorner, Math.PI / 2);
 </code></pre>
 <p>The corners are reduced to a single corner problem.</p>
 <h3 id="reflecting-on-things" tabindex="-1"><a class="permalink" href="#reflecting-on-things">Reflecting on things</a></h3>
@@ -102,7 +102,7 @@
   <img src="i/bounds.png" alt="">
 </p>
 <p>Once we have a moveEdge method that internally uses the moveCorner method, we put our withFrameOfReference wrapper to good use to implement all side drag handles:</p>
-<pre><code class="language-javascript">export const moveTopEdge = withFrameOfReference(moveEdge, Math.PI / 2);
+<pre><code class="language-js">export const moveTopEdge = withFrameOfReference(moveEdge, Math.PI / 2);
 </code></pre>
 <h3 id="not-a-corner-problem" tabindex="-1"><a class="permalink" href="#not-a-corner-problem">Not a corner problem</a></h3>
 <p>One last piece of the puzzle is to prevent the crop rectangle from being shrunk beyond dimensions that would break the UX. To do this, the only thing we need to do is to clip the bounding rectangle:</p>

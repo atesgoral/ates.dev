@@ -37,7 +37,7 @@ code.language-html, code.language-js, code.language-css {
 }
 code.language-html:before, code.language-js:before, code.language-css:before {
   position: absolute;
-  top: -0.5rlh;
+  top: -1rlh;
   font-size: 0.625rlh;
   right: -0.25rlh;
   opacity: 0.5;
