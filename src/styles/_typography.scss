@@ -25,9 +25,29 @@ pre {
 }
 
 pre > code {
+  display: block;
   font-size: inherit;
   background: none;
   padding: 0;
+  overflow-x: auto;
+
+  &::-webkit-scrollbar {
+    height: 0.5rlh;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: #f1f1f1; // Background of the scrollbar track
+    border-radius: 4px; // Rounded corners for the thumb
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #888; // Color of the scrollbar thumb
+    border-radius: 4px; // Rounded corners for the thumb
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: #555; // Color of the thumb on hover
+  }
 }
 
 pre {
@@ -37,19 +57,19 @@ pre {
   border-radius: 4px;
 }
 
-code.language-html, code.language-js, code.language-css {
+pre:has(.language-html), pre:has(.language-js), pre:has(.language-css) {
   position: relative;
   display: block;
 
   &:before {
     position: absolute;
-    top: -1rlh;
+    top: -0.5rlh;
     font-size: 0.625rlh;
-    right: -0.25rlh;
+    right: 0.25rlh;
     opacity: 0.5;
   }
 }
 
-code.language-html:before { content: 'HTML'; }
-code.language-js:before { content: 'JS'; }
-code.language-css:before { content: 'CSS'; }
+pre:has(.language-html):before { content: 'HTML'; }
+pre:has(.language-js):before { content: 'JS'; }
+pre:has(.language-css):before { content: 'CSS'; }
