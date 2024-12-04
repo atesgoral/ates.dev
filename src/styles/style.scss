@@ -36,6 +36,10 @@ footer {
   margin: auto;
 }
 
+.zoomable {
+  margin: 1rlh 0;
+}
+
 .zoomable > img {
   cursor: zoom-in;
 }
@@ -211,7 +215,7 @@ html {
 
   h3[id^="year-"] {
     position: absolute;
-    margin-left: -3rlh;
+    margin-left: -3.5rlh;
     text-align: right;
   }
 
