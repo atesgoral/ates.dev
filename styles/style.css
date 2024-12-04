@@ -112,15 +112,15 @@ dt {
 }
 
 code {
-  font-size: 1rlh;
+  font-size: 0.875rlh;
   background: rgba(207, 47, 151, 0.1568627451);
   border-radius: 4px;
   padding: 0 0.125rlh;
 }
 
 pre > code {
-  background: none;
   font-size: inherit;
+  background: none;
   padding: 0;
 }
 
@@ -480,15 +480,6 @@ html {
   height: 7rlh;
   background: rgba(208, 132, 255, 0.062745098);
   border-radius: 4px;
-}
-
-.canvas-container.rows {
-  flex-direction: row;
-  gap: 0.5rlh;
-}
-.canvas-container.rows > canvas {
-  width: 300px;
-  height: 150px;
 }
 
 canvas.bordered {
