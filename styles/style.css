@@ -17,7 +17,7 @@ pre {
 }
 
 h1, h2, h3, h4, h5 {
-  margin: 0.5rlh 0;
+  margin: 1.5rlh 0 0.5rlh;
   line-height: 1rlh;
 }
 
@@ -28,17 +28,17 @@ h1 {
 }
 
 h2 {
-  font-size: 1.125rlh;
+  font-size: 1.25rlh;
   padding: 0.5rlh 0;
 }
 
 h3 {
-  font-size: 1rlh;
+  font-size: 1.125rlh;
   padding: 0.25rlh 0;
 }
 
 h4 {
-  font-size: 0.75rlh;
+  font-size: 0.875rlh;
   padding: 0.25rlh 0;
 }
 
@@ -116,6 +116,10 @@ code {
   background: rgba(207, 47, 151, 0.1568627451);
   border-radius: 4px;
   padding: 0 0.125rlh;
+}
+
+pre {
+  margin: 1rlh 0;
 }
 
 pre > code {
@@ -277,6 +281,10 @@ main,
 footer {
   max-width: 32rlh;
   margin: auto;
+}
+
+.zoomable {
+  margin: 1rlh 0;
 }
 
 .zoomable > img {
@@ -452,7 +460,7 @@ html {
   }
   h3[id^=year-] {
     position: absolute;
-    margin-left: -3rlh;
+    margin-left: -3.5rlh;
     text-align: right;
   }
   h3[id^=year-]:before {

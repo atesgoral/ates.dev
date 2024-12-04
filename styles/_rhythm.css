@@ -17,7 +17,7 @@ pre {
 }
 
 h1, h2, h3, h4, h5 {
-  margin: 0.5rlh 0;
+  margin: 1.5rlh 0 0.5rlh;
   line-height: 1rlh;
 }
 
@@ -28,17 +28,17 @@ h1 {
 }
 
 h2 {
-  font-size: 1.125rlh;
+  font-size: 1.25rlh;
   padding: 0.5rlh 0;
 }
 
 h3 {
-  font-size: 1rlh;
+  font-size: 1.125rlh;
   padding: 0.25rlh 0;
 }
 
 h4 {
-  font-size: 0.75rlh;
+  font-size: 0.875rlh;
   padding: 0.25rlh 0;
 }
 
