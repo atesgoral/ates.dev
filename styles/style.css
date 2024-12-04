@@ -127,8 +127,32 @@ pre > code {
 pre {
   font-size: 0.875rlh;
   background: rgba(207, 47, 151, 0.1568627451);
-  padding: 0 0.5rlh;
+  padding: 0.5rlh;
   border-radius: 4px;
+}
+
+code.language-html, code.language-js, code.language-css {
+  position: relative;
+  display: block;
+}
+code.language-html:before, code.language-js:before, code.language-css:before {
+  position: absolute;
+  top: -0.5rlh;
+  font-size: 0.625rlh;
+  right: -0.25rlh;
+  opacity: 0.5;
+}
+
+code.language-html:before {
+  content: "HTML";
+}
+
+code.language-js:before {
+  content: "JS";
+}
+
+code.language-css:before {
+  content: "CSS";
 }
 
 body {
@@ -480,6 +504,7 @@ html {
   height: 7rlh;
   background: rgba(208, 132, 255, 0.062745098);
   border-radius: 4px;
+  margin: 1rlh 0;
 }
 
 canvas.bordered {
