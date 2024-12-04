@@ -48,7 +48,7 @@ And the frame of reference rotation trick for the bottom right corner looks like
 
 Once we have a moveCorner method that handles the bottom right corner, and a withFrameOfReference wrapper, the implementation of e.g. the top right corner becomes just:
 
-```javascript
+```js
 export const moveTopRightCorner = withFrameOfReference(moveCorner, Math.PI / 2);
 ```
 
@@ -84,7 +84,7 @@ To overcome this issue, here's the second tweak. We reflect the bounding rectang
 
 Once we have a moveEdge method that internally uses the moveCorner method, we put our withFrameOfReference wrapper to good use to implement all side drag handles:
 
-```javascript
+```js
 export const moveTopEdge = withFrameOfReference(moveEdge, Math.PI / 2);
 ```
 
