@@ -288,20 +288,64 @@ same size. And the anti-aliased edges of the circle should now look as crisp as
 physically possible on your screen (without getting into subpixel rendering).
 
 In case your DPR is `1.0`, and you don't see a difference above, here's what the
-comparison would have looked like:
+comparison would have looked like against a DPR of `2.0`:
 
-<p class="canvas-container rows">
-  <canvas id="canvas-no-dpr"></canvas>
-  <canvas id="canvas-dpr"></canvas>
+<p class="canvas-container">
+  <canvas id="canvas-dpr-compare" class="fit"></canvas>
 </p>
 
 <script>
-render('canvas-no-dpr', {
-  init: (canvas, ctx) => initDprDemo(canvas, ctx, 1)
-});
+render('canvas-dpr-compare', {
+  init: (canvas, ctx) => {
+    const dpr = window.devicePixelRatio;
 
-render('canvas-dpr', {
-  init: (canvas, ctx) => initDprDemo(canvas, ctx)
+    canvas.width = canvas.clientWidth * dpr;
+    canvas.height = canvas.clientHeight * dpr;
+  },
+  draw: (ctx, t) => {
+    const dpr = window.devicePixelRatio;
+    const s = t / 1000 | 0;
+    const fakeDpr = 2;
+    const virtualDpr = s & 1 ? fakeDpr : 1;
+    const canvas = ctx.canvas;
+
+    ctx.reset();
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    const scale = dpr / virtualDpr;
+
+    ctx.scale(scale, scale);
+
+    const SIZE = 100;
+
+    const x = canvas.width / 2 / scale;
+    const y = canvas.height / 2 / scale;
+    const r = SIZE / 2 * virtualDpr * virtualDpr / fakeDpr;
+
+    ctx.fillStyle = 'white';
+    ctx.beginPath();
+    ctx.arc(x, y, r, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Display DPR
+    ctx.font = '1em monospace';
+    ctx.fillText(virtualDpr.toFixed(1), 10, 20);
+
+    // 10x10 pixel reference square
+    ctx.fillRect(10, 30, 10, 10);
+
+    const u = r * 2 / virtualDpr;
+
+    ctx.strokeStyle = 'red';
+    ctx.strokeRect(x - r, y - r, r * 2, r * 2);
+    ctx.strokeStyle = 'blue';
+    ctx.strokeRect(x - u, y - u, u * 2, u * 2);
+    ctx.drawImage(
+      canvas,
+      x - r, y - r, r * 2, r * 2,
+      x - u, y - u, u * 2, u * 2
+    );
+  }
 });
 </script>
 
