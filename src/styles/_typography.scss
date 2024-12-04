@@ -29,6 +29,23 @@ pre > code {
 pre {
   font-size: 0.875rlh;
   background: #cf2f9728;
-  padding: 0 0.5rlh;
+  padding: 0.5rlh;
   border-radius: 4px;
 }
+
+code.language-html, code.language-js, code.language-css {
+  position: relative;
+  display: block;
+
+  &:before {
+    position: absolute;
+    top: -0.5rlh;
+    font-size: 0.625rlh;
+    right: -0.25rlh;
+    opacity: 0.5;
+  }
+}
+
+code.language-html:before { content: 'HTML'; }
+code.language-js:before { content: 'JS'; }
+code.language-css:before { content: 'CSS'; }

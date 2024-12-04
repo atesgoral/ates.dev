@@ -257,7 +257,7 @@ canvas.width = canvas.clientWidth * dpr;
 canvas.height = canvas.clientHeight * dpr;
 ```
 
-But then, we also have to start factoring in dpr in all size units when using
+But then, we also have to start factoring in DPR in all size units when using
 the drawing primitives:
 
 ```js
