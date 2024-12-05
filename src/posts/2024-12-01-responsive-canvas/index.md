@@ -288,7 +288,7 @@ same size. And the anti-aliased edges of the circle should now look as crisp as
 physically possible on your screen (without getting into subpixel rendering).
 
 In case your DPR is `1.0`, and you don't see a difference above, here's what the
-comparison would have looked like against a DPR of `2.0`:
+comparison would have **approximately** looked like against a DPR of `2.0`:
 
 <p class="canvas-container">
   <canvas id="canvas-dpr-compare" class="fit"></canvas>
@@ -301,6 +301,8 @@ render('canvas-dpr-compare', {
 
     canvas.width = canvas.clientWidth * dpr;
     canvas.height = canvas.clientHeight * dpr;
+
+    console.log(canvas.width, canvas.clientWidth, dpr);
   },
   draw: (ctx, t) => {
     const dpr = window.devicePixelRatio;
@@ -334,19 +336,32 @@ render('canvas-dpr-compare', {
     // 10x10 pixel reference square
     ctx.fillRect(10, 30, 10, 10);
 
+    ctx.imageSmoothingEnabled = false;
+
     const u = r * 2 / virtualDpr;
 
-    ctx.strokeStyle = 'red';
-    ctx.strokeRect(x - r, y - r, r * 2, r * 2);
-    ctx.strokeStyle = 'blue';
-    ctx.strokeRect(x - u, y - u, u * 2, u * 2);
     ctx.drawImage(
       canvas,
-      x - r, y - r, r * 2, r * 2,
+      (x - r) * scale, (y - r) * scale, r * 2 * scale, r * 2 * scale,
       x - u, y - u, u * 2, u * 2
     );
+
+    const zx = x + Math.cos(Math.PI / 4) * u;
+    const zy = y - Math.sin(Math.PI / 4) * u;
+
+    ctx.drawImage(
+      canvas,
+      (zx - u / 6) * scale, (zy - u / 6) * scale, u / 3 * scale, u / 3 * scale,
+      x + u + u / 3, y - u + u / 3, u / 3 * 4, u / 3 * 4,
+    );
+
+    ctx.strokeStyle = '#ff0080';
+    ctx.lineWidth = 2 / scale;
+
+    ctx.strokeRect(zx - u / 6, zy - u / 6, u / 3, u / 3);
+    ctx.strokeRect(x + u + u / 3, y - u + u / 3, u / 3 * 4, u / 3 * 4);
   }
 });
 </script>
 
-TO BE CONTINUED
+Hi!
