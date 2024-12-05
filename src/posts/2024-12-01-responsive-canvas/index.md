@@ -15,7 +15,7 @@ function tailDebounce(fn, delay) {
   };
 }
 
-function render(id, {init, draw}) {
+function render(id, {init, draw, dontResize}) {
   const canvas = document.querySelector(`#${id}`);
   const ctx = canvas.getContext("2d");
 
@@ -28,17 +28,19 @@ function render(id, {init, draw}) {
 
   initOnRaf();
 
-  const debouncedInitOnRaf = tailDebounce(initOnRaf, 100);
+  if (!dontResize) {
+    const debouncedInitOnRaf = tailDebounce(initOnRaf, 100);
 
-  const resizeObserver = new ResizeObserver((entries) => {
-    for (const entry of entries) {
-      if (entry.contentRect) {
-        debouncedInitOnRaf();
+    const resizeObserver = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        if (entry.contentRect) {
+          debouncedInitOnRaf();
+        }
       }
-    }
-  });
+    });
 
-  resizeObserver.observe(canvas);
+    resizeObserver.observe(canvas);
+  }
 
   function raf(draw) {
     requestAnimationFrame((t) => {
@@ -74,11 +76,11 @@ function initDprDemo(canvas, ctx, forceDpr) {
   ctx.fill();
 
   // Display DPR
-  ctx.font = '1em monospace';
-  ctx.fillText(dpr.toFixed(1), 10, 20);
+  ctx.font = '2em monospace';
+  ctx.fillText(usedDpr.toFixed(1), 10, 35);
 
-  // 10x10 pixel reference square
-  ctx.fillRect(10, 30, 10, 10);
+  // 20x20 pixel reference square
+  ctx.fillRect(10, 50, 20, 20);
 }
 </script>
 
@@ -249,21 +251,18 @@ render('canvas-with-square-fit-fix', {
 
 ### Crisp rendering
 
-Next, let's switch to rendering a circle to achieve anti-aliased edges. And let's
-also print your browser's DPR (Device Pixel Ratio), and a reference 10x10 square
-which will become significant soon.
+Next, let's switch to rendering a circle to achieve anti-aliased edges. And let's also print "1.0", and render a reference 20x20 square, both of which will become significant soon.
 
 ```js
 ctx.beginPath();
 ctx.arc(canvas.width / 2, canvas.height / 2, SIZE / 2, 0, Math.PI * 2);
 ctx.fill();
 
-// Display DPR
-ctx.font = "1em monospace";
-ctx.fillText(window.devicePixelRatio.toFixed(1), 10, 20);
+ctx.font = '2em monospace';
+ctx.fillText('1.0', 10, 35);
 
-// 10x10 pixel reference square
-ctx.fillRect(10, 30, 10, 10);
+// 20x20 pixel reference square
+ctx.fillRect(10, 50, 20, 20);
 ```
 
 <p class="canvas-container">
@@ -276,11 +275,9 @@ render('canvas-with-circle', {
 });
 </script>
 
-The CSS dimensions we set on the canvas are the logical pixel dimensions.
-If your DPR is higher than `1.0`, the physical pixel density exceeds the
-logical pixel density, and therefore we're not rendering this circle in the
-crispiest way possible. To fix this, we apply the DPR as a multiplier to the
-canvas dimensions:
+The CSS dimensions we set on the canvas are the logical pixel dimensions. Your browser's DPR (Device Pixel Ratio) is a multiplier that determines the physical pixel density of your screen. For example, if your DPR is `2.0`, then for every logical pixel, there are 4 physical pixels (2x2). To render this circle in the
+crispiest way possible we will apply the DPR as a multiplier to the
+canvas dimensions. We'll also print your actual DPR instead of the "1.0" we hard-coded earlier:
 
 ```js
 const dpr = window.devicePixelRatio;
@@ -302,6 +299,10 @@ ctx.arc(
   Math.PI * 2
 );
 ctx.fill();
+
+// Display DPR
+ctx.font = '2em monospace';
+ctx.fillText(dpr.toFixed(2), 10, 35);
 ```
 
 <p class="canvas-container">
@@ -314,8 +315,8 @@ render('canvas-with-circle-dpr', {
 });
 </script>
 
-If your DPR is greater than `1.0`, you should see the 10x10 pixel reference
-square rendered as something smaller than 10x10 while our circle remains the
+If your DPR is greater than `1.0`, you should see the 20x20 pixel reference
+square rendered as something smaller than 20x20 while our circle remains the
 same size. And the anti-aliased edges of the circle should now look as crisp as
 physically possible on your screen (without getting into subpixel rendering).
 
@@ -358,11 +359,11 @@ render('canvas-dpr-compare', {
     ctx.fill();
 
     // Display DPR
-    ctx.font = '1em monospace';
-    ctx.fillText(virtualDpr.toFixed(1), 10, 20);
+    ctx.font = '2em monospace';
+    ctx.fillText(virtualDpr.toFixed(1), 10, 35);
 
-    // 10x10 pixel reference square
-    ctx.fillRect(10, 30, 10, 10);
+    // 20x20 pixel reference square
+    ctx.fillRect(10, 50, 20, 20);
 
     ctx.imageSmoothingEnabled = false;
 
@@ -413,4 +414,111 @@ render('canvas-dpr-compare', {
 });
 </script>
 
-Hi!!
+### Layout
+
+<script>
+  function drawCircleScene(ctx) {
+    const canvas = ctx.canvas;
+    const dpr = window.devicePixelRatio;
+
+    canvas.width = canvas.clientWidth * dpr;
+    canvas.height = canvas.clientHeight * dpr;
+
+    ctx.fillStyle = 'black';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    const size = canvas.height / 3;;
+
+    ctx.fillStyle = 'white';
+    ctx.beginPath();
+    ctx.arc(
+      canvas.width / 2,
+      canvas.height / 2,
+      size / 2 * dpr,
+      0,
+      Math.PI * 2
+    );
+    ctx.fill();
+  }
+</script>
+
+<p class="canvas-container">
+  <span class="canvas-subcontainer">
+    <canvas id="canvas-resize-layout" class="fit black"></canvas>
+  </span>
+</p>
+
+<script>
+  render('canvas-resize-layout', {
+    dontResize: true,
+    init: (_canvas, ctx) => drawCircleScene(ctx)
+  });
+</script>
+
+### Resizing
+
+<script>
+  setInterval(() => {
+    const width = `${Math.random() * 100 + 200}px`
+
+    document.querySelectorAll('.canvas-subcontainer.auto-resize').forEach((el) => el.style.width = width);
+  }, 1000);
+</script>
+
+<p class="canvas-container">
+  <span class="canvas-subcontainer auto-resize">
+    <canvas id="canvas-resize-stretch" class="fit black"></canvas>
+  </span>
+</p>
+
+<script>
+  render('canvas-resize-stretch', {
+    dontResize: true,
+    init: (_canvas, ctx) => drawCircleScene(ctx)
+  });
+</script>
+
+<p class="canvas-container">
+  <span class="canvas-subcontainer auto-resize">
+    <canvas id="canvas-resize-draw" class="fit black"></canvas>
+  </span>
+</p>
+
+<script>
+  render('canvas-resize-draw', {
+    dontResize: true,
+    draw: (ctx) => drawCircleScene(ctx)
+  });
+</script>
+
+<p class="canvas-container">
+  <span class="canvas-subcontainer auto-resize" style="width: 300px; height: auto; aspect-ratio: 300 / 150;">
+    <canvas id="canvas-resize-stretch-ar" class="black" style="width: 100%; height: 100%;"></canvas>
+  </span>
+</p>
+
+<script>
+  render('canvas-resize-stretch-ar', {
+    dontResize: true,
+    init: (_canvas, ctx) => drawCircleScene(ctx)
+  });
+</script>
+
+<p class="canvas-container">
+  <span id="canvas-resize-stretch-tiny-container" class="canvas-subcontainer" style="width: 80px; height: 40px;">
+    <canvas id="canvas-resize-stretch-tiny" class="black" style="width: 100%; height: 100%;"></canvas>
+  </span>
+</p>
+
+<script>
+  render('canvas-resize-stretch-tiny', {
+    dontResize: true,
+    init: (canvas, ctx) => {
+      drawCircleScene(ctx);
+
+      const container = document.querySelector('#canvas-resize-stretch-tiny-container');
+      container.style.width = '300px';
+      container.style.height = '150px';
+    }
+  });
+</script>
