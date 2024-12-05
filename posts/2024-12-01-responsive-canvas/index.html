@@ -43,11 +43,39 @@
   <p class="meta">Posted on December 01, 2024</p>
 
   <div class="content"><script>
+function tailDebounce(fn, delay) {
+  let timer;
+
+  return function (...args) {
+    clearTimeout(timer);
+    timer = setTimeout(() => fn.apply(this, args), delay);
+  };
+}
+
 function render(id, {init, draw}) {
   const canvas = document.querySelector(`#${id}`);
   const ctx = canvas.getContext("2d");
 
-  init && init(canvas, ctx);
+  function initOnRaf() {
+    requestAnimationFrame(() => {
+      init && init(canvas, ctx);
+      draw && draw(ctx, 0);
+    });
+  }
+
+  initOnRaf();
+
+  const debouncedInitOnRaf = tailDebounce(initOnRaf, 100);
+
+  const resizeObserver = new ResizeObserver((entries) => {
+    for (const entry of entries) {
+      if (entry.contentRect) {
+        debouncedInitOnRaf();
+      }
+    }
+  });
+
+  resizeObserver.observe(canvas);
 
   function raf(draw) {
     requestAnimationFrame((t) => {
@@ -66,6 +94,7 @@ function initDprDemo(canvas, ctx, forceDpr) {
   canvas.width = canvas.clientWidth * usedDpr;
   canvas.height = canvas.clientHeight * usedDpr;
 
+  ctx.fillStyle = 'black';
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
   const SIZE = 100;
@@ -141,11 +170,12 @@ ctx.fillRect(
 );
 </code></pre>
 <p class="canvas-container">
-  <canvas id="canvas-with-square"></canvas>
+  <canvas id="canvas-with-square" class="black"></canvas>
 </p>
 <script>
 render('canvas-with-square', {
   init(canvas, ctx) {
+    ctx.fillStyle = 'black';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     const SIZE = 100;
@@ -168,11 +198,12 @@ render('canvas-with-square', {
 }
 </code></pre>
 <p class="canvas-container">
-  <canvas id="canvas-with-square-fit" class="fit"></canvas>
+  <canvas id="canvas-with-square-fit" class="fit black"></canvas>
 </p>
 <script>
 render('canvas-with-square-fit', {
   init(canvas, ctx) {
+    ctx.fillStyle = 'black';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     const SIZE = 100;
@@ -196,7 +227,7 @@ intrinsic dimensions of the canvas are still the defaults, 300x150.</p>
 canvas.height = canvas.clientHeight;
 </code></pre>
 <p class="canvas-container">
-  <canvas id="canvas-with-square-fit-fix" class="fit"></canvas>
+  <canvas id="canvas-with-square-fit-fix" class="fit black"></canvas>
 </p>
 <script>
 render('canvas-with-square-fit-fix', {
@@ -204,6 +235,7 @@ render('canvas-with-square-fit-fix', {
     canvas.width = canvas.clientWidth;
     canvas.height = canvas.clientHeight;
 
+    ctx.fillStyle = 'black';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     const SIZE = 100;
@@ -234,7 +266,7 @@ ctx.fillText(window.devicePixelRatio.toFixed(1), 10, 20);
 ctx.fillRect(10, 30, 10, 10);
 </code></pre>
 <p class="canvas-container">
-  <canvas id="canvas-with-circle" class="fit"></canvas>
+  <canvas id="canvas-with-circle" class="fit black"></canvas>
 </p>
 <script>
 render('canvas-with-circle', {
@@ -264,7 +296,7 @@ ctx.arc(
 ctx.fill();
 </code></pre>
 <p class="canvas-container">
-  <canvas id="canvas-with-circle-dpr" class="fit"></canvas>
+  <canvas id="canvas-with-circle-dpr" class="fit black"></canvas>
 </p>
 <script>
 render('canvas-with-circle-dpr', {
@@ -278,24 +310,20 @@ physically possible on your screen (without getting into subpixel rendering).</p
 <p>In case your DPR is <code>1.0</code>, and you don't see a difference above, here's what the
 comparison would have <strong>approximately</strong> looked like against a DPR of <code>2.0</code>:</p>
 <p class="canvas-container">
-  <canvas id="canvas-dpr-compare" class="fit"></canvas>
+  <canvas id="canvas-dpr-compare" class="fit black"></canvas>
 </p>
 <script>
 render('canvas-dpr-compare', {
-  init: (canvas, ctx) => {
+  draw: (ctx, t) => {
+    const canvas = ctx.canvas;
     const dpr = window.devicePixelRatio;
 
     canvas.width = canvas.clientWidth * dpr;
     canvas.height = canvas.clientHeight * dpr;
 
-    console.log(canvas.width, canvas.clientWidth, dpr);
-  },
-  draw: (ctx, t) => {
-    const dpr = window.devicePixelRatio;
     const s = t / 1000 | 0;
     const fakeDpr = 2;
     const virtualDpr = s & 1 ? fakeDpr : 1;
-    const canvas = ctx.canvas;
 
     ctx.reset();
     ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -341,15 +369,36 @@ render('canvas-dpr-compare', {
       x + u + u / 3, y - u + u / 3, u / 3 * 4, u / 3 * 4,
     );
 
-    ctx.strokeStyle = '#ff0080';
-    ctx.lineWidth = 2 / scale;
+    ctx.strokeStyle = '#00c0ff';
+    ctx.lineWidth = 3 / scale;
 
     ctx.strokeRect(zx - u / 6, zy - u / 6, u / 3, u / 3);
-    ctx.strokeRect(x + u + u / 3, y - u + u / 3, u / 3 * 4, u / 3 * 4);
+    ctx.strokeRect(
+      x + u + u / 3,
+      y - u + u / 3,
+      u / 3 * 4,
+      u / 3 * 4,
+    );
+
+    ctx.strokeStyle = 'black';
+    ctx.lineWidth = 2 / scale;
+
+    ctx.strokeRect(
+      zx - u / 6 + 1 / scale,
+      zy - u / 6 + 1 / scale,
+      u / 3 - 2 / scale,
+      u / 3 - 2 / scale,
+    );
+    ctx.strokeRect(
+      x + u + u / 3 + 1 / scale,
+      y - u + u / 3 + 1 / scale,
+      u / 3 * 4 - 2 / scale,
+      u / 3 * 4 - 2 / scale,
+    );
   }
 });
 </script>
-<p>Hi!</p>
+<p>Hi!!</p>
 </div>
 </article>
 </main>
