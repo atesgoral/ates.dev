@@ -427,7 +427,7 @@ render('canvas-dpr-compare', {
     ctx.fillStyle = 'black';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    const size = canvas.height / 3;;
+    const size = canvas.height / 4;
 
     ctx.fillStyle = 'white';
     ctx.beginPath();
