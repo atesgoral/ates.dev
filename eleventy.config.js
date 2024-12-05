@@ -2,15 +2,16 @@ import markdownItAnchor from "markdown-it-anchor";
 import * as sass from "sass";
 import path from "path";
 
+/** @param {import("@11ty/eleventy").UserConfig} eleventyConfig */
 export default function (eleventyConfig) {
-  eleventyConfig
-    .addPassthroughCopy("assets/**/*")
-    .addPassthroughCopy("src/pages/*/i/*")
-    .addPassthroughCopy("src/pages/*/*.js")
-    .addPassthroughCopy("src/pages/*/*.pde")
-    .addPassthroughCopy("src/posts/*/i/*")
-    .addPassthroughCopy("src/posts/*/*.js")
-    .addFilter("debug", (value) => Object.keys(value));
+  eleventyConfig.addPassthroughCopy("assets/**/*");
+  eleventyConfig.addPassthroughCopy("src/pages/*/i/*");
+  eleventyConfig.addPassthroughCopy("src/pages/*/*.js");
+  eleventyConfig.addPassthroughCopy("src/pages/*/*.pde");
+  eleventyConfig.addPassthroughCopy("src/posts/*/i/*");
+  eleventyConfig.addPassthroughCopy("src/posts/*/*.js");
+
+  eleventyConfig.addFilter("debug", (value) => Object.keys(value));
 
   eleventyConfig.amendLibrary("md", (mdLib) => {
     mdLib.use(markdownItAnchor, {
@@ -47,7 +48,7 @@ export default function (eleventyConfig) {
       // Register any Sass dependencies for incremental builds
       this.addDependencies(inputPath, result.loadedUrls);
 
-      return async (data) => {
+      return async (_data) => {
         return result.css;
       };
     },
@@ -55,9 +56,14 @@ export default function (eleventyConfig) {
 
   eleventyConfig.addGlobalData("baseUrl", "https://ates.dev");
 
-  return {
-    dir: {
-      input: "src",
-    },
-  };
+  // eleventyConfig.addWatchTarget("src/**/*", {
+  //   resetConfig: true,
+  // });
+
+  eleventyConfig.setChokidarConfig({
+    usePolling: true,
+    interval: 500,
+  });
+
+  eleventyConfig.setInputDirectory("src");
 }
