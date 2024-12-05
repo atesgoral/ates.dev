@@ -33,6 +33,7 @@ header,
 main,
 footer {
   max-width: 32rlh;
+  min-width: 320px;
   margin: auto;
 }
 
@@ -279,6 +280,10 @@ html {
   background: #d084ff10;
   border-radius: 4px;
   margin: 1rlh 0;
+}
+
+canvas.black {
+  background: black;
 }
 
 canvas.bordered {

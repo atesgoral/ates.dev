@@ -6,11 +6,39 @@ date: 2024-12-01
 ---
 
 <script>
+function tailDebounce(fn, delay) {
+  let timer;
+
+  return function (...args) {
+    clearTimeout(timer);
+    timer = setTimeout(() => fn.apply(this, args), delay);
+  };
+}
+
 function render(id, {init, draw}) {
   const canvas = document.querySelector(`#${id}`);
   const ctx = canvas.getContext("2d");
 
-  init && init(canvas, ctx);
+  function initOnRaf() {
+    requestAnimationFrame(() => {
+      init && init(canvas, ctx);
+      draw && draw(ctx, 0);
+    });
+  }
+
+  initOnRaf();
+
+  const debouncedInitOnRaf = tailDebounce(initOnRaf, 100);
+
+  const resizeObserver = new ResizeObserver((entries) => {
+    for (const entry of entries) {
+      if (entry.contentRect) {
+        debouncedInitOnRaf();
+      }
+    }
+  });
+
+  resizeObserver.observe(canvas);
 
   function raf(draw) {
     requestAnimationFrame((t) => {
@@ -29,6 +57,7 @@ function initDprDemo(canvas, ctx, forceDpr) {
   canvas.width = canvas.clientWidth * usedDpr;
   canvas.height = canvas.clientHeight * usedDpr;
 
+  ctx.fillStyle = 'black';
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
   const SIZE = 100;
@@ -124,12 +153,13 @@ ctx.fillRect(
 ```
 
 <p class="canvas-container">
-  <canvas id="canvas-with-square"></canvas>
+  <canvas id="canvas-with-square" class="black"></canvas>
 </p>
 
 <script>
 render('canvas-with-square', {
   init(canvas, ctx) {
+    ctx.fillStyle = 'black';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     const SIZE = 100;
@@ -157,12 +187,13 @@ canvas {
 ```
 
 <p class="canvas-container">
-  <canvas id="canvas-with-square-fit" class="fit"></canvas>
+  <canvas id="canvas-with-square-fit" class="fit black"></canvas>
 </p>
 
 <script>
 render('canvas-with-square-fit', {
   init(canvas, ctx) {
+    ctx.fillStyle = 'black';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     const SIZE = 100;
@@ -191,7 +222,7 @@ canvas.height = canvas.clientHeight;
 ```
 
 <p class="canvas-container">
-  <canvas id="canvas-with-square-fit-fix" class="fit"></canvas>
+  <canvas id="canvas-with-square-fit-fix" class="fit black"></canvas>
 </p>
 
 <script>
@@ -200,6 +231,7 @@ render('canvas-with-square-fit-fix', {
     canvas.width = canvas.clientWidth;
     canvas.height = canvas.clientHeight;
 
+    ctx.fillStyle = 'black';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     const SIZE = 100;
@@ -235,7 +267,7 @@ ctx.fillRect(10, 30, 10, 10);
 ```
 
 <p class="canvas-container">
-  <canvas id="canvas-with-circle" class="fit"></canvas>
+  <canvas id="canvas-with-circle" class="fit black"></canvas>
 </p>
 
 <script>
@@ -273,7 +305,7 @@ ctx.fill();
 ```
 
 <p class="canvas-container">
-  <canvas id="canvas-with-circle-dpr" class="fit"></canvas>
+  <canvas id="canvas-with-circle-dpr" class="fit black"></canvas>
 </p>
 
 <script>
@@ -291,25 +323,21 @@ In case your DPR is `1.0`, and you don't see a difference above, here's what the
 comparison would have **approximately** looked like against a DPR of `2.0`:
 
 <p class="canvas-container">
-  <canvas id="canvas-dpr-compare" class="fit"></canvas>
+  <canvas id="canvas-dpr-compare" class="fit black"></canvas>
 </p>
 
 <script>
 render('canvas-dpr-compare', {
-  init: (canvas, ctx) => {
+  draw: (ctx, t) => {
+    const canvas = ctx.canvas;
     const dpr = window.devicePixelRatio;
 
     canvas.width = canvas.clientWidth * dpr;
     canvas.height = canvas.clientHeight * dpr;
 
-    console.log(canvas.width, canvas.clientWidth, dpr);
-  },
-  draw: (ctx, t) => {
-    const dpr = window.devicePixelRatio;
     const s = t / 1000 | 0;
     const fakeDpr = 2;
     const virtualDpr = s & 1 ? fakeDpr : 1;
-    const canvas = ctx.canvas;
 
     ctx.reset();
     ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -355,13 +383,34 @@ render('canvas-dpr-compare', {
       x + u + u / 3, y - u + u / 3, u / 3 * 4, u / 3 * 4,
     );
 
-    ctx.strokeStyle = '#ff0080';
-    ctx.lineWidth = 2 / scale;
+    ctx.strokeStyle = '#00c0ff';
+    ctx.lineWidth = 3 / scale;
 
     ctx.strokeRect(zx - u / 6, zy - u / 6, u / 3, u / 3);
-    ctx.strokeRect(x + u + u / 3, y - u + u / 3, u / 3 * 4, u / 3 * 4);
+    ctx.strokeRect(
+      x + u + u / 3,
+      y - u + u / 3,
+      u / 3 * 4,
+      u / 3 * 4,
+    );
+
+    ctx.strokeStyle = 'black';
+    ctx.lineWidth = 2 / scale;
+
+    ctx.strokeRect(
+      zx - u / 6 + 1 / scale,
+      zy - u / 6 + 1 / scale,
+      u / 3 - 2 / scale,
+      u / 3 - 2 / scale,
+    );
+    ctx.strokeRect(
+      x + u + u / 3 + 1 / scale,
+      y - u + u / 3 + 1 / scale,
+      u / 3 * 4 - 2 / scale,
+      u / 3 * 4 - 2 / scale,
+    );
   }
 });
 </script>
 
-Hi!
+Hi!!
