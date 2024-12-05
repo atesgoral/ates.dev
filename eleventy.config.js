@@ -56,14 +56,14 @@ export default function (eleventyConfig) {
 
   eleventyConfig.addGlobalData("baseUrl", "https://ates.dev");
 
-  // eleventyConfig.addWatchTarget("src/**/*", {
-  //   resetConfig: true,
+  // eleventyConfig.addWatchTarget("./src/**/*", {
+  // resetConfig: true,
   // });
 
-  eleventyConfig.setChokidarConfig({
-    usePolling: true,
-    interval: 500,
-  });
+  // eleventyConfig.setChokidarConfig({
+  // usePolling: true,
+  // interval: 500,
+  // });
 
   eleventyConfig.setInputDirectory("src");
 }
