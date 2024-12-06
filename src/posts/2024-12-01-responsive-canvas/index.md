@@ -17,13 +17,23 @@ function tailDebounce(fn, delay) {
 
 const visibilityCallbacks = new WeakMap();
 
-const viewportObserver = new IntersectionObserver((entries) => {
+const visibilityObserver = new IntersectionObserver((entries) => {
   for (const entry of entries) {
     entry.target.setAttribute('data-in-viewport', entry.isIntersecting);
     visibilityCallbacks.get(entry.target)?.(entry.isIntersecting);
   }
 }, {
   threshold: 0.5,
+});
+
+const resizeCallbacks = new WeakMap();
+
+const resizeObserver = new ResizeObserver((entries) => {
+  for (const entry of entries) {
+    if (entry.contentRect) {
+      resizeCallbacks.get(entry.target)?.();
+    }
+  }
 });
 
 function render(id, {init, draw, resize = true}) {
@@ -66,21 +76,13 @@ function render(id, {init, draw, resize = true}) {
       visible = newVisible;
     });
 
-    viewportObserver.observe(canvas);
+    visibilityObserver.observe(canvas);
   }
 
   if (resize && init) {
     const debouncedInitOnRaf = tailDebounce(initOnRaf, 100);
 
-    // TODO: make this a single observer with a WeakMap for callback
-    const resizeObserver = new ResizeObserver((entries) => {
-      for (const entry of entries) {
-        if (entry.contentRect) {
-          debouncedInitOnRaf();
-        }
-      }
-    });
-
+    resizeCallbacks.set(canvas, debouncedInitOnRaf);
     resizeObserver.observe(canvas);
   }
 }
