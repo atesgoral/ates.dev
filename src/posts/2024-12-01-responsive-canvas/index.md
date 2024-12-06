@@ -15,12 +15,12 @@ function tailDebounce(fn, delay) {
   };
 }
 
-const targetCallbacks = new WeakMap();
+const visibilityCallbacks = new WeakMap();
 
 const viewportObserver = new IntersectionObserver((entries) => {
   for (const entry of entries) {
     entry.target.setAttribute('data-in-viewport', entry.isIntersecting);
-    targetCallbacks.get(entry.target)?.(entry.isIntersecting);
+    visibilityCallbacks.get(entry.target)?.(entry.isIntersecting);
   }
 }, {
   threshold: 0.5,
@@ -29,7 +29,7 @@ const viewportObserver = new IntersectionObserver((entries) => {
 function render(id, {init, draw, resize = true}) {
   const canvas = document.querySelector(`#${id}`);
   const ctx = canvas.getContext("2d");
-  let inViewport = false;
+  let visible = false;
   let rafId = null;
 
   function initOnRaf() {
@@ -51,19 +51,19 @@ function render(id, {init, draw, resize = true}) {
   }
 
   if (draw) {
-    targetCallbacks.set(canvas, (newInViewport) => {
-      if (newInViewport) {
-        if (!inViewport) {
+    visibilityCallbacks.set(canvas, (newVisible) => {
+      if (newVisible) {
+        if (!visible) {
           raf(draw);
         }
       } else {
-        if (inViewport && rafId) {
+        if (visible && rafId) {
           cancelAnimationFrame(rafId);
           rafId = null;
         }
       }
 
-      inViewport = newInViewport;
+      visible = newVisible;
     });
 
     viewportObserver.observe(canvas);
