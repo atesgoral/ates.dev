@@ -547,7 +547,7 @@ getting resampled to fit the new dimensions.
 One option to overcome is to set up a rendering loop to keep adjustign the
 intrinsic dimemsions of the canvas and rendering the scene every frame. This
 way, the entire scene will always be rendered at the correct proportions. We'll
-use a [requestAnimationFrame][5] loop for this:
+use a [requestAnimationFrame][5] (RAF) loop for this:
 
 [5]: https://developer.mozilla.org/en-US/docs/Web/API/window/requestAnimationFrame
 
@@ -582,7 +582,7 @@ function draw() {
 requestAnimationFrame(draw);
 ```
 
-<p class="canvas-container">
+<p class="canvas-container raf">
   <span class="canvas-subcontainer auto-resize">
     <canvas id="canvas-resize-draw" class="fit black bordered"></canvas>
   </span>
