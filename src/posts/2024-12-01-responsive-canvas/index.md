@@ -595,6 +595,8 @@ requestAnimationFrame(draw);
   });
 </script>
 
+The circle remains a circle now.
+
 Instead of rendering a static scene every frame, another option is to preserve
 the aspect ratio of the canvas so that the scene doesn't stretch or squash. We
 can render the canvas once and let CSS do its thing:
@@ -630,6 +632,8 @@ canvas {
     init: (_canvas, ctx) => drawCircleScene(ctx)
   });
 </script>
+
+The circle remains a circle.
 
 However, the ugly truth is that you will lose all the crispy rendering you got
 at the start by updating the intrinsic dimensions of the canvas with DPR in
