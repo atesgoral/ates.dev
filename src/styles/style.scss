@@ -286,6 +286,14 @@ html {
   display: flex;
 }
 
+canvas {
+  transition: opacity 0.3s ease-in-out;
+}
+
+canvas[data-in-viewport="false"] {
+  opacity: 0.5;
+}
+
 canvas.black {
   background: black;
 }

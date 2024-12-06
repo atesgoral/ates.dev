@@ -15,22 +15,65 @@ function tailDebounce(fn, delay) {
   };
 }
 
+const targetCallbacks = new WeakMap();
+
+const viewportObserver = new IntersectionObserver((entries) => {
+  for (const entry of entries) {
+    entry.target.setAttribute('data-in-viewport', entry.isIntersecting);
+    targetCallbacks.get(entry.target)?.(entry.isIntersecting);
+  }
+}, {
+  threshold: 0.5,
+});
+
 function render(id, {init, draw, dontResize}) {
   const canvas = document.querySelector(`#${id}`);
   const ctx = canvas.getContext("2d");
+  let inViewport = false;
+  let rafId = null;
 
   function initOnRaf() {
     requestAnimationFrame(() => {
-      init && init(canvas, ctx);
-      draw && draw(ctx, 0);
+      init(canvas, ctx);
+      // draw && draw(ctx, 0);
     });
   }
 
-  initOnRaf();
+  function raf(draw) {
+    rafId = requestAnimationFrame((t) => {
+      raf(draw);
+      draw(ctx, t);
+    });
+  }
 
-  if (!dontResize) {
+  if (init) {
+    initOnRaf();
+  }
+
+  if (draw) {
+    targetCallbacks.set(canvas, (newInViewport) => {
+      if (newInViewport) {
+        if (!inViewport) {
+          raf(draw);
+        }
+      } else {
+        if (inViewport && rafId) {
+          cancelAnimationFrame(rafId);
+          rafId = null;
+        }
+      }
+
+      inViewport = newInViewport;
+    });
+
+    viewportObserver.observe(canvas);
+  }
+
+  // TODO: invert this to resize
+  if (!dontResize && init) {
     const debouncedInitOnRaf = tailDebounce(initOnRaf, 100);
 
+    // TODO: make this a single observer with a WeakMap for callback
     const resizeObserver = new ResizeObserver((entries) => {
       for (const entry of entries) {
         if (entry.contentRect) {
@@ -41,15 +84,6 @@ function render(id, {init, draw, dontResize}) {
 
     resizeObserver.observe(canvas);
   }
-
-  function raf(draw) {
-    requestAnimationFrame((t) => {
-      raf(draw);
-      draw(ctx, t);
-    });
-  }
-
-  draw && raf(draw);
 }
 
 function initDprDemo(canvas, ctx, forceDpr) {
@@ -485,17 +519,9 @@ ctx.fill();
 Typically, a canvas will be dynamically resized based on the size of a
 container, using CSS.
 
-<script>
-  setInterval(() => {
-    const width = `${Math.random() * 100 + 200}px`
-
-    document.querySelectorAll('.canvas-subcontainer.auto-resize').forEach((el) => el.style.width = width);
-  }, 1000);
-</script>
-
 <p class="canvas-container">
   <span class="canvas-subcontainer auto-resize">
-    <canvas id="canvas-resize-stretch" class="fit black"></canvas>
+    <canvas id="canvas-resize-stretch" class="fit black bordered"></canvas>
   </span>
 </p>
 
@@ -508,7 +534,7 @@ container, using CSS.
 
 <p class="canvas-container">
   <span class="canvas-subcontainer auto-resize">
-    <canvas id="canvas-resize-draw" class="fit black"></canvas>
+    <canvas id="canvas-resize-draw" class="fit black bordered"></canvas>
   </span>
 </p>
 
@@ -521,7 +547,7 @@ container, using CSS.
 
 <p class="canvas-container">
   <span class="canvas-subcontainer auto-resize" style="width: 300px; height: auto; aspect-ratio: 300 / 150;">
-    <canvas id="canvas-resize-stretch-ar" class="black" style="width: 100%; height: 100%;"></canvas>
+    <canvas id="canvas-resize-stretch-ar" class="black bordered" style="width: 100%; height: 100%;"></canvas>
   </span>
 </p>
 
@@ -549,4 +575,16 @@ container, using CSS.
       container.style.height = '150px';
     }
   });
+</script>
+
+<script>
+  const autoResizables = document.querySelectorAll('.canvas-subcontainer.auto-resize');
+
+  setInterval(() => {
+    const width = `${Math.random() * 100 + 200}px`
+
+    autoResizables.forEach((el) => {
+      el.style.width = width;
+    });
+  }, 1000);
 </script>
