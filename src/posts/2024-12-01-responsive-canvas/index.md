@@ -62,14 +62,14 @@ function initDprDemo(canvas, ctx, forceDpr) {
   ctx.fillStyle = 'black';
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  const SIZE = 100;
+  const RADIUS = 50;
 
   ctx.fillStyle = 'white';
   ctx.beginPath();
   ctx.arc(
     canvas.width / 2,
     canvas.height / 2,
-    SIZE / 2 * usedDpr,
+    RADIUS * usedDpr,
     0,
     Math.PI * 2
   );
@@ -254,8 +254,10 @@ render('canvas-with-square-fit-fix', {
 Next, let's switch to rendering a circle to achieve anti-aliased edges. And let's also print "1.0", and render a reference 20x20 square, both of which will become significant soon.
 
 ```js
+const RADIUS = 50;
+
 ctx.beginPath();
-ctx.arc(canvas.width / 2, canvas.height / 2, SIZE / 2, 0, Math.PI * 2);
+ctx.arc(canvas.width / 2, canvas.height / 2, RADIUS, 0, Math.PI * 2);
 ctx.fill();
 
 ctx.font = '2em monospace';
@@ -294,7 +296,7 @@ ctx.beginPath();
 ctx.arc(
   canvas.width / 2,
   canvas.height / 2,
-  (SIZE / 2) * dpr, // Adjust for DPR
+  RADIUS * dpr, // Adjust for DPR
   0,
   Math.PI * 2
 );
@@ -347,11 +349,11 @@ render('canvas-dpr-compare', {
 
     ctx.scale(scale, scale);
 
-    const SIZE = 100;
+    const RADIUS = 50;
 
     const x = canvas.width / 2 / scale;
     const y = canvas.height / 2 / scale;
-    const r = SIZE / 2 * virtualDpr * virtualDpr / fakeDpr;
+    const r = RADIUS * virtualDpr * virtualDpr / fakeDpr;
 
     ctx.fillStyle = 'white';
     ctx.beginPath();
@@ -416,6 +418,29 @@ render('canvas-dpr-compare', {
 
 ### Layout
 
+In the examples so far we've used hard-coded dimensions for the elements because
+we knew the canvas height was always 150px. A square 100px across or a circle
+50px in radius would nicely fit.
+
+When the canvas size is dynamic, I find it easier to define the scene in terms
+of proportions, typically as a fraction of the canvas height. So, let's switch
+to rendering our circle with a radius of 1/6th of the canvas height:
+
+```js
+const radius = canvas.height / 6;
+
+ctx.fillStyle = 'white';
+ctx.beginPath();
+ctx.arc(
+  canvas.width / 2,
+  canvas.height / 2,
+  radius * dpr,
+  0,
+  Math.PI * 2
+);
+ctx.fill();
+```
+
 <script>
   function drawCircleScene(ctx) {
     const canvas = ctx.canvas;
@@ -427,14 +452,14 @@ render('canvas-dpr-compare', {
     ctx.fillStyle = 'black';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    const size = canvas.height / 4;
+    const radius = canvas.height / 6;
 
     ctx.fillStyle = 'white';
     ctx.beginPath();
     ctx.arc(
       canvas.width / 2,
       canvas.height / 2,
-      size / 2 * dpr,
+      radius * dpr,
       0,
       Math.PI * 2
     );
@@ -456,6 +481,9 @@ render('canvas-dpr-compare', {
 </script>
 
 ### Resizing
+
+Typically, a canvas will be dynamically resized based on the size of a
+container, using CSS.
 
 <script>
   setInterval(() => {
