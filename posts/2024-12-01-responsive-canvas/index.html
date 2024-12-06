@@ -52,22 +52,65 @@ function tailDebounce(fn, delay) {
   };
 }
 
+const targetCallbacks = new WeakMap();
+
+const viewportObserver = new IntersectionObserver((entries) => {
+  for (const entry of entries) {
+    entry.target.setAttribute('data-in-viewport', entry.isIntersecting);
+    targetCallbacks.get(entry.target)?.(entry.isIntersecting);
+  }
+}, {
+  threshold: 0.5,
+});
+
 function render(id, {init, draw, dontResize}) {
   const canvas = document.querySelector(`#${id}`);
   const ctx = canvas.getContext("2d");
+  let inViewport = false;
+  let rafId = null;
 
   function initOnRaf() {
     requestAnimationFrame(() => {
-      init && init(canvas, ctx);
-      draw && draw(ctx, 0);
+      init(canvas, ctx);
+      // draw && draw(ctx, 0);
     });
   }
 
-  initOnRaf();
+  function raf(draw) {
+    rafId = requestAnimationFrame((t) => {
+      raf(draw);
+      draw(ctx, t);
+    });
+  }
 
-  if (!dontResize) {
+  if (init) {
+    initOnRaf();
+  }
+
+  if (draw) {
+    targetCallbacks.set(canvas, (newInViewport) => {
+      if (newInViewport) {
+        if (!inViewport) {
+          raf(draw);
+        }
+      } else {
+        if (inViewport && rafId) {
+          cancelAnimationFrame(rafId);
+          rafId = null;
+        }
+      }
+
+      inViewport = newInViewport;
+    });
+
+    viewportObserver.observe(canvas);
+  }
+
+  // TODO: invert this to resize
+  if (!dontResize && init) {
     const debouncedInitOnRaf = tailDebounce(initOnRaf, 100);
 
+    // TODO: make this a single observer with a WeakMap for callback
     const resizeObserver = new ResizeObserver((entries) => {
       for (const entry of entries) {
         if (entry.contentRect) {
@@ -78,15 +121,6 @@ function render(id, {init, draw, dontResize}) {
 
     resizeObserver.observe(canvas);
   }
-
-  function raf(draw) {
-    requestAnimationFrame((t) => {
-      raf(draw);
-      draw(ctx, t);
-    });
-  }
-
-  draw && raf(draw);
 }
 
 function initDprDemo(canvas, ctx, forceDpr) {
@@ -99,14 +133,14 @@ function initDprDemo(canvas, ctx, forceDpr) {
   ctx.fillStyle = 'black';
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  const SIZE = 100;
+  const RADIUS = 50;
 
   ctx.fillStyle = 'white';
   ctx.beginPath();
   ctx.arc(
     canvas.width / 2,
     canvas.height / 2,
-    SIZE / 2 * usedDpr,
+    RADIUS * usedDpr,
     0,
     Math.PI * 2
   );
@@ -254,8 +288,10 @@ render('canvas-with-square-fit-fix', {
 </script>
 <h3 id="crisp-rendering" tabindex="-1"><a class="permalink" href="#crisp-rendering">Crisp rendering</a></h3>
 <p>Next, let's switch to rendering a circle to achieve anti-aliased edges. And let's also print &quot;1.0&quot;, and render a reference 20x20 square, both of which will become significant soon.</p>
-<pre><code class="language-js">ctx.beginPath();
-ctx.arc(canvas.width / 2, canvas.height / 2, SIZE / 2, 0, Math.PI * 2);
+<pre><code class="language-js">const RADIUS = 50;
+
+ctx.beginPath();
+ctx.arc(canvas.width / 2, canvas.height / 2, RADIUS, 0, Math.PI * 2);
 ctx.fill();
 
 ctx.font = '2em monospace';
@@ -286,7 +322,7 @@ the drawing primitives:</p>
 ctx.arc(
   canvas.width / 2,
   canvas.height / 2,
-  (SIZE / 2) * dpr, // Adjust for DPR
+  RADIUS * dpr, // Adjust for DPR
   0,
   Math.PI * 2
 );
@@ -333,11 +369,11 @@ render('canvas-dpr-compare', {
 
     ctx.scale(scale, scale);
 
-    const SIZE = 100;
+    const RADIUS = 50;
 
     const x = canvas.width / 2 / scale;
     const y = canvas.height / 2 / scale;
-    const r = SIZE / 2 * virtualDpr * virtualDpr / fakeDpr;
+    const r = RADIUS * virtualDpr * virtualDpr / fakeDpr;
 
     ctx.fillStyle = 'white';
     ctx.beginPath();
@@ -400,6 +436,25 @@ render('canvas-dpr-compare', {
 });
 </script>
 <h3 id="layout" tabindex="-1"><a class="permalink" href="#layout">Layout</a></h3>
+<p>In the examples so far we've used hard-coded dimensions for the elements because
+we knew the canvas height was always 150px. A square 100px across or a circle
+50px in radius would nicely fit.</p>
+<p>When the canvas size is dynamic, I find it easier to define the scene in terms
+of proportions, typically as a fraction of the canvas height. So, let's switch
+to rendering our circle with a radius of 1/6th of the canvas height:</p>
+<pre><code class="language-js">const radius = canvas.height / 6;
+
+ctx.fillStyle = 'white';
+ctx.beginPath();
+ctx.arc(
+  canvas.width / 2,
+  canvas.height / 2,
+  radius * dpr,
+  0,
+  Math.PI * 2
+);
+ctx.fill();
+</code></pre>
 <script>
   function drawCircleScene(ctx) {
     const canvas = ctx.canvas;
@@ -411,14 +466,14 @@ render('canvas-dpr-compare', {
     ctx.fillStyle = 'black';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    const size = canvas.height / 4;
+    const radius = canvas.height / 6;
 
     ctx.fillStyle = 'white';
     ctx.beginPath();
     ctx.arc(
       canvas.width / 2,
       canvas.height / 2,
-      size / 2 * dpr,
+      radius * dpr,
       0,
       Math.PI * 2
     );
@@ -437,16 +492,11 @@ render('canvas-dpr-compare', {
   });
 </script>
 <h3 id="resizing" tabindex="-1"><a class="permalink" href="#resizing">Resizing</a></h3>
-<script>
-  setInterval(() => {
-    const width = `${Math.random() * 100 + 200}px`
-
-    document.querySelectorAll('.canvas-subcontainer.auto-resize').forEach((el) => el.style.width = width);
-  }, 1000);
-</script>
+<p>Typically, a canvas will be dynamically resized based on the size of a
+container, using CSS.</p>
 <p class="canvas-container">
   <span class="canvas-subcontainer auto-resize">
-    <canvas id="canvas-resize-stretch" class="fit black"></canvas>
+    <canvas id="canvas-resize-stretch" class="fit black bordered"></canvas>
   </span>
 </p>
 <script>
@@ -457,7 +507,7 @@ render('canvas-dpr-compare', {
 </script>
 <p class="canvas-container">
   <span class="canvas-subcontainer auto-resize">
-    <canvas id="canvas-resize-draw" class="fit black"></canvas>
+    <canvas id="canvas-resize-draw" class="fit black bordered"></canvas>
   </span>
 </p>
 <script>
@@ -468,7 +518,7 @@ render('canvas-dpr-compare', {
 </script>
 <p class="canvas-container">
   <span class="canvas-subcontainer auto-resize" style="width: 300px; height: auto; aspect-ratio: 300 / 150;">
-    <canvas id="canvas-resize-stretch-ar" class="black" style="width: 100%; height: 100%;"></canvas>
+    <canvas id="canvas-resize-stretch-ar" class="black bordered" style="width: 100%; height: 100%;"></canvas>
   </span>
 </p>
 <script>
@@ -493,6 +543,17 @@ render('canvas-dpr-compare', {
       container.style.height = '150px';
     }
   });
+</script>
+<script>
+  const autoResizables = document.querySelectorAll('.canvas-subcontainer.auto-resize');
+
+  setInterval(() => {
+    const width = `${Math.random() * 100 + 200}px`
+
+    autoResizables.forEach((el) => {
+      el.style.width = width;
+    });
+  }, 1000);
 </script>
 </div>
 </article>
