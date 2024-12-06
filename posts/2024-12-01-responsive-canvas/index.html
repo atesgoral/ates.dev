@@ -154,6 +154,18 @@ function initDprDemo(canvas, ctx, forceDpr) {
   // 20x20 pixel reference square
   ctx.fillRect(10, 50, 20, 20);
 }
+
+window.addEventListener('DOMContentLoaded', () => {
+  const autoResizables = document.querySelectorAll('.canvas-subcontainer.auto-resize');
+
+  setInterval(() => {
+    const width = `${Math.random() * 100 + 200}px`
+
+    autoResizables.forEach((el) => {
+      el.style.width = width;
+    });
+  }, 1000);
+});
 </script>
 <p>&quot;Responsive&quot; in web development pertains to, in a nutshell, layout: Adjusting the
 layout of a page based on the dimensions of the renderable area. A more formal
@@ -613,17 +625,7 @@ create a blurry mess:</p>
     }
   });
 </script>
-<script>
-  const autoResizables = document.querySelectorAll('.canvas-subcontainer.auto-resize');
-
-  setInterval(() => {
-    const width = `${Math.random() * 100 + 200}px`
-
-    autoResizables.forEach((el) => {
-      el.style.width = width;
-    });
-  }, 1000);
-</script>
+<p>TO BE CONTINUED</p>
 </div>
 </article>
 </main>
