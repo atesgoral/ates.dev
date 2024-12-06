@@ -477,17 +477,17 @@ we knew the canvas height was always 150px. A square 100px across or a circle
 
 When the canvas size is dynamic, I find it easier to define the scene in terms
 of proportions, typically as a fraction of the canvas height. So, let's switch
-to rendering our circle with a radius of 1/6th of the canvas height:
+to rendering our circle with a radius of 1/3 of the canvas height:
 
 ```js
-const radius = canvas.height / 6;
+const radius = canvas.height / 3;
 
 ctx.fillStyle = 'white';
 ctx.beginPath();
 ctx.arc(
   canvas.width / 2,
   canvas.height / 2,
-  radius * dpr,
+  radius,
   0,
   Math.PI * 2
 );
@@ -505,14 +505,14 @@ ctx.fill();
     ctx.fillStyle = 'black';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    const radius = canvas.height / 6;
+    const radius = canvas.height / 3;
 
     ctx.fillStyle = 'white';
     ctx.beginPath();
     ctx.arc(
       canvas.width / 2,
       canvas.height / 2,
-      radius * dpr,
+      radius,
       0,
       Math.PI * 2
     );
