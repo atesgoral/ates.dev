@@ -26,7 +26,7 @@ const viewportObserver = new IntersectionObserver((entries) => {
   threshold: 0.5,
 });
 
-function render(id, {init, draw, dontResize}) {
+function render(id, {init, draw, resize = true}) {
   const canvas = document.querySelector(`#${id}`);
   const ctx = canvas.getContext("2d");
   let inViewport = false;
@@ -69,8 +69,7 @@ function render(id, {init, draw, dontResize}) {
     viewportObserver.observe(canvas);
   }
 
-  // TODO: invert this to resize
-  if (!dontResize && init) {
+  if (resize && init) {
     const debouncedInitOnRaf = tailDebounce(initOnRaf, 100);
 
     // TODO: make this a single observer with a WeakMap for callback
@@ -509,7 +508,7 @@ ctx.fill();
 
 <script>
   render('canvas-resize-layout', {
-    dontResize: true,
+    resize: false,
     init: (_canvas, ctx) => drawCircleScene(ctx)
   });
 </script>
@@ -527,7 +526,7 @@ container, using CSS.
 
 <script>
   render('canvas-resize-stretch', {
-    dontResize: true,
+    resize: false,
     init: (_canvas, ctx) => drawCircleScene(ctx)
   });
 </script>
@@ -540,7 +539,7 @@ container, using CSS.
 
 <script>
   render('canvas-resize-draw', {
-    dontResize: true,
+    resize: false,
     draw: (ctx) => drawCircleScene(ctx)
   });
 </script>
@@ -553,7 +552,7 @@ container, using CSS.
 
 <script>
   render('canvas-resize-stretch-ar', {
-    dontResize: true,
+    resize: false,
     init: (_canvas, ctx) => drawCircleScene(ctx)
   });
 </script>
@@ -566,7 +565,7 @@ container, using CSS.
 
 <script>
   render('canvas-resize-stretch-tiny', {
-    dontResize: true,
+    resize: false,
     init: (canvas, ctx) => {
       drawCircleScene(ctx);
 
