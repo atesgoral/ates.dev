@@ -286,7 +286,9 @@ render('canvas-with-square-fit-fix', {
 
 ### Crisp rendering
 
-Next, let's switch to rendering a circle to achieve anti-aliased edges. And let's also print "1.0", and render a reference 20x20 square, both of which will become significant soon.
+Next, let's switch to rendering a circle to achieve anti-aliased edges. And
+let's also print "1.0", and render a reference 20x20 square, both of which will
+become significant soon.
 
 ```js
 const RADIUS = 50;
@@ -312,9 +314,13 @@ render('canvas-with-circle', {
 });
 </script>
 
-The CSS dimensions we set on the canvas are the logical pixel dimensions. Your browser's DPR (Device Pixel Ratio) is a multiplier that determines the physical pixel density of your screen. For example, if your DPR is `2.0`, then for every logical pixel, there are 4 physical pixels (2x2). To render this circle in the
-crispiest way possible we will apply the DPR as a multiplier to the
-canvas dimensions. We'll also print your actual DPR instead of the "1.0" we hard-coded earlier:
+The CSS dimensions we set on the canvas are the logical pixel dimensions. Your
+browser's DPR (Device Pixel Ratio) is a multiplier that determines the physical
+pixel density of your screen. For example, if your DPR is `2.0`, then for every
+logical pixel, there are 4 physical pixels (2x2). To render this circle in the
+crispiest way possible we will apply the DPR as a multiplier to the canvas
+dimensions. We'll also print your actual DPR instead of the "1.0" we hard-coded
+earlier:
 
 ```js
 const dpr = window.devicePixelRatio;
@@ -517,8 +523,9 @@ ctx.fill();
 
 ### Resizing
 
-Typically, a canvas will be dynamically resized based on the size of a
-container, using CSS.
+Typically, a canvas will be set up to be dynamically resized to fit its
+container. After rendering the circle once, let's randomly change the width of
+the canvas container every second:
 
 <p class="canvas-container">
   <span class="canvas-subcontainer auto-resize">
@@ -533,6 +540,48 @@ container, using CSS.
   });
 </script>
 
+The circle will stretch and squash into an ellipse as the container width
+changes because the canvas is essentially acting like an image, its pixels
+getting resampled to fit the new dimensions.
+
+One option to overcome is to set up a rendering loop to keep adjustign the
+intrinsic dimemsions of the canvas and rendering the scene every frame. This
+way, the entire scene will always be rendered at the correct proportions. We'll
+use a [requestAnimationFrame][5] loop for this:
+
+[5]: https://developer.mozilla.org/en-US/docs/Web/API/window/requestAnimationFrame
+
+```js
+function draw() {
+  // Request the next frame before we draw this one
+  requestAnimationFrame(draw);
+
+  const dpr = window.devicePixelRatio;
+
+  canvas.width = canvas.clientWidth * dpr;
+  canvas.height = canvas.clientHeight * dpr;
+
+  ctx.fillStyle = 'black';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  const radius = canvas.height / 6;
+
+  ctx.fillStyle = 'white';
+  ctx.beginPath();
+  ctx.arc(
+    canvas.width / 2,
+    canvas.height / 2,
+    radius * dpr,
+    0,
+    Math.PI * 2
+  );
+  ctx.fill();
+}
+
+// Kick off the loop
+requestAnimationFrame(draw);
+```
+
 <p class="canvas-container">
   <span class="canvas-subcontainer auto-resize">
     <canvas id="canvas-resize-draw" class="fit black bordered"></canvas>
@@ -546,6 +595,29 @@ container, using CSS.
   });
 </script>
 
+Instead of rendering a static scene every frame, another option is to preserve
+the aspect ratio of the canvas so that the scene doesn't stretch or squash. We
+can render the canvas once and let CSS do its thing:
+
+```html
+<div class="container">
+  <canvas></canvas>
+</div>
+```
+
+```css
+/* How this container itself fits into the layout is up to you */
+.container {
+  aspect-ratio: 300 / 150;
+}
+
+canvas {
+  /* Alternatively, use Flexbox */
+  width: 100%;
+  height: 100%;
+}
+```
+
 <p class="canvas-container">
   <span class="canvas-subcontainer auto-resize" style="width: 300px; height: auto; aspect-ratio: 300 / 150;">
     <canvas id="canvas-resize-stretch-ar" class="black bordered" style="width: 100%; height: 100%;"></canvas>
@@ -558,6 +630,12 @@ container, using CSS.
     init: (_canvas, ctx) => drawCircleScene(ctx)
   });
 </script>
+
+However, the ugly truth is that you will lose all the crispy rendering you got
+at the start by updating the intrinsic dimensions of the canvas with DPR in
+mind. Even when initially rendering big and then scaling down, ugly resampling
+artifacts might appear. And initially rendering small and then scaling up will
+create a blurry mess:
 
 <p class="canvas-container">
   <span id="canvas-resize-stretch-tiny-container" class="canvas-subcontainer" style="width: 80px; height: 40px;">
