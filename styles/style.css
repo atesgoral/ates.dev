@@ -304,6 +304,7 @@ footer {
 
 header nav {
   margin: 0.5rlh 0;
+  text-transform: uppercase;
 }
 header nav ul {
   padding: 0;
