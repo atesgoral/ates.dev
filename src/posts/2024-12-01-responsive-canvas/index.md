@@ -189,6 +189,8 @@ position on the page.
 
 [4]: https://html.spec.whatwg.org/multipage/canvas.html#the-canvas-element:~:text=The%20width%20attribute%20defaults%20to%20300%2C%20and%20the%20height%20attribute%20defaults%20to%20150.
 
+### Reference square
+
 Now, let's fill it black and then render a 100x100 white square in its middle:
 
 ```html
@@ -235,7 +237,7 @@ render('canvas-with-square', {
 });
 </script>
 
-### Stretching
+### Intrinsic dimensions
 
 Now let's stretch the canvas to 100% of the width of the container:
 
@@ -311,7 +313,7 @@ render('canvas-with-square-fit-fix', {
 });
 </script>
 
-### Crisp rendering
+### Reference circle
 
 Next, let's switch to rendering a circle to achieve anti-aliased edges. And
 let's also print "1.0", and render a reference 20x20 square, both of which will
@@ -340,6 +342,8 @@ render('canvas-with-circle', {
   init: (canvas, ctx) => initDprDemo(canvas, ctx, 1)
 });
 </script>
+
+### Crisp rendering
 
 The CSS dimensions we set on the canvas are the logical pixel dimensions. Your
 browser's DPR (Device Pixel Ratio) is a multiplier that determines the physical
@@ -388,6 +392,8 @@ render('canvas-with-circle-dpr', {
   init: (canvas, ctx) => initDprDemo(canvas, ctx)
 });
 </script>
+
+### DPR comparison
 
 If your DPR is greater than `1.0`, you should see the 20x20 pixel reference
 square rendered as something smaller than 20x20 while our circle remains the
@@ -489,7 +495,7 @@ render('canvas-dpr-compare', {
 });
 </script>
 
-### Layout
+### Scene layout
 
 In the examples so far we've used hard-coded dimensions for the elements because
 we knew the canvas height was always 150px. A square 100px across or a circle
@@ -578,8 +584,10 @@ The circle will stretch and squash into an ellipse as the container width
 changes because the canvas is essentially acting like an image, its pixels
 getting resampled to fit the new dimensions.
 
-One option to overcome is to set up a rendering loop to keep adjustign the
-intrinsic dimemsions of the canvas and rendering the scene every frame. This
+#### Brute-force rendering
+
+One option to overcome is to set up a rendering loop to keep adjusting the
+intrinsic dimensions of the canvas and rendering the scene every frame. This
 way, the entire scene will always be rendered at the correct proportions. We'll
 use a [requestAnimationFrame][5] (RAF) loop for this:
 
@@ -632,6 +640,8 @@ requestAnimationFrame(draw);
 
 The circle remains a circle now.
 
+#### Preserving the aspect ratio
+
 Instead of rendering a static scene every frame, another option is to preserve
 the aspect ratio of the canvas so that the scene doesn't stretch or squash. We
 can render the canvas once and let CSS do its thing:
@@ -670,6 +680,8 @@ canvas {
 
 The circle remains a circle.
 
+#### Avoid resampling
+
 However, the ugly truth is that you will lose all the crispy rendering you got
 at the start by updating the intrinsic dimensions of the canvas with DPR in
 mind. Even when initially rendering big and then scaling down, ugly resampling
@@ -695,7 +707,7 @@ create a blurry mess:
   });
 </script>
 
-Debounce:
+#### Debounced redraw
 
 <p class="canvas-container">
   <span
