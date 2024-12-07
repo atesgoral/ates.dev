@@ -967,8 +967,8 @@ render('canvas-stroke-no-dpr', {
 });
 </script>
 
-If your DPR is greater than 1, the border should appear more or less the same
-thickness as the previous one, only blurrier.
+If your DPR is greater than 1, the border should still appear more or less the
+same thickness as the previous one, but blurrier.
 
 Solid shapes, images and text should be rendered with the DPR in mind. Strokes
 not so.
