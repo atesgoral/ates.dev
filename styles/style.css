@@ -531,9 +531,6 @@ html {
   border-radius: 4px;
   margin: 1rlh 0;
 }
-.canvas-container .auto-resize {
-  transition: width 0.3s ease-in-out, height 0.3s ease-in-out;
-}
 
 .canvas-subcontainer {
   display: flex;
