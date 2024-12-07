@@ -49,7 +49,6 @@ function render(id, {init, draw, resize = true}) {
   function initOnRaf() {
     requestAnimationFrame(() => {
       init(canvas, ctx);
-      // draw && draw(ctx, 0);
     });
   }
 
@@ -127,6 +126,8 @@ function initDprDemo(canvas, ctx, forceDpr) {
 window.addEventListener('DOMContentLoaded', () => {
   const autoResizables = document.querySelectorAll('.canvas-subcontainer.auto-resize');
 
+  autoResizables.forEach((el) => visibilityObserver.observe(el));
+
   const epoch = performance.now();
 
   function setWidths() {
@@ -135,7 +136,11 @@ window.addEventListener('DOMContentLoaded', () => {
     const elapsed = performance.now() - epoch;
     const width = clamp(Math.sin(elapsed / 1000) * 200 + 200, 100, 300);
 
-    autoResizables.forEach((el) => el.style.width = `${width}px`);
+    autoResizables.forEach((el) => {
+      if (el.getAttribute('data-in-viewport') === 'true') {
+        el.style.width = `${width}px`;
+      }
+    });
   }
 
   requestAnimationFrame(setWidths);
@@ -842,3 +847,5 @@ resizeObserver.observe(canvas);
 If you look closely, especially when scaling up, you can see the scene being
 resampled, creating a blurry edge around the circle. When the resizing stops
 for at least 100ms, the scene is redrawn and the crispiness is restored.
+
+### Stroke width
