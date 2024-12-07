@@ -52,6 +52,10 @@ function tailDebounce(fn, delay) {
   };
 }
 
+function clamp(v, min, max) {
+  return Math.min(Math.max(v, min), max);
+}
+
 const visibilityCallbacks = new WeakMap();
 
 const visibilityObserver = new IntersectionObserver((entries) => {
@@ -127,21 +131,23 @@ function render(id, {init, draw, resize = true}) {
 function initDprDemo(canvas, ctx, forceDpr) {
   const dpr = window.devicePixelRatio;
   const usedDpr = forceDpr || dpr;
+  const {width, height} = canvas.getBoundingClientRect();
 
-  canvas.width = canvas.clientWidth * usedDpr;
-  canvas.height = canvas.clientHeight * usedDpr;
+  canvas.width = width * usedDpr;
+  canvas.height = height * usedDpr;
 
   ctx.fillStyle = 'black';
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
   const RADIUS = 50;
+  const radius = RADIUS * usedDpr;
 
   ctx.fillStyle = 'white';
   ctx.beginPath();
   ctx.arc(
     canvas.width / 2,
     canvas.height / 2,
-    RADIUS * usedDpr,
+    radius,
     0,
     Math.PI * 2
   );
@@ -158,13 +164,18 @@ function initDprDemo(canvas, ctx, forceDpr) {
 window.addEventListener('DOMContentLoaded', () => {
   const autoResizables = document.querySelectorAll('.canvas-subcontainer.auto-resize');
 
-  setInterval(() => {
-    const width = `${Math.random() * 100 + 200}px`
+  const epoch = performance.now();
 
-    autoResizables.forEach((el) => {
-      el.style.width = width;
-    });
-  }, 1000);
+  function setWidths() {
+    requestAnimationFrame(setWidths);
+
+    const elapsed = performance.now() - epoch;
+    const width = clamp(Math.sin(elapsed / 1000) * 200 + 200, 100, 300);
+
+    autoResizables.forEach((el) => el.style.width = `${width}px`);
+  }
+
+  requestAnimationFrame(setWidths);
 });
 </script>
 <p>&quot;Responsive&quot; in web development pertains to, in a nutshell, layout: Adjusting the
@@ -272,8 +283,10 @@ CSS and didn't attach <code>width</code> and <code>height</code> attributes to t
 intrinsic dimensions of the canvas are still the defaults, 300x150.</p>
 <p>To fix the dimensions of the rendering context, we can set the <code>width</code> and
 <code>height</code> properties of the canvas DOM element to the measured pixel dimensions:</p>
-<pre><code class="language-js">canvas.width = canvas.clientWidth;
-canvas.height = canvas.clientHeight;
+<pre><code class="language-js">const {width, height} = canvas.getBoundingClientRect();
+
+canvas.width = width;
+canvas.height = height;
 </code></pre>
 <p class="canvas-container">
   <canvas id="canvas-with-square-fit-fix" class="fit black"></canvas>
@@ -281,8 +294,10 @@ canvas.height = canvas.clientHeight;
 <script>
 render('canvas-with-square-fit-fix', {
   init(canvas, ctx) {
-    canvas.width = canvas.clientWidth;
-    canvas.height = canvas.clientHeight;
+    const {width, height} = canvas.getBoundingClientRect();
+
+    canvas.width = width;
+    canvas.height = height;
 
     ctx.fillStyle = 'black';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -331,17 +346,21 @@ crispiest way possible we will apply the DPR as a multiplier to the canvas
 dimensions. We'll also print your actual DPR instead of the &quot;1.0&quot; we hard-coded
 earlier:</p>
 <pre><code class="language-js">const dpr = window.devicePixelRatio;
+const {width, height} = canvas.getBoundingClientRect();
 
-canvas.width = canvas.clientWidth * dpr;
-canvas.height = canvas.clientHeight * dpr;
+canvas.width = width * dpr;
+canvas.height = height * dpr;
 </code></pre>
 <p>But then, we also have to start factoring in DPR in all size units when using
 the drawing primitives:</p>
-<pre><code class="language-js">ctx.beginPath();
+<pre><code class="language-js">// Adjust for DPR
+const radius = RADUIS * dpr;
+
+ctx.beginPath();
 ctx.arc(
   canvas.width / 2,
   canvas.height / 2,
-  RADIUS * dpr, // Adjust for DPR
+  radius,
   0,
   Math.PI * 2
 );
@@ -373,9 +392,10 @@ render('canvas-dpr-compare', {
   draw: (ctx, t) => {
     const canvas = ctx.canvas;
     const dpr = window.devicePixelRatio;
+    const {width, height} = canvas.getBoundingClientRect();
 
-    canvas.width = canvas.clientWidth * dpr;
-    canvas.height = canvas.clientHeight * dpr;
+    canvas.width = width * dpr;
+    canvas.height = height * dpr;
 
     const s = t / 1000 | 0;
     const fakeDpr = 2;
@@ -389,10 +409,10 @@ render('canvas-dpr-compare', {
     ctx.scale(scale, scale);
 
     const RADIUS = 50;
+    const r = RADIUS * virtualDpr * virtualDpr / fakeDpr;
 
     const x = canvas.width / 2 / scale;
     const y = canvas.height / 2 / scale;
-    const r = RADIUS * virtualDpr * virtualDpr / fakeDpr;
 
     ctx.fillStyle = 'white';
     ctx.beginPath();
@@ -479,8 +499,10 @@ ctx.fill();
     const canvas = ctx.canvas;
     const dpr = window.devicePixelRatio;
 
-    canvas.width = canvas.clientWidth * dpr;
-    canvas.height = canvas.clientHeight * dpr;
+    const {width, height} = canvas.getBoundingClientRect();
+
+    canvas.width = width * dpr;
+    canvas.height = height * dpr;
 
     ctx.fillStyle = 'black';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -512,8 +534,8 @@ ctx.fill();
 </script>
 <h3 id="resizing" tabindex="-1"><a class="permalink" href="#resizing">Resizing</a></h3>
 <p>Typically, a canvas will be set up to be dynamically resized to fit its
-container. After rendering the circle once, let's randomly change the width of
-the canvas container every second:</p>
+container. After rendering the circle once, let's start changing the width of
+the canvas container:</p>
 <p class="canvas-container">
   <span class="canvas-subcontainer auto-resize">
     <canvas id="canvas-resize-stretch" class="fit black bordered"></canvas>
@@ -537,9 +559,10 @@ use a <a href="https://developer.mozilla.org/en-US/docs/Web/API/window/requestAn
   requestAnimationFrame(draw);
 
   const dpr = window.devicePixelRatio;
+  const {width, height} = canvas.getBoundingClientRect();
 
-  canvas.width = canvas.clientWidth * dpr;
-  canvas.height = canvas.clientHeight * dpr;
+  canvas.width = width * dpr;
+  canvas.height = height * dpr;
 
   ctx.fillStyle = 'black';
   ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -551,7 +574,7 @@ use a <a href="https://developer.mozilla.org/en-US/docs/Web/API/window/requestAn
   ctx.arc(
     canvas.width / 2,
     canvas.height / 2,
-    radius * dpr,
+    radius,
     0,
     Math.PI * 2
   );
@@ -592,7 +615,7 @@ canvas {
 }
 </code></pre>
 <p class="canvas-container">
-  <span class="canvas-subcontainer auto-resize" style="width: 300px; height: auto; aspect-ratio: 300 / 150;">
+  <span class="canvas-subcontainer auto-resize" style="width: 300px; min-height: 0; height: auto; aspect-ratio: 300 / 150;">
     <canvas id="canvas-resize-stretch-ar" class="black bordered" style="width: 100%; height: 100%;"></canvas>
   </span>
 </p>
@@ -625,7 +648,28 @@ create a blurry mess:</p>
     }
   });
 </script>
-<p>TO BE CONTINUED</p>
+<p>Debounce:</p>
+<p class="canvas-container">
+  <span
+    id="canvas-size-update-container"
+    class="canvas-subcontainer auto-resize"
+    style="width: 100px; min-height: 0; height: auto; aspect-ratio: 300 / 150;"
+  >
+    <canvas
+      id="canvas-size-update"
+      class="black bordered"
+      style="width: 100%; height: 100%;"
+    ></canvas>
+  </span>
+</p>
+<script>
+  render('canvas-size-update', {
+    resize: false,
+    init: (canvas, ctx) => {
+      drawCircleScene(ctx);
+    }
+  });
+</script>
 </div>
 </article>
 </main>
