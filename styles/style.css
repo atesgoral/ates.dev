@@ -10,6 +10,9 @@ body {
   margin: 0;
   padding: 1.25rlh;
 }
+body[data-grid] {
+  background-image: repeating-linear-gradient(rgba(255, 255, 255, 0.1) 0 0.5px, transparent 0.5px 0.5rlh);
+}
 
 pre {
   line-height: 1rlh;
@@ -24,7 +27,6 @@ h1, h2, h3, h4, h5 {
 h1 {
   font-size: 1.5rlh;
   line-height: 2rlh;
-  padding: 0.5rlh 0;
 }
 
 h2 {
@@ -298,6 +300,24 @@ footer {
   max-width: 32rlh;
   min-width: 320px;
   margin: auto;
+}
+
+header nav {
+  margin: 0.5rlh 0;
+}
+header nav ul {
+  padding: 0;
+  margin: 0.5rlh 0;
+  display: flex;
+  list-style-type: none;
+  gap: 0.5rlh;
+}
+header nav ul li {
+  font-size: 0.625rlh;
+}
+
+main {
+  margin-top: 1.5rlh;
 }
 
 .zoomable {
