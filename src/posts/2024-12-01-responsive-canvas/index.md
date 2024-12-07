@@ -915,6 +915,21 @@ render('canvas-stroke', {
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
     ctx.fillText('circle', canvas.width / 2, canvas.height / 2);
+
+    const x = canvas.width / 2 + radius;
+    const y = canvas.height / 2;
+
+    ctx.strokeStyle = '#00c0ff';
+    ctx.lineWidth = 2 * dpr;
+
+    ctx.strokeRect(x - 5 * dpr, y - 5 * dpr, 10 * dpr, 10 * dpr);
+
+    ctx.imageSmoothingEnabled = false;
+    ctx.drawImage(
+      canvas,
+      x - 5 * dpr, y - 5 * dpr, 10 * dpr, 10 * dpr,
+      x + radius, y - 50 * dpr, 100 * dpr, 100 * dpr
+    );
   },
 });
 </script>
@@ -963,6 +978,23 @@ render('canvas-stroke-no-dpr', {
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
     ctx.fillText('circle', canvas.width / 2, canvas.height / 2);
+
+    const x = canvas.width / 2 + radius;
+    const y = canvas.height / 2;
+
+    const dpr = 1;
+
+    ctx.strokeStyle = '#00c0ff';
+    ctx.lineWidth = 2 * dpr;
+
+    ctx.strokeRect(x - 5 * dpr, y - 5 * dpr, 10 * dpr, 10 * dpr);
+
+    ctx.imageSmoothingEnabled = false;
+    ctx.drawImage(
+      canvas,
+      x - 5 * dpr, y - 5 * dpr, 10 * dpr, 10 * dpr,
+      x + radius, y - 50 * dpr, 100 * dpr, 100 * dpr
+    );
   },
 });
 </script>
