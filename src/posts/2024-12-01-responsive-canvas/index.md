@@ -709,6 +709,70 @@ create a blurry mess:
 
 #### Debounced redraw
 
+We can watch for the resizing of the canvas and redraw the scene on a debounce.
+This way, we let the canvas get resampled while a resize is still in progress,
+but then ensure the scene is rendered at the correct proportions once the
+resizing stops.
+
+Let's do this efficiently. To watch for resizing, we'll use the `ResizeObserver`
+browser API:
+
+```js
+// One could always use Lodash's debounce
+function tailDebounce(fn, delay) {
+  let timer;
+
+  return function (...args) {
+    clearTimeout(timer);
+    timer = setTimeout(() => fn.apply(this, args), delay);
+  };
+}
+
+let contentRect = null;
+
+const draw = () => {
+  // Always draw when the time is right
+  requestAnimationFrame(() => {
+    const dpr = window.devicePixelRatio;
+    const rect = contentRect || canvas.getBoundingClientRect();
+    const {width, height} = rect;
+
+    canvas.width = width * dpr;
+    canvas.height = height * dpr;
+
+    ctx.fillStyle = 'black';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    const radius = canvas.height / 3;
+
+    ctx.fillStyle = 'white';
+    ctx.beginPath();
+    ctx.arc(
+      canvas.width / 2,
+      canvas.height / 2,
+      radius,
+      0,
+      Math.PI * 2
+    );
+    ctx.fill();
+  });
+};
+
+const debouncedDraw = tailDebounce(draw, 100);
+
+const resizeObserver = new ResizeObserver((entries) => {
+  for (const entry of entries) {
+    if (entry.target === canvas && entry.contentRect) {
+      contentRect = entry.contentRect;
+      debouncedDraw();
+    }
+  }
+});
+
+draw();
+resizeObserver.observe(canvas);
+```
+
 <p class="canvas-container">
   <span
     id="canvas-size-update-container"
@@ -727,7 +791,54 @@ create a blurry mess:
   render('canvas-size-update', {
     resize: false,
     init: (canvas, ctx) => {
-      drawCircleScene(ctx);
+      let contentRect = null;
+
+      const draw = () => {
+        requestAnimationFrame(() => {
+          if (!contentRect) {
+            return;
+          }
+
+          const dpr = window.devicePixelRatio;
+
+          canvas.width = contentRect.width * dpr;
+          canvas.height = contentRect.height * dpr;
+
+          ctx.fillStyle = 'black';
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+          const radius = canvas.height / 3;
+
+          ctx.fillStyle = 'white';
+          ctx.beginPath();
+          ctx.arc(
+            canvas.width / 2,
+            canvas.height / 2,
+            radius,
+            0,
+            Math.PI * 2
+          );
+          ctx.fill();
+        });
+      };
+
+      const debouncedDraw = tailDebounce(draw, 100);
+
+      const resizeObserver = new ResizeObserver((entries) => {
+        for (const entry of entries) {
+          if (entry.target === canvas && entry.contentRect) {
+            contentRect = entry.contentRect;
+            debouncedDraw();
+          }
+        }
+      });
+
+      draw();
+      resizeObserver.observe(canvas);
     }
   });
 </script>
+
+If you look closely, especially when scaling up, you can see the scene being
+resampled, creating a blurry edge around the circle. When the resizing stops
+for at least 100ms, the scene is redrawn and the crispiness is restored.
