@@ -316,6 +316,27 @@ header nav ul {
 header nav ul li {
   font-size: 0.625rlh;
 }
+header nav ul li a.logo {
+  display: flex;
+  align-items: center;
+}
+header nav ul li a.logo:before {
+  content: "";
+  display: inline-block;
+  width: 0.5rlh;
+  height: 0.5rlh;
+  margin-right: 0.125rlh;
+  background-color: white;
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  mask-position: center;
+}
+header nav ul li a.logo.bluesky:before {
+  mask-image: url("/assets/logos/bluesky.svg");
+}
+header nav ul li a.logo.github:before {
+  mask-image: url("/assets/logos/github.svg");
+}
 
 main {
   margin-top: 1.5rlh;
