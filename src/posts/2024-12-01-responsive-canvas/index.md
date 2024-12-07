@@ -848,7 +848,33 @@ If you look closely, especially when scaling up, you can see the scene being
 resampled, creating a blurry edge around the circle. When the resizing stops
 for at least 100ms, the scene is redrawn and the crispiness is restored.
 
-### Stroke width
+### Stroke width and font size
+
+Here's a hollow circle with a 3px border, with the text "circle" in the middle:
+
+```js
+ctx.lineWidth = 3;
+
+ctx.strokeStyle = 'white';
+ctx.beginPath();
+ctx.arc(
+  canvas.width / 2,
+  canvas.height / 2,
+  radius,
+  0,
+  Math.PI * 2
+);
+ctx.stroke();
+
+const fontSize = 1 * dpr;
+const fontFace = 'Varela Round';
+
+ctx.fillStyle = 'white';
+ctx.font = `${fontSize}em ${fontFace}`;
+ctx.textAlign = 'center';
+ctx.textBaseline = 'middle';
+ctx.fillText('circle', canvas.width / 2, canvas.height / 2);
+```
 
 <p class="canvas-container">
   <canvas id="canvas-stroke" class="fit black"></canvas>
@@ -880,6 +906,75 @@ render('canvas-stroke', {
       Math.PI * 2
     );
     ctx.stroke();
+
+    const fontSize = 1 * dpr;
+    const fontFace = 'Varela Round';
+
+    ctx.fillStyle = 'white';
+    ctx.font = `${fontSize}em ${fontFace}`;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText('circle', canvas.width / 2, canvas.height / 2);
   },
 });
 </script>
+
+The stroke width is not affected by the intrinsic resolution of the canvas. When
+you set the stroke width to 3, it will always be 3 logical pixels wide. However,
+the font size needs to be adjusted.
+
+Here's the same scene without the DPR adjustment:
+
+<p class="canvas-container">
+  <canvas id="canvas-stroke-no-dpr" class="fit black"></canvas>
+</p>
+
+<script>
+render('canvas-stroke-no-dpr', {
+  init: (canvas, ctx) => {
+    const {width, height} = canvas.getBoundingClientRect();
+
+    canvas.width = width;
+    canvas.height = height;
+
+    ctx.fillStyle = 'black';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    const radius = canvas.height / 3;
+
+    ctx.lineWidth = 3;
+
+    ctx.strokeStyle = 'white';
+    ctx.beginPath();
+    ctx.arc(
+      canvas.width / 2,
+      canvas.height / 2,
+      radius,
+      0,
+      Math.PI * 2
+    );
+    ctx.stroke();
+
+    const fontSize = 1;
+    const fontFace = 'Varela Round';
+
+    ctx.fillStyle = 'white';
+    ctx.font = `${fontSize}em ${fontFace}`;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText('circle', canvas.width / 2, canvas.height / 2);
+  },
+});
+</script>
+
+If your DPR is greater than 1, the border should appear more or less the same
+thickness as the previous one, only blurrier.
+
+Solid shapes, images and text should be rendered with the DPR in mind. Strokes
+not so.
+
+### Time
+
+Let's get moving!
+
+TO BE CONTINUED
