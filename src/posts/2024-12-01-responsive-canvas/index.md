@@ -1,6 +1,6 @@
 ---
 layout: layouts/post
-title: "Responsive Canvas"
+title: "Responsive Canvas Rendering"
 image: i/responsive-canvas.png
 date: 2024-12-01
 ---

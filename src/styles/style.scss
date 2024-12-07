@@ -64,11 +64,11 @@ main {
   margin: 1rlh 0;
 }
 
-.zoomable > img {
+.zoomable>img {
   cursor: zoom-in;
 }
 
-.zoomable > img.zoomed {
+.zoomable>img.zoomed {
   position: fixed;
   top: 0;
   left: 0;
@@ -135,7 +135,7 @@ body {
   z-index: -10;
 }
 
-#trails-container > #trails {
+#trails-container>#trails {
   position: absolute;
   width: 16rlh;
   height: 16rlh;
@@ -195,7 +195,7 @@ body.light-mode img {
   box-shadow: 0 0 10px 2px rgba(0, 0, 0, 0.1);
 }
 
-body.light-mode .project-thumbnail > img.zoomed {
+body.light-mode .project-thumbnail>img.zoomed {
   background-color: #fff;
 }
 
@@ -229,7 +229,7 @@ html {
 }
 
 @media (min-width: 57rlh) {
-  .avatar > img {
+  .avatar>img {
     position: absolute;
     width: 3rlh;
     height: 3rlh;
@@ -249,7 +249,7 @@ html {
 }
 
 @media (max-width: 30rlh) {
-  .avatar > img {
+  .avatar>img {
     float: none;
     margin: 0 auto;
     margin-bottom: 1rlh;
@@ -257,6 +257,10 @@ html {
 
   h1 {
     text-align: center;
+  }
+
+  header>nav>ul {
+    justify-content: center;
   }
 }
 
@@ -266,16 +270,16 @@ html {
     text-shadow: 0 0 5px rgba(255, 164, 132, 0.5);
   }
 
-  .zoomable > img {
+  .zoomable>img {
     max-width: 100%;
     transition: transform 0.3s ease-in-out;
   }
 
-  .zoomable > img.zoomed {
+  .zoomable>img.zoomed {
     transition: none;
   }
 
-  .zoomable > img:not(.zoomed):hover {
+  .zoomable>img:not(.zoomed):hover {
     box-shadow: 0 0 10px 2px rgba(255, 164, 132, 0.5);
     transform: scale(1.01);
   }
@@ -285,7 +289,7 @@ html {
     text-shadow: 0 0 5px rgba(255, 131, 86, 0.5);
   }
 
-  body.light-mode .project-thumbnail > img:hover {
+  body.light-mode .project-thumbnail>img:hover {
     box-shadow: 0 0 10px 2px rgba(255, 131, 86, 0.5);
   }
 
