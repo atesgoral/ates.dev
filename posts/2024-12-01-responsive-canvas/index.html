@@ -211,6 +211,7 @@ will progressively get more complicated, fast.</p>
 <p>By default, it is a transparent rectangle measuring 300 by 150 pixels
 (<a href="https://html.spec.whatwg.org/multipage/canvas.html#the-canvas-element:~:text=The%20width%20attribute%20defaults%20to%20300%2C%20and%20the%20height%20attribute%20defaults%20to%20150.">spec</a>). I have added a border around it to clearly define its size and
 position on the page.</p>
+<h3 id="reference-square" tabindex="-1"><a class="permalink" href="#reference-square">Reference square</a></h3>
 <p>Now, let's fill it black and then render a 100x100 white square in its middle:</p>
 <pre><code class="language-html">&lt;canvas id=&quot;canvas&quot;&gt;&lt;/canvas&gt;
 </code></pre>
@@ -250,7 +251,7 @@ render('canvas-with-square', {
   },
 });
 </script>
-<h3 id="stretching" tabindex="-1"><a class="permalink" href="#stretching">Stretching</a></h3>
+<h3 id="intrinsic-dimensions" tabindex="-1"><a class="permalink" href="#intrinsic-dimensions">Intrinsic dimensions</a></h3>
 <p>Now let's stretch the canvas to 100% of the width of the container:</p>
 <pre><code class="language-css">canvas {
   width: 100%;
@@ -314,7 +315,7 @@ render('canvas-with-square-fit-fix', {
   },
 });
 </script>
-<h3 id="crisp-rendering" tabindex="-1"><a class="permalink" href="#crisp-rendering">Crisp rendering</a></h3>
+<h3 id="reference-circle" tabindex="-1"><a class="permalink" href="#reference-circle">Reference circle</a></h3>
 <p>Next, let's switch to rendering a circle to achieve anti-aliased edges. And
 let's also print &quot;1.0&quot;, and render a reference 20x20 square, both of which will
 become significant soon.</p>
@@ -338,6 +339,7 @@ render('canvas-with-circle', {
   init: (canvas, ctx) => initDprDemo(canvas, ctx, 1)
 });
 </script>
+<h3 id="crisp-rendering" tabindex="-1"><a class="permalink" href="#crisp-rendering">Crisp rendering</a></h3>
 <p>The CSS dimensions we set on the canvas are the logical pixel dimensions. Your
 browser's DPR (Device Pixel Ratio) is a multiplier that determines the physical
 pixel density of your screen. For example, if your DPR is <code>2.0</code>, then for every
@@ -378,6 +380,7 @@ render('canvas-with-circle-dpr', {
   init: (canvas, ctx) => initDprDemo(canvas, ctx)
 });
 </script>
+<h3 id="dpr-comparison" tabindex="-1"><a class="permalink" href="#dpr-comparison">DPR comparison</a></h3>
 <p>If your DPR is greater than <code>1.0</code>, you should see the 20x20 pixel reference
 square rendered as something smaller than 20x20 while our circle remains the
 same size. And the anti-aliased edges of the circle should now look as crisp as
@@ -474,7 +477,7 @@ render('canvas-dpr-compare', {
   }
 });
 </script>
-<h3 id="layout" tabindex="-1"><a class="permalink" href="#layout">Layout</a></h3>
+<h3 id="scene-layout" tabindex="-1"><a class="permalink" href="#scene-layout">Scene layout</a></h3>
 <p>In the examples so far we've used hard-coded dimensions for the elements because
 we knew the canvas height was always 150px. A square 100px across or a circle
 50px in radius would nicely fit.</p>
@@ -550,8 +553,9 @@ the canvas container:</p>
 <p>The circle will stretch and squash into an ellipse as the container width
 changes because the canvas is essentially acting like an image, its pixels
 getting resampled to fit the new dimensions.</p>
-<p>One option to overcome is to set up a rendering loop to keep adjustign the
-intrinsic dimemsions of the canvas and rendering the scene every frame. This
+<h4 id="brute-force-rendering" tabindex="-1"><a class="permalink" href="#brute-force-rendering">Brute-force rendering</a></h4>
+<p>One option to overcome is to set up a rendering loop to keep adjusting the
+intrinsic dimensions of the canvas and rendering the scene every frame. This
 way, the entire scene will always be rendered at the correct proportions. We'll
 use a <a href="https://developer.mozilla.org/en-US/docs/Web/API/window/requestAnimationFrame">requestAnimationFrame</a> (RAF) loop for this:</p>
 <pre><code class="language-js">function draw() {
@@ -596,6 +600,7 @@ requestAnimationFrame(draw);
   });
 </script>
 <p>The circle remains a circle now.</p>
+<h4 id="preserving-the-aspect-ratio" tabindex="-1"><a class="permalink" href="#preserving-the-aspect-ratio">Preserving the aspect ratio</a></h4>
 <p>Instead of rendering a static scene every frame, another option is to preserve
 the aspect ratio of the canvas so that the scene doesn't stretch or squash. We
 can render the canvas once and let CSS do its thing:</p>
@@ -626,6 +631,7 @@ canvas {
   });
 </script>
 <p>The circle remains a circle.</p>
+<h4 id="avoid-resampling" tabindex="-1"><a class="permalink" href="#avoid-resampling">Avoid resampling</a></h4>
 <p>However, the ugly truth is that you will lose all the crispy rendering you got
 at the start by updating the intrinsic dimensions of the canvas with DPR in
 mind. Even when initially rendering big and then scaling down, ugly resampling
@@ -648,7 +654,7 @@ create a blurry mess:</p>
     }
   });
 </script>
-<p>Debounce:</p>
+<h4 id="debounced-redraw" tabindex="-1"><a class="permalink" href="#debounced-redraw">Debounced redraw</a></h4>
 <p class="canvas-container">
   <span
     id="canvas-size-update-container"
