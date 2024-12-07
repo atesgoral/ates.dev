@@ -37,6 +37,28 @@ footer {
   margin: auto;
 }
 
+header {
+  nav {
+    margin: 0.5rlh 0;
+
+    ul {
+      padding: 0;
+      margin: 0.5rlh 0;
+      display: flex;
+      list-style-type: none;
+      gap: 0.5rlh;
+
+      li {
+        font-size: 0.625rlh;
+      }
+    }
+  }
+}
+
+main {
+  margin-top: 1.5rlh;
+}
+
 .zoomable {
   margin: 1rlh 0;
 }
