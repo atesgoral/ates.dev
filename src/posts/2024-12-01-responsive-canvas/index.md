@@ -27,7 +27,7 @@ const visibilityObserver = new IntersectionObserver((entries) => {
     visibilityCallbacks.get(entry.target)?.(entry.isIntersecting);
   }
 }, {
-  threshold: 0.5,
+  threshold: 0.75,
 });
 
 const resizeCallbacks = new WeakMap();

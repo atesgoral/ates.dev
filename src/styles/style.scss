@@ -284,6 +284,11 @@ html {
 
 .canvas-subcontainer {
   display: flex;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.canvas-subcontainer[data-in-viewport="false"] {
+  opacity: 0.5;
 }
 
 canvas {
