@@ -849,3 +849,37 @@ resampled, creating a blurry edge around the circle. When the resizing stops
 for at least 100ms, the scene is redrawn and the crispiness is restored.
 
 ### Stroke width
+
+<p class="canvas-container">
+  <canvas id="canvas-stroke" class="fit black"></canvas>
+</p>
+
+<script>
+render('canvas-stroke', {
+  init: (canvas, ctx) => {
+    const dpr = window.devicePixelRatio;
+    const {width, height} = canvas.getBoundingClientRect();
+
+    canvas.width = width * dpr;
+    canvas.height = height * dpr;
+
+    ctx.fillStyle = 'black';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    const radius = canvas.height / 3;
+
+    ctx.lineWidth = 3;
+
+    ctx.strokeStyle = 'white';
+    ctx.beginPath();
+    ctx.arc(
+      canvas.width / 2,
+      canvas.height / 2,
+      radius,
+      0,
+      Math.PI * 2
+    );
+    ctx.stroke();
+  },
+});
+</script>
