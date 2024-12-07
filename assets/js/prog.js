@@ -227,4 +227,10 @@ document.addEventListener("DOMContentLoaded", () => {
   initializeTrails();
   initializeZoom();
   initializeThemeToggle();
+
+  const params = new URLSearchParams(document.location.search);
+
+  if (params.has("grid")) {
+    document.body.setAttribute("data-grid", "");
+  }
 });
