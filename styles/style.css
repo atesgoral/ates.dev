@@ -531,20 +531,8 @@ html {
   border-radius: 4px;
   margin: 1rlh 0;
 }
-.canvas-container.raf {
-  position: relative;
-}
-.canvas-container.raf:before {
-  content: "RAF";
-  font-family: monospace;
-  position: absolute;
-  top: -0.5rlh;
-  font-size: 0.625rlh;
-  right: 0.25rlh;
-  opacity: 0.5;
-}
-.canvas-container.raf:has(canvas[data-in-viewport=false]):before {
-  content: "RAF (paused)";
+.canvas-container .auto-resize {
+  transition: width 0.3s ease-in-out, height 0.3s ease-in-out;
 }
 
 .canvas-subcontainer {
