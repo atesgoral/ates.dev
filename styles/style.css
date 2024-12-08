@@ -272,6 +272,10 @@ h6 {
   color: #84ddff;
 }
 
+html {
+  overflow-y: scroll;
+}
+
 ul,
 ol {
   padding-left: 0.75rlh;

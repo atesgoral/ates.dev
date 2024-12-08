@@ -190,14 +190,17 @@ function initializeThemeToggle() {
   });
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-  initializeTrails();
-  initializeZoom();
-  initializeThemeToggle();
-
+function initializeGrid() {
   const params = new URLSearchParams(document.location.search);
 
   if (params.has("grid")) {
     document.body.setAttribute("data-grid", "");
   }
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  initializeTrails();
+  initializeZoom();
+  initializeThemeToggle();
+  initializeGrid();
 });
