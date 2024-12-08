@@ -457,58 +457,48 @@ body {
   background-color: #84ddff;
 }
 
-body.light-mode {
+html.light-mode body {
   background-color: #fff;
   color: #333;
 }
-
-body.light-mode h1,
-body.light-mode h2,
-body.light-mode h3,
-body.light-mode h4,
-body.light-mode h5,
-body.light-mode h6 {
+html.light-mode body h1,
+html.light-mode body h2,
+html.light-mode body h3,
+html.light-mode body h4,
+html.light-mode body h5,
+html.light-mode body h6 {
   color: #3fb2e7;
 }
-
-body.light-mode a {
+html.light-mode body a {
   color: #8356ff;
 }
-
-body.light-mode a:visited {
+html.light-mode body a:visited {
   color: #652dff;
 }
-
-body.light-mode a:active {
+html.light-mode body a:active {
   color: #ff652d;
   text-shadow: 0 0 5px rgba(255, 101, 45, 0.5);
 }
-
-body.light-mode img {
+html.light-mode body img {
   box-shadow: 0 0 10px 2px rgba(0, 0, 0, 0.1);
 }
-
-body.light-mode .project-thumbnail > img.zoomed {
+html.light-mode body .project-thumbnail > img.zoomed {
   background-color: #fff;
 }
-
-body.light-mode #theme-toggle-label {
+html.light-mode body #theme-toggle-label {
   box-shadow: 0 0 10px 2px rgba(0, 0, 0, 0.1);
 }
-
-body.light-mode h2:before,
-body.light-mode h3:before,
-body.light-mode h4:before,
-body.light-mode h5:before,
-body.light-mode h6:before {
+html.light-mode body h2:before,
+html.light-mode body h3:before,
+html.light-mode body h4:before,
+html.light-mode body h5:before,
+html.light-mode body h6:before {
   background-color: #3fb2e7;
 }
-
-body.light-mode .footer:before {
+html.light-mode body .footer:before {
   background-color: #3fb2e7;
 }
-
-body.light-mode ::selection {
+html.light-mode body ::selection {
   color: #fff;
   background-color: #3fb2e7;
 }
@@ -574,14 +564,14 @@ html {
     box-shadow: 0 0 10px 2px rgba(255, 164, 132, 0.5);
     transform: scale(1.01);
   }
-  body.light-mode a:hover {
+  html.light-mode body a:hover {
     color: #ff8356;
     text-shadow: 0 0 5px rgba(255, 131, 86, 0.5);
   }
-  body.light-mode .project-thumbnail > img:hover {
+  html.light-mode body .project-thumbnail > img:hover {
     box-shadow: 0 0 10px 2px rgba(255, 131, 86, 0.5);
   }
-  body.light-mode .hoverable:hover {
+  html.light-mode body .hoverable:hover {
     box-shadow: 0 0 10px 2px rgba(255, 131, 86, 0.5);
   }
 }

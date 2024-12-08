@@ -1,40 +1,6 @@
-function setClass(el, classToToggle, set) {
-  let className = el.className;
-  const classes = new Set(className && className.split(" "));
-
-  if (set) {
-    classes.add(classToToggle);
-  } else {
-    classes.delete(classToToggle);
-  }
-
-  className = [...classes.keys()].join(" ");
-
-  el.className = className;
-}
-
-function toggleClass(el, classToToggle) {
-  let className = el.className;
-  const classes = new Set(className && className.split(" "));
-
-  const classWasPresent = classes.has(classToToggle);
-
-  if (classWasPresent) {
-    classes.delete(classToToggle);
-  } else {
-    classes.add(classToToggle);
-  }
-
-  className = [...classes.keys()].join(" ");
-
-  el.className = className;
-
-  return !classWasPresent;
-}
-
 function initializeZoom() {
   function toggleImageZoom(imageEl) {
-    toggleClass(imageEl, "zoomed");
+    imageEl.classList.toggle("zoomed");
   }
 
   function closeZoomedImage() {
@@ -209,7 +175,8 @@ function initializeThemeToggle() {
     const themeOverride = localStorage.getItem("theme-override");
     const lightMode = themeOverride && themeOverride === "light";
 
-    setClass(document.body, "light-mode", lightMode);
+    document.documentElement.classList.toggle("light-mode", lightMode);
+
     toggle.checked = !lightMode;
   }
 
@@ -218,7 +185,7 @@ function initializeThemeToggle() {
   window.addEventListener("storage", applyPrefs);
 
   toggle.addEventListener("change", () => {
-    setClass(document.body, "light-mode", !toggle.checked);
+    document.documentElement.classList.toggle("light-mode", !toggle.checked);
     localStorage.setItem("theme-override", toggle.checked ? "dark" : "light");
   });
 }

@@ -9,6 +9,13 @@
     <meta property="og:locale" content="en_CA" />
     <meta property="og:site_name" content="ates.dev" />
     <title>ates.dev &middot; All Posts</title>
+    <script>
+      (() => {
+        const themeOverride = localStorage.getItem("theme-override");
+        const lightMode = themeOverride && themeOverride === "light";
+        document.documentElement.classList.toggle("light-mode", lightMode);
+      })();
+    </script>
     <link
       rel="icon"
       type="image/png"
