@@ -18,6 +18,7 @@ omit: true
         <span class="p-locality">Toronto</span>
         <span class="p-region">Ontario</span>
         <span class="p-country-name">Canada</span>
+      </div>
       <div class="p-org">Shopify</div>
       <div class="p-job-title">Senior Staff Developer</div>
     </div>
