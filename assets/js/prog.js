@@ -1,38 +1,38 @@
 function initializeZoom() {
   function toggleImageZoom(imageEl) {
-    imageEl.classList.toggle("zoomed");
+    imageEl.classList.toggle('zoomed');
   }
 
   function closeZoomedImage() {
-    const zoomedEl = document.querySelector(".zoomed");
+    const zoomedEl = document.querySelector('.zoomed');
 
     if (zoomedEl) {
       toggleImageZoom(zoomedEl);
     }
   }
 
-  const imageEls = document.querySelectorAll(".zoomable > img");
+  const imageEls = document.querySelectorAll('.zoomable > img');
 
   for (const imageEl of imageEls) {
-    imageEl.addEventListener("click", () => toggleImageZoom(imageEl));
+    imageEl.addEventListener('click', () => toggleImageZoom(imageEl));
   }
 
-  document.body.addEventListener("keyup", (evt) => {
-    if (evt.key === "Escape") {
+  document.body.addEventListener('keyup', (evt) => {
+    if (evt.key === 'Escape') {
       closeZoomedImage();
     }
   });
 }
 
 function initializeTrails() {
-  const trailsContainer = document.createElement("div");
-  const trailsCanvas = document.createElement("canvas");
+  const trailsContainer = document.createElement('div');
+  const trailsCanvas = document.createElement('canvas');
 
-  trailsContainer.setAttribute("id", "trails-container");
-  trailsCanvas.setAttribute("id", "trails");
+  trailsContainer.setAttribute('id', 'trails-container');
+  trailsCanvas.setAttribute('id', 'trails');
 
   trailsContainer.appendChild(trailsCanvas);
-  document.querySelector("body").appendChild(trailsContainer);
+  document.querySelector('body').appendChild(trailsContainer);
 
   const dpr = window.devicePixelRatio;
 
@@ -58,27 +58,27 @@ function initializeTrails() {
     }px`;
   }
 
-  document.body.addEventListener("mousemove", (evt) => {
+  document.body.addEventListener('mousemove', (evt) => {
     moveTrails(evt.clientX, evt.clientY);
   });
 
-  document.body.addEventListener("mousedown", (evt) => {
+  document.body.addEventListener('mousedown', (evt) => {
     moveTrails(evt.clientX, evt.clientY);
   });
 
-  document.body.addEventListener("touchstart", (evt) => {
+  document.body.addEventListener('touchstart', (evt) => {
     moveTrails(evt.touches[0].clientX, evt.touches[0].clientY);
   });
 
-  document.body.addEventListener("touchmove", (evt) => {
+  document.body.addEventListener('touchmove', (evt) => {
     moveTrails(evt.touches[0].clientX, evt.touches[0].clientY);
   });
 
-  window.addEventListener("scroll", () => {
+  window.addEventListener('scroll', () => {
     moveTrails(trails.x, trails.y);
   });
 
-  const trailsCtx = trailsCanvas.getContext("2d");
+  const trailsCtx = trailsCanvas.getContext('2d');
 
   function renderTrails(t) {
     requestAnimationFrame(renderTrails);
@@ -87,7 +87,7 @@ function initializeTrails() {
       return;
     }
 
-    const debug = window.location.search.includes("debug");
+    const debug = window.location.search.includes('debug');
 
     const maxAge = 1000;
 
@@ -104,10 +104,10 @@ function initializeTrails() {
     trailsCanvas.width |= 0;
 
     if (debug) {
-      trailsCtx.strokeStyle = "#fff";
+      trailsCtx.strokeStyle = '#fff';
       trailsCtx.strokeRect(0, 0, trailsCanvas.width, trailsCanvas.height);
-      trailsCtx.fillStyle = "#fff";
-      trailsCtx.font = "40px sans-serif";
+      trailsCtx.fillStyle = '#fff';
+      trailsCtx.font = '40px sans-serif';
       trailsCtx.fillText(`window.scrollY: ${window.scrollY}`, 20, 60);
       trailsCtx.fillText(`trailsY: ${trails.y}`, 20, 120);
     }
@@ -117,7 +117,7 @@ function initializeTrails() {
 
     const pixel = 1 / scale;
 
-    trailsCtx.fillStyle = "#a484ff";
+    trailsCtx.fillStyle = '#a484ff';
 
     const subs = 16;
     const spacing = trailsCanvas.clientWidth / subs;
@@ -145,7 +145,7 @@ function initializeTrails() {
           dispY - (size / 2) * pixel,
           size * pixel,
           0,
-          Math.PI * 2
+          Math.PI * 2,
         );
         trailsCtx.fill();
       }
@@ -156,51 +156,68 @@ function initializeTrails() {
 }
 
 function initializeThemeToggle() {
-  const toggleLabel = document.createElement("label");
+  const toggleLabel = document.createElement('label');
 
-  toggleLabel.setAttribute("id", "theme-toggle-label");
-  toggleLabel.setAttribute("class", "hoverable");
-  toggleLabel.appendChild(document.createTextNode("Toggle theme"));
+  toggleLabel.setAttribute('id', 'theme-toggle-label');
+  toggleLabel.setAttribute('class', 'hoverable');
+  toggleLabel.appendChild(document.createTextNode('Toggle theme'));
 
-  const toggle = document.createElement("input");
+  const toggle = document.createElement('input');
 
-  toggle.setAttribute("type", "checkbox");
-  toggle.setAttribute("id", "theme-toggle");
-  toggle.setAttribute("title", "Toggle theme");
+  toggle.setAttribute('type', 'checkbox');
+  toggle.setAttribute('id', 'theme-toggle');
+  toggle.setAttribute('title', 'Toggle theme');
 
   toggleLabel.appendChild(toggle);
-  document.querySelector("main").appendChild(toggleLabel);
+  document.querySelector('main').appendChild(toggleLabel);
 
   function applyPrefs() {
-    const themeOverride = localStorage.getItem("theme-override");
-    const lightMode = themeOverride && themeOverride === "light";
+    const themeOverride = localStorage.getItem('theme-override');
+    const lightMode = themeOverride && themeOverride === 'light';
 
-    document.documentElement.classList.toggle("light-mode", lightMode);
+    document.documentElement.classList.toggle('light-mode', lightMode);
 
     toggle.checked = !lightMode;
   }
 
   applyPrefs();
 
-  window.addEventListener("storage", applyPrefs);
+  window.addEventListener('storage', applyPrefs);
 
-  toggle.addEventListener("change", () => {
-    document.documentElement.classList.toggle("light-mode", !toggle.checked);
-    localStorage.setItem("theme-override", toggle.checked ? "dark" : "light");
+  toggle.addEventListener('change', () => {
+    document.documentElement.classList.toggle('light-mode', !toggle.checked);
+    localStorage.setItem('theme-override', toggle.checked ? 'dark' : 'light');
   });
 }
 
 function initializeGrid() {
   const params = new URLSearchParams(document.location.search);
 
-  if (params.has("grid")) {
-    document.body.setAttribute("data-grid", "");
+  if (params.has('grid')) {
+    document.body.setAttribute('data-grid', '');
   }
 }
 
-document.addEventListener("DOMContentLoaded", () => {
+function installServiceWorker() {
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker
+      .register('/service-worker.js')
+      .then((registration) => {
+        console.log(
+          'Service Worker registered with scope:',
+          registration.scope,
+        );
+      })
+      .catch((error) => {
+        console.error('Service Worker registration failed:', error);
+      });
+  }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
   initializeTrails();
   initializeZoom();
   initializeThemeToggle();
   initializeGrid();
+  installServiceWorker();
 });

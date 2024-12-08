@@ -16,14 +16,29 @@
     <title>ates.dev &middot; {{ title }}</title>
     <script>
       (() => {
-        const themeOverride = localStorage.getItem("theme-override");
-        const lightMode = themeOverride && themeOverride === "light";
-        document.documentElement.classList.toggle("light-mode", lightMode);
+        const themeOverride = localStorage.getItem('theme-override');
+        const lightMode = themeOverride && themeOverride === 'light';
+        document.documentElement.classList.toggle('light-mode', lightMode);
       })();
     </script>
-    <link rel="preload" href="/assets/fonts/varelaround-regular-webfont.woff2" as="font">
-    <link rel="preload" href="/assets/logos/bluesky.svg" as="image">
-    <link rel="preload" href="/assets/logos/github.svg" as="image">
+    <link
+      rel="preload"
+      href="/assets/fonts/varelaround-regular-webfont.woff2"
+      as="font"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="preload"
+      href="/assets/logos/bluesky.svg"
+      as="image"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="preload"
+      href="/assets/logos/github.svg"
+      as="image"
+      crossorigin="anonymous"
+    />
     <link
       rel="icon"
       type="image/png"
@@ -44,16 +59,45 @@
   </head>
   <body>
     <header>
-      <h1>{% if page.url == '/' %}ates.dev{% else %}<a href="/">ates.dev</a>{% endif %}</h1>
+      <h1>
+        {% if page.url == '/' %}ates.dev{% else %}<a href="/">ates.dev</a>{%
+        endif %}
+      </h1>
       <nav>
         <ul>
-          <li>{% if page.url == '/' %}Home{% else %}<a href="/">Home</a>{% endif %}</li>
-          <li>{% if page.url == '/pages/all-posts/' %}Posts{% else %}<a href="/pages/all-posts">Posts</a>{% endif %}</li>
-          <li>{% if page.url == '/pages/all-pages/' %}Pages{% else %}<a href="/pages/all-pages">Pages</a>{% endif %}</li>
-          <li>{% if page.url == '/pages/about/' %}About{% else %}<a href="/pages/about">About</a>{% endif %}</li>
+          <li>
+            {% if page.url == '/' %}Home{% else %}<a href="/">Home</a>{% endif
+            %}
+          </li>
+          <li>
+            {% if page.url == '/pages/all-posts/' %}Posts{% else %}<a
+              href="/pages/all-posts"
+              >Posts</a
+            >{% endif %}
+          </li>
+          <li>
+            {% if page.url == '/pages/all-pages/' %}Pages{% else %}<a
+              href="/pages/all-pages"
+              >Pages</a
+            >{% endif %}
+          </li>
+          <li>
+            {% if page.url == '/pages/about/' %}About{% else %}<a
+              href="/pages/about"
+              >About</a
+            >{% endif %}
+          </li>
           <li class="break"></li>
-          <li><a href="https://bsky.app/profile/ates.dev" class="bluesky logo">Bluesky</a></li>
-          <li><a href="https://github.com/atesgoral" class="github logo">GitHub</a></li>
+          <li>
+            <a href="https://bsky.app/profile/ates.dev" class="bluesky logo"
+              >Bluesky</a
+            >
+          </li>
+          <li>
+            <a href="https://github.com/atesgoral" class="github logo"
+              >GitHub</a
+            >
+          </li>
         </ul>
       </nav>
     </header>
@@ -63,9 +107,9 @@
     <footer>
       <hr />
       <p class="footer meta">
-        &copy; Ateş Göral
-        &middot; <a href="https://github.com/atesgoral/ates.dev">src</a>
-        &middot; <a href="https://www.11ty.dev/">11ty</a>
+        &copy; Ateş Göral &middot;
+        <a href="https://github.com/atesgoral/ates.dev">src</a> &middot;
+        <a href="https://www.11ty.dev/">11ty</a>
       </p>
     </footer>
   </body>
