@@ -4,6 +4,10 @@
 @use "theme-toggle";
 @use "permalinks";
 
+html {
+  overflow-y: scroll;
+}
+
 ul,
 ol {
   padding-left: 0.75rlh;
