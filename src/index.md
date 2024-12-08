@@ -7,8 +7,8 @@ title: Home
   <img src="/assets/i/profile-picture.jpg" alt="Profile picture" title="Side shot of my head">
 </p>
 
-Hi! I'm **Ateş Göral**. I enjoy writing code, tinkering with graphics, experimenting with electronics, and executing ambitious DIY projects.
-([More?](/pages/about))
+Hi! I'm <strong>Ate<span class="sh">s</span> Göral</strong>. I enjoy writing code, tinkering with graphics, experimenting with electronics, and executing ambitious DIY projects.
+[More&hellip;](/pages/about)
 
 <p class="meta">
   Jump to:
@@ -16,6 +16,25 @@ Hi! I'm **Ateş Göral**. I enjoy writing code, tinkering with graphics, experim
   <a href="#blog-posts">Blog Posts</a> &middot;
   <a href="#talks">Talks</a>
 </p>
+
+## Latest Post
+
+Where I write about code, techniques, stories from the IT realm.
+
+{% assign latest_post = collections.posts | last %}
+
+#### [{{ latest_post.data.title }}]({{ latest_post.url }})
+
+<p class="project-thumbnail zoomable">
+  <img src="{{ baseUrl }}{{ latest_post.url }}{{ latest_post.data.image }}" alt="IKEA OBEGRÄNSAD Hack" title="Collage showing electronics, a Mario
+scene, and a metaballs scene">
+</p>
+
+<p class="meta">{{ latest_post.date | date: "%b %d, %Y" }}</p>
+
+{{ latest_post.data.description }}
+
+<div class="clear"></div>
 
 ## Projects
 

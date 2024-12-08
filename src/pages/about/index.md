@@ -1,7 +1,7 @@
 ---
 layout: layouts/page
 title: About Me
-image: i/custom_colors.jpg
+omit: true
 ---
 
 Hi! I'm **Ateş Göral**. I enjoy writing code, tinkering with graphics, experimenting with electronics, and executing ambitious DIY projects.

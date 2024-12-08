@@ -1,6 +1,7 @@
 ---
 layout: layouts/post
 title: "We Have a Corner Problem"
+description: "An exploration of a technique that simplifies the implementation of draggable crop rectangles by focusing on the transformation of just one corner."
 image: i/corner.png
 date: 2024-11-28
 ---

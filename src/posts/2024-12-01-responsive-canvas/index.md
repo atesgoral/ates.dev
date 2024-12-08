@@ -1,8 +1,10 @@
 ---
 layout: layouts/post
 title: "Responsive Canvas Rendering"
+description: "The techniques I use for responsive canvas rendering, to maintain crisp visuals across different screen sizes."
 image: i/responsive-canvas.png
 date: 2024-12-01
+draft: true
 ---
 
 <script>

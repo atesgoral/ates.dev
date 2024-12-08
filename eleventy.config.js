@@ -30,10 +30,14 @@ export default function (eleventyConfig) {
   });
 
   eleventyConfig.addCollection('posts', (collectionApi) =>
-    collectionApi.getFilteredByGlob('src/posts/**/*.md'),
+    collectionApi
+      .getFilteredByGlob('src/posts/**/*.md')
+      .filter((post) => !post.data.draft),
   );
   eleventyConfig.addCollection('pages', (collectionApi) =>
-    collectionApi.getFilteredByGlob('src/pages/**/*.md'),
+    collectionApi
+      .getFilteredByGlob('src/pages/**/*.md')
+      .filter((page) => !page.data.omit),
   );
 
   eleventyConfig.addTemplateFormats('scss');

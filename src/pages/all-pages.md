@@ -1,6 +1,7 @@
 ---
 layout: layouts/page
 title: All Pages
+omit: true
 ---
 
 <ul>
