@@ -461,6 +461,9 @@ body {
   padding-top: 0.5rlh;
   position: relative;
 }
+.footer .sh:after {
+  top: 0.0625lh;
+}
 
 .footer:before {
   content: "";
