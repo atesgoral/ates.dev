@@ -99,3 +99,7 @@ dt {
     margin-right: 0;
   }
 }
+
+.clear {
+  clear: left;
+}

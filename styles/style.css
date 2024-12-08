@@ -100,6 +100,10 @@ dt {
   }
 }
 
+.clear {
+  clear: left;
+}
+
 @font-face {
   font-family: "Varela Round";
   src: url("../assets/fonts/varelaround-regular-webfont.woff2") format("woff2");
