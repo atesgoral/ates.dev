@@ -19,7 +19,7 @@ Hi! I'm <strong>Ate<span class="sh">s</span> Göral</strong>. I enjoy writing co
 
 ## Latest Post
 
-Where I write about code, techniques, stories from the IT realm.
+I write about code, techniques, stories from the IT realm.
 
 {% assign latest_post = collections.posts | last %}
 
