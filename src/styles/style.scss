@@ -204,60 +204,62 @@ body {
   background-color: #84ddff;
 }
 
-body.light-mode {
-  background-color: #fff;
-  color: #333;
-}
+html.light-mode {
+  body {
+    background-color: #fff;
+    color: #333;
+  }
 
-body.light-mode h1,
-body.light-mode h2,
-body.light-mode h3,
-body.light-mode h4,
-body.light-mode h5,
-body.light-mode h6 {
-  color: #3fb2e7;
-}
+  body h1,
+  body h2,
+  body h3,
+  body h4,
+  body h5,
+  body h6 {
+    color: #3fb2e7;
+  }
 
-body.light-mode a {
-  color: #8356ff;
-}
+  body a {
+    color: #8356ff;
+  }
 
-body.light-mode a:visited {
-  color: #652dff;
-}
+  body a:visited {
+    color: #652dff;
+  }
 
-body.light-mode a:active {
-  color: #ff652d;
-  text-shadow: 0 0 5px rgba(255, 101, 45, 0.5);
-}
+  body a:active {
+    color: #ff652d;
+    text-shadow: 0 0 5px rgba(255, 101, 45, 0.5);
+  }
 
-body.light-mode img {
-  box-shadow: 0 0 10px 2px rgba(0, 0, 0, 0.1);
-}
+  body img {
+    box-shadow: 0 0 10px 2px rgba(0, 0, 0, 0.1);
+  }
 
-body.light-mode .project-thumbnail>img.zoomed {
-  background-color: #fff;
-}
+  body .project-thumbnail>img.zoomed {
+    background-color: #fff;
+  }
 
-body.light-mode #theme-toggle-label {
-  box-shadow: 0 0 10px 2px rgba(0, 0, 0, 0.1);
-}
+  body #theme-toggle-label {
+    box-shadow: 0 0 10px 2px rgba(0, 0, 0, 0.1);
+  }
 
-body.light-mode h2:before,
-body.light-mode h3:before,
-body.light-mode h4:before,
-body.light-mode h5:before,
-body.light-mode h6:before {
-  background-color: #3fb2e7;
-}
+  body h2:before,
+  body h3:before,
+  body h4:before,
+  body h5:before,
+  body h6:before {
+    background-color: #3fb2e7;
+  }
 
-body.light-mode .footer:before {
-  background-color: #3fb2e7;
-}
+  body .footer:before {
+    background-color: #3fb2e7;
+  }
 
-body.light-mode ::selection {
-  color: #fff;
-  background-color: #3fb2e7;
+  body ::selection {
+    color: #fff;
+    background-color: #3fb2e7;
+  }
 }
 
 .center {
@@ -333,17 +335,19 @@ html {
     transform: scale(1.01);
   }
 
-  body.light-mode a:hover {
-    color: #ff8356;
-    text-shadow: 0 0 5px rgba(255, 131, 86, 0.5);
-  }
+  html.light-mode {
+    body a:hover {
+      color: #ff8356;
+      text-shadow: 0 0 5px rgba(255, 131, 86, 0.5);
+    }
 
-  body.light-mode .project-thumbnail>img:hover {
-    box-shadow: 0 0 10px 2px rgba(255, 131, 86, 0.5);
-  }
+    body .project-thumbnail>img:hover {
+      box-shadow: 0 0 10px 2px rgba(255, 131, 86, 0.5);
+    }
 
-  body.light-mode .hoverable:hover {
-    box-shadow: 0 0 10px 2px rgba(255, 131, 86, 0.5);
+    body .hoverable:hover {
+      box-shadow: 0 0 10px 2px rgba(255, 131, 86, 0.5);
+    }
   }
 }
 
