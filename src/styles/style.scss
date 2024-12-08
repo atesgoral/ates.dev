@@ -71,6 +71,10 @@ header {
       li {
         font-size: 0.625rlh;
 
+        &.break {
+          margin-left: auto;
+        }
+
         a.logo {
           display: flex;
           align-items: center;
