@@ -4,9 +4,25 @@ title: About Me
 omit: true
 ---
 
-<p class="avatar">
-  <img src="/assets/i/profile-picture.jpg" alt="Profile picture" title="Side shot of my head">
-</p>
+<div class="h-card">
+  <p class="avatar">
+    <img src="/assets/i/profile-picture.jpg" alt="Profile picture" title="Side shot of my head" class="u-photo">
+    <div class="hidden">
+      <div class="p-name">Ateş Göral</div>
+      <div class="p-name">Ates Goral</div>
+      <div class="p-nickname">magna</div>
+      <div class="u-email">ates.goral@gmail.com</div>
+      <div class="u-url">https://ates.dev</div>
+      <div class="u-uid">https://ates.dev</div>
+      <div class="p-adr h-adr">
+        <span class="p-locality">Toronto</span>
+        <span class="p-region">Ontario</span>
+        <span class="p-country-name">Canada</span>
+      <div class="p-org">Shopify</div>
+      <div class="p-job-title">Senior Staff Developer</div>
+    </div>
+  </p>
+</div>
 
 Hi! I'm <strong>Ate<span class="sh">s</span> Göral</strong>. I enjoy writing code, tinkering with graphics, experimenting with electronics, and executing ambitious DIY projects.
 
