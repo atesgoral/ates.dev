@@ -883,56 +883,75 @@ ctx.fillText('circle', canvas.width / 2, canvas.height / 2);
 </p>
 
 <script>
+function renderStrokeScene(ctx, forceDpr) {
+  const canvas = ctx.canvas;
+  const {width, height} = canvas.getBoundingClientRect();
+
+  const dpr = window.devicePixelRatio;
+  const usedDpr = forceDpr || dpr;
+
+  canvas.width = width * usedDpr;
+  canvas.height = height * usedDpr;
+
+  ctx.fillStyle = 'black';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  const radius = canvas.height / 3;
+
+  ctx.lineWidth = 3;
+
+  ctx.strokeStyle = 'white';
+  ctx.beginPath();
+  ctx.arc(
+    canvas.width / 2,
+    canvas.height / 2,
+    radius,
+    0,
+    Math.PI * 2
+  );
+  ctx.stroke();
+
+  const fontSize = 1 * usedDpr;
+  const fontFace = 'Varela Round';
+
+  ctx.fillStyle = 'white';
+  ctx.font = `${fontSize}em ${fontFace}`;
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText('circle', canvas.width / 2, canvas.height / 2);
+
+  const x = canvas.width / 2 + radius;
+  const y = canvas.height / 2;
+
+  const SAMPLE = 11;
+  const ZOOM = 7;
+
+  ctx.strokeStyle = '#00c0ff';
+  ctx.lineWidth = 2 * usedDpr;
+
+  ctx.strokeRect(
+    x - SAMPLE / 2 * usedDpr | 0,
+    y - SAMPLE / 2 * usedDpr | 0,
+    SAMPLE * usedDpr,
+    SAMPLE * usedDpr
+  );
+
+  ctx.imageSmoothingEnabled = false;
+  ctx.drawImage(
+    canvas,
+    x - SAMPLE / 2 * usedDpr | 0,
+    y - SAMPLE / 2 * usedDpr | 0,
+    SAMPLE * usedDpr,
+    SAMPLE * usedDpr,
+    x + SAMPLE * usedDpr,
+    y - SAMPLE * ZOOM / 2 * usedDpr,
+    SAMPLE * ZOOM * usedDpr,
+    SAMPLE * ZOOM * usedDpr
+  );
+}
+
 render('canvas-stroke', {
-  init: (canvas, ctx) => {
-    const dpr = window.devicePixelRatio;
-    const {width, height} = canvas.getBoundingClientRect();
-
-    canvas.width = width * dpr;
-    canvas.height = height * dpr;
-
-    ctx.fillStyle = 'black';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-    const radius = canvas.height / 3;
-
-    ctx.lineWidth = 3;
-
-    ctx.strokeStyle = 'white';
-    ctx.beginPath();
-    ctx.arc(
-      canvas.width / 2,
-      canvas.height / 2,
-      radius,
-      0,
-      Math.PI * 2
-    );
-    ctx.stroke();
-
-    const fontSize = 1 * dpr;
-    const fontFace = 'Varela Round';
-
-    ctx.fillStyle = 'white';
-    ctx.font = `${fontSize}em ${fontFace}`;
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.fillText('circle', canvas.width / 2, canvas.height / 2);
-
-    const x = canvas.width / 2 + radius;
-    const y = canvas.height / 2;
-
-    ctx.strokeStyle = '#00c0ff';
-    ctx.lineWidth = 2 * dpr;
-
-    ctx.strokeRect(x - 5 * dpr, y - 5 * dpr, 10 * dpr, 10 * dpr);
-
-    ctx.imageSmoothingEnabled = false;
-    ctx.drawImage(
-      canvas,
-      x - 5 * dpr, y - 5 * dpr, 10 * dpr, 10 * dpr,
-      x + radius, y - 50 * dpr, 100 * dpr, 100 * dpr
-    );
-  },
+  init: (_canvas, ctx) => renderStrokeScene(ctx),
 });
 </script>
 
@@ -948,56 +967,7 @@ Here's the same scene without the DPR adjustment:
 
 <script>
 render('canvas-stroke-no-dpr', {
-  init: (canvas, ctx) => {
-    const {width, height} = canvas.getBoundingClientRect();
-
-    canvas.width = width;
-    canvas.height = height;
-
-    ctx.fillStyle = 'black';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-    const radius = canvas.height / 3;
-
-    ctx.lineWidth = 3;
-
-    ctx.strokeStyle = 'white';
-    ctx.beginPath();
-    ctx.arc(
-      canvas.width / 2,
-      canvas.height / 2,
-      radius,
-      0,
-      Math.PI * 2
-    );
-    ctx.stroke();
-
-    const fontSize = 1;
-    const fontFace = 'Varela Round';
-
-    ctx.fillStyle = 'white';
-    ctx.font = `${fontSize}em ${fontFace}`;
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.fillText('circle', canvas.width / 2, canvas.height / 2);
-
-    const x = canvas.width / 2 + radius;
-    const y = canvas.height / 2;
-
-    const dpr = 1;
-
-    ctx.strokeStyle = '#00c0ff';
-    ctx.lineWidth = 2 * dpr;
-
-    ctx.strokeRect(x - 5 * dpr, y - 5 * dpr, 10 * dpr, 10 * dpr);
-
-    ctx.imageSmoothingEnabled = false;
-    ctx.drawImage(
-      canvas,
-      x - 5 * dpr, y - 5 * dpr, 10 * dpr, 10 * dpr,
-      x + radius, y - 50 * dpr, 100 * dpr, 100 * dpr
-    );
-  },
+  init: (_canvas, ctx) => renderStrokeScene(ctx, 1)
 });
 </script>
 
