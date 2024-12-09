@@ -731,8 +731,8 @@ will create blurry results:</p>
 <p>We can watch for the resizing of the canvas and redraw the scene on a debounce.
 This approach allows resampling during resizing but ensures accurate proportions
 once resizing stops.</p>
-<p>Let's do this efficiently. To watch for resizing, we'll use the <code>ResizeObserver</code>
-browser API:</p>
+<p>Let's do this efficiently. To watch for resizing, we'll use the
+<a href="https://developer.mozilla.org/en-US/docs/Web/API/ResizeObserver">ResizeObserver</a> browser API:</p>
 <pre><code class="language-js">// One could always use Lodash's debounce
 function tailDebounce(fn, delay) {
   let timer;
@@ -969,6 +969,14 @@ render('canvas-stroke-no-dpr', {
 same thickness as the previous one, but blurrier.</p>
 <p>Solid shapes, images, and text should consider DPR for clarity. Strokes not so.</p>
 </div>
+
+  
+  <h3>Discourse</h3>
+  <p class="meta">
+    Comments, questions, corrections? Please drop them on
+    <a href="https://bsky.app/profile/ates.dev/post/3lctuxtbaxs2z">Bluesky!</a>
+  </p>
+  
 </article>
 </main>
 
