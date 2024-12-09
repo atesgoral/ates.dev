@@ -44,8 +44,7 @@ I write about code, techniques, stories from the IT realm.
 #### [{{ latest_post.data.title }}]({{ latest_post.url }})
 
 <p class="project-thumbnail zoomable">
-  <img src="{{ baseUrl }}{{ latest_post.url }}{{ latest_post.data.image }}" alt="IKEA OBEGRÄNSAD Hack" title="Collage showing electronics, a Mario
-scene, and a metaballs scene">
+  <img src="{{ baseUrl }}{{ latest_post.url }}{{ latest_post.data.image }}" alt="{{ latest_post.data.alt}}">
 </p>
 
 <p class="meta">{{ latest_post.date | date: "%b %d, %Y" }}</p>

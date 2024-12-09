@@ -10,8 +10,7 @@ I write about code, techniques, personal stories from the IT realm.
 #### [{{ post.data.title }}]({{ post.url }})
 
 <p class="project-thumbnail zoomable">
-  <img src="{{ baseUrl }}{{ post.url }}{{ post.data.image }}" alt="IKEA OBEGRÄNSAD Hack" title="Collage showing electronics, a Mario
-scene, and a metaballs scene">
+  <img src="{{ baseUrl }}{{ post.url }}{{ post.data.image }}" alt="{{ post.data.alt }}">
 </p>
 
 <p class="meta">{{ post.date | date: "%b %d, %Y" }}</p>
