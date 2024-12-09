@@ -3,13 +3,19 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta property="og:title" content="All Posts" />
+    <meta property="og:title" content="Punctual Canvas Rendering" />
     <meta property="og:type" content="article" />
-    <meta property="og:description" content="" />
+    <meta property="og:description" content="The techniques I use for punctual canvas rendering, to maintain a consistent frame rate." />
+    
+    <meta
+      property="og:image"
+      content="https://ates.dev/posts/2024-12-09-punctual-canvas/i/punctual-canvas.png"
+    />
+    <meta property="og:image:alt" content="" />
     
     <meta property="og:locale" content="en_CA" />
     <meta property="og:site_name" content="ates.dev" />
-    <title>ates.dev &middot; All Posts</title>
+    <title>ates.dev &middot; Punctual Canvas Rendering</title>
     <script>
       (() => {
         const themeOverride = localStorage.getItem('theme-override');
@@ -74,7 +80,10 @@
             <a href="/">Home</a>
           </li>
           <li>
-            Posts
+            <a
+              href="/pages/all-posts"
+              >Posts</a
+            >
           </li>
           <li>
             <a
@@ -108,23 +117,61 @@
 
     <main>
 <article>
-  <h2>All Posts</h2>
+  <h2>Punctual Canvas Rendering</h2>
+  <p class="meta">Posted on Dec 09, 2024</p>
 
-  <div class="content"><p>I write about code, techniques, personal stories from the IT realm.</p>
-<h4 id="responsive-canvas-rendering" tabindex="-1"><a class="permalink" href="#responsive-canvas-rendering"><a href="/posts/2024-12-08-responsive-canvas/">Responsive Canvas Rendering</a></a></h4>
-<p class="project-thumbnail zoomable">
-  <img src="https://ates.dev/posts/2024-12-08-responsive-canvas/i/responsive-canvas.png" alt="A filled circle and an empty circle on an HTML canvas, with a zoom in on the anti-aliasing at their edges.">
+  <div class="content"><h3 id="time" tabindex="-1"><a class="permalink" href="#time">Time</a></h3>
+<p>Let's get moving!</p>
+<p class="canvas-container">
+  <canvas id="canvas-starfield" class="fit black"></canvas>
 </p>
-<p class="meta">Dec 08, 2024</p>
-<p>The techniques I use for responsive canvas rendering, to maintain crisp visuals across different screen sizes.</p>
-<div class="clear"></div>
-<h4 id="we-have-a-corner-problem" tabindex="-1"><a class="permalink" href="#we-have-a-corner-problem"><a href="/posts/2024-11-28-corner-problem/">We Have a Corner Problem</a></a></h4>
-<p class="project-thumbnail zoomable">
-  <img src="https://ates.dev/posts/2024-11-28-corner-problem/i/corner.png" alt="The vectors involved in moving the bottom right corner of a crop rectangle while obeying the aspect ratio constraint">
-</p>
-<p class="meta">Nov 28, 2024</p>
-<p>An exploration of a technique that simplifies the implementation of draggable crop rectangles by focusing on the transformation of just one corner.</p>
-<div class="clear"></div>
+<script>
+  render('canvas-starfield', {
+    init: (canvas, _ctx) => {
+      const {width, height} = canvas.getBoundingClientRect();
+
+      const dpr = window.devicePixelRatio;
+
+      canvas.width = width * dpr;
+      canvas.height = height * dpr;
+
+      const STAR_COUNT = 50;
+
+      this.stars ||= Array(STAR_COUNT).fill().map(() => ({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        z: Math.random()
+      }));
+    },
+    draw: (ctx) => {
+      const canvas = ctx.canvas;
+      const dpr = window.devicePixelRatio;
+
+      const SIZE = 5;
+      const VELOCITY = 3;
+      const PERSPECTIVE = 5;
+
+      ctx.fillStyle = 'black';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      ctx.fillStyle = 'white';
+
+      for (const star of this.stars) {
+        const {x, y, z} = star;
+        const size = SIZE / (1 + z * PERSPECTIVE);
+
+        ctx.fillRect(
+          x - size / 2 * dpr,
+          y - size / 2 * dpr,
+          size * dpr,
+          size * dpr
+        )
+
+        star.x = (star.x + VELOCITY * (1 - z)) % canvas.width;
+      }
+    }
+  });
+</script>
 </div>
 </article>
 </main>
