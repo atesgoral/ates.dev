@@ -3,6 +3,7 @@ layout: layouts/post
 title: "Responsive Canvas Rendering"
 description: "The techniques I use for responsive canvas rendering, to maintain crisp visuals across different screen sizes."
 image: i/responsive-canvas.png
+alt: "A filled circle and an empty circle on an HTML canvas, with a zoom in on the anti-aliasing at their edges."
 date: 2024-12-08
 ---
 
