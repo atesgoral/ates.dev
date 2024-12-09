@@ -1,9 +1,9 @@
 ---
 layout: layouts/post
 title: "Responsive Canvas Rendering"
-description: "The techniques I use for responsive canvas rendering, to maintain crisp visuals across different screen sizes."
+description: "Techniques for responsive canvas rendering to maintain crisp visuals across varying screen sizes."
 image: i/responsive-canvas.png
-alt: "A filled circle and an empty circle on an HTML canvas, with a zoom in on the anti-aliasing at their edges."
+alt: "A filled circle and an empty circle on an HTML canvas, with a zoomed-in view of the anti-aliasing at their edges."
 date: 2024-12-08
 ---
 
@@ -148,7 +148,7 @@ window.addEventListener('DOMContentLoaded', () => {
 });
 </script>
 
-"Responsive" in web development pertains to, in a nutshell, layout: Adjusting the
+In web development, 'responsive' typically refers to layout. Adjusting the
 layout of a page based on the dimensions of the renderable area. A more formal
 definition from [Wikipedia][1]:
 
@@ -158,7 +158,7 @@ definition from [Wikipedia][1]:
 > satisfaction.
 
 Here, I will share a few key techniques I always apply when rendering pixels on
-a [`<canvas>`][2] element, while keeping the rendering properly respond to
+a [`<canvas>`][2] element, while ensuring the rendering properly responds to
 canvas size and [Device Pixel Ratio][3] (DPR).
 
 This is not a comprehensive tutorial that aims to teach on canvas rendering from
@@ -181,7 +181,7 @@ Let's start with a default canvas:
   <canvas id="canvas-default" class="bordered"></canvas>
 </p>
 
-By default, it is a transparent rectangle measuring 300 by 150 pixels
+By default, the canvas is a transparent rectangle measuring 300x150 pixels
 ([spec][4]). I have added a border around it to clearly define its size and
 position on the page.
 
@@ -269,12 +269,12 @@ render('canvas-with-square-fit', {
 });
 </script>
 
-What happened to our perfectly square square? Because we resized the canvas with
+Why is our square no longer square? Because we resized the canvas with
 CSS and didn't attach `width` and `height` attributes to the `<canvas>` tag, the
 intrinsic dimensions of the canvas are still the defaults, 300x150.
 
-To fix the dimensions of the rendering context, we can set the `width` and
-`height` properties of the canvas DOM element to the measured pixel dimensions:
+We can fix this by setting the `width` and `height` properties of the canvas
+element to its pixel dimensions:
 
 ```js
 const {width, height} = canvas.getBoundingClientRect();
@@ -347,7 +347,7 @@ The CSS dimensions we set on the canvas are the logical pixel dimensions. Your
 browser's DPR (Device Pixel Ratio) is a multiplier that determines the physical
 pixel density of your screen. For example, if your DPR is `2.0`, then for every
 logical pixel, there are 4 physical pixels (2x2). To render this circle in the
-crispiest way possible we will apply the DPR as a multiplier to the canvas
+crispiest way possible we apply the DPR as a multiplier to the canvas
 dimensions. We'll also print your actual DPR instead of the "1.0" we hard-coded
 earlier:
 
@@ -396,7 +396,7 @@ render('canvas-with-circle-dpr', {
 If your DPR is greater than `1.0`, you should see the 20x20 pixel reference
 square rendered as something smaller than 20x20 while our circle remains the
 same size. And the anti-aliased edges of the circle should now look as crisp as
-physically possible on your screen (without getting into subpixel rendering).
+possible on your screen (without getting into subpixel rendering).
 
 In case your DPR is `1.0`, and you don't see a difference above, here's what the
 comparison would have **approximately** looked like against a DPR of `2.0`:
@@ -499,9 +499,9 @@ In the examples so far we've used hard-coded dimensions for the elements because
 we knew the canvas height was always 150px. A square 100px across or a circle
 50px in radius would nicely fit.
 
-When the canvas size is dynamic, I find it easier to define the scene in terms
-of proportions, typically as a fraction of the canvas height. So, let's switch
-to rendering our circle with a radius of 1/3 of the canvas height:
+Defining the scene in proportions, such as a fraction of the canvas height,
+simplifies dynamic layouts. So, let's switch to rendering our circle with a
+radius of 1/3 of the canvas height:
 
 ```js
 const radius = canvas.height / 3;
@@ -578,13 +578,12 @@ the canvas container:
   });
 </script>
 
-The circle will stretch and squash into an ellipse as the container width
-changes because the canvas is essentially acting like an image, its pixels
-getting resampled to fit the new dimensions.
+As the container width changes, the circle stretches into an ellipse because the
+canvas pixels are resampled to fit the new dimensions.
 
 #### Brute-force rendering
 
-One option to overcome is to set up a rendering loop to keep adjusting the
+One way to address this is to set up a rendering loop to keep adjusting the
 intrinsic dimensions of the canvas and rendering the scene every frame. This
 way, the entire scene will always be rendered at the correct proportions. We'll
 use a [requestAnimationFrame][5] (RAF) loop for this:
@@ -682,9 +681,9 @@ The circle remains a circle.
 
 However, the ugly truth is that you will lose all the crispy rendering you got
 at the start by updating the intrinsic dimensions of the canvas with DPR in
-mind. Even when initially rendering big and then scaling down, ugly resampling
-artifacts might appear. And initially rendering small and then scaling up will
-create a blurry mess:
+mind. Even when initially rendering big and then scaling down, resampling can
+cause undesirable artifacts. And initially rendering small and then scaling up
+will create blurry results:
 
 <p class="canvas-container">
   <span id="canvas-resize-stretch-tiny-container" class="canvas-subcontainer" style="width: 80px; height: 40px;">
@@ -708,9 +707,8 @@ create a blurry mess:
 #### Debounced redraw
 
 We can watch for the resizing of the canvas and redraw the scene on a debounce.
-This way, we let the canvas get resampled while a resize is still in progress,
-but then ensure the scene is rendered at the correct proportions once the
-resizing stops.
+This approach allows resampling during resizing but ensures accurate proportions
+once resizing stops.
 
 Let's do this efficiently. To watch for resizing, we'll use the `ResizeObserver`
 browser API:
@@ -947,8 +945,8 @@ render('canvas-stroke', {
 </script>
 
 The stroke width is not affected by the intrinsic resolution of the canvas. When
-you set the stroke width to 3, it will always be 3 logical pixels wide. However,
-the font size needs to be adjusted.
+you set the stroke width to 3, it will always be 3 logical pixels wide. Font
+size, however, needs to account for DPR adjustments.
 
 Here's the same scene without the DPR adjustment:
 
@@ -965,6 +963,5 @@ render('canvas-stroke-no-dpr', {
 If your DPR is greater than 1, the border should still appear more or less the
 same thickness as the previous one, but blurrier.
 
-Solid shapes, images and text should be rendered with the DPR in mind. Strokes
-not so.
+Solid shapes, images, and text should consider DPR for clarity. Strokes not so.
 
