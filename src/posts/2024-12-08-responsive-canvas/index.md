@@ -364,7 +364,7 @@ the drawing primitives:
 
 ```js
 // Adjust for DPR
-const radius = RADUIS * dpr;
+const radius = RADIUS * dpr;
 
 ctx.beginPath();
 ctx.arc(
