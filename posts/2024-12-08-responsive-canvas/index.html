@@ -5,13 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta property="og:title" content="Responsive Canvas Rendering" />
     <meta property="og:type" content="article" />
-    <meta property="og:description" content="The techniques I use for responsive canvas rendering, to maintain crisp visuals across different screen sizes." />
+    <meta property="og:description" content="Techniques for responsive canvas rendering to maintain crisp visuals across varying screen sizes." />
     
     <meta
       property="og:image"
       content="https://ates.dev/posts/2024-12-08-responsive-canvas/i/responsive-canvas.png"
     />
-    <meta property="og:image:alt" content="A filled circle and an empty circle on an HTML canvas, with a zoom in on the anti-aliasing at their edges." />
+    <meta property="og:image:alt" content="A filled circle and an empty circle on an HTML canvas, with a zoomed-in view of the anti-aliasing at their edges." />
     
     <meta property="og:locale" content="en_CA" />
     <meta property="og:site_name" content="ates.dev" />
@@ -260,7 +260,7 @@ window.addEventListener('DOMContentLoaded', () => {
   requestAnimationFrame(setWidths);
 });
 </script>
-<p>&quot;Responsive&quot; in web development pertains to, in a nutshell, layout: Adjusting the
+<p>In web development, 'responsive' typically refers to layout. Adjusting the
 layout of a page based on the dimensions of the renderable area. A more formal
 definition from <a href="https://en.wikipedia.org/wiki/Responsive_web_design">Wikipedia</a>:</p>
 <blockquote>
@@ -270,7 +270,7 @@ screen sizes from minimum to maximum display size to ensure usability and
 satisfaction.</p>
 </blockquote>
 <p>Here, I will share a few key techniques I always apply when rendering pixels on
-a <a href="https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API"><code>&lt;canvas&gt;</code></a> element, while keeping the rendering properly respond to
+a <a href="https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API"><code>&lt;canvas&gt;</code></a> element, while ensuring the rendering properly responds to
 canvas size and <a href="https://developer.mozilla.org/en-US/docs/Web/API/Window/devicePixelRatio">Device Pixel Ratio</a> (DPR).</p>
 <p>This is not a comprehensive tutorial that aims to teach on canvas rendering from
 scratch. Code excerpts are partial, only highlighting key changes from the
@@ -282,7 +282,7 @@ previous example. Knowledge of JavaScript and some algebra is assumed.</p>
 <p class="canvas-container">
   <canvas id="canvas-default" class="bordered"></canvas>
 </p>
-<p>By default, it is a transparent rectangle measuring 300 by 150 pixels
+<p>By default, the canvas is a transparent rectangle measuring 300x150 pixels
 (<a href="https://html.spec.whatwg.org/multipage/canvas.html#the-canvas-element:~:text=The%20width%20attribute%20defaults%20to%20300%2C%20and%20the%20height%20attribute%20defaults%20to%20150.">spec</a>). I have added a border around it to clearly define its size and
 position on the page.</p>
 <h3 id="reference-square" tabindex="-1"><a class="permalink" href="#reference-square">Reference square</a></h3>
@@ -353,11 +353,11 @@ render('canvas-with-square-fit', {
   },
 });
 </script>
-<p>What happened to our perfectly square square? Because we resized the canvas with
+<p>Why is our square no longer square? Because we resized the canvas with
 CSS and didn't attach <code>width</code> and <code>height</code> attributes to the <code>&lt;canvas&gt;</code> tag, the
 intrinsic dimensions of the canvas are still the defaults, 300x150.</p>
-<p>To fix the dimensions of the rendering context, we can set the <code>width</code> and
-<code>height</code> properties of the canvas DOM element to the measured pixel dimensions:</p>
+<p>We can fix this by setting the <code>width</code> and <code>height</code> properties of the canvas
+element to its pixel dimensions:</p>
 <pre><code class="language-js">const {width, height} = canvas.getBoundingClientRect();
 
 canvas.width = width;
@@ -418,7 +418,7 @@ render('canvas-with-circle', {
 browser's DPR (Device Pixel Ratio) is a multiplier that determines the physical
 pixel density of your screen. For example, if your DPR is <code>2.0</code>, then for every
 logical pixel, there are 4 physical pixels (2x2). To render this circle in the
-crispiest way possible we will apply the DPR as a multiplier to the canvas
+crispiest way possible we apply the DPR as a multiplier to the canvas
 dimensions. We'll also print your actual DPR instead of the &quot;1.0&quot; we hard-coded
 earlier:</p>
 <pre><code class="language-js">const dpr = window.devicePixelRatio;
@@ -458,7 +458,7 @@ render('canvas-with-circle-dpr', {
 <p>If your DPR is greater than <code>1.0</code>, you should see the 20x20 pixel reference
 square rendered as something smaller than 20x20 while our circle remains the
 same size. And the anti-aliased edges of the circle should now look as crisp as
-physically possible on your screen (without getting into subpixel rendering).</p>
+possible on your screen (without getting into subpixel rendering).</p>
 <p>In case your DPR is <code>1.0</code>, and you don't see a difference above, here's what the
 comparison would have <strong>approximately</strong> looked like against a DPR of <code>2.0</code>:</p>
 <p class="canvas-container">
@@ -555,9 +555,9 @@ render('canvas-dpr-compare', {
 <p>In the examples so far we've used hard-coded dimensions for the elements because
 we knew the canvas height was always 150px. A square 100px across or a circle
 50px in radius would nicely fit.</p>
-<p>When the canvas size is dynamic, I find it easier to define the scene in terms
-of proportions, typically as a fraction of the canvas height. So, let's switch
-to rendering our circle with a radius of 1/3 of the canvas height:</p>
+<p>Defining the scene in proportions, such as a fraction of the canvas height,
+simplifies dynamic layouts. So, let's switch to rendering our circle with a
+radius of 1/3 of the canvas height:</p>
 <pre><code class="language-js">const radius = canvas.height / 3;
 
 ctx.fillStyle = 'white';
@@ -624,11 +624,10 @@ the canvas container:</p>
     init: (_canvas, ctx) => drawCircleScene(ctx)
   });
 </script>
-<p>The circle will stretch and squash into an ellipse as the container width
-changes because the canvas is essentially acting like an image, its pixels
-getting resampled to fit the new dimensions.</p>
+<p>As the container width changes, the circle stretches into an ellipse because the
+canvas pixels are resampled to fit the new dimensions.</p>
 <h4 id="brute-force-rendering" tabindex="-1"><a class="permalink" href="#brute-force-rendering">Brute-force rendering</a></h4>
-<p>One option to overcome is to set up a rendering loop to keep adjusting the
+<p>One way to address this is to set up a rendering loop to keep adjusting the
 intrinsic dimensions of the canvas and rendering the scene every frame. This
 way, the entire scene will always be rendered at the correct proportions. We'll
 use a <a href="https://developer.mozilla.org/en-US/docs/Web/API/window/requestAnimationFrame">requestAnimationFrame</a> (RAF) loop for this:</p>
@@ -708,9 +707,9 @@ canvas {
 <h4 id="avoid-resampling" tabindex="-1"><a class="permalink" href="#avoid-resampling">Avoid resampling</a></h4>
 <p>However, the ugly truth is that you will lose all the crispy rendering you got
 at the start by updating the intrinsic dimensions of the canvas with DPR in
-mind. Even when initially rendering big and then scaling down, ugly resampling
-artifacts might appear. And initially rendering small and then scaling up will
-create a blurry mess:</p>
+mind. Even when initially rendering big and then scaling down, resampling can
+cause undesirable artifacts. And initially rendering small and then scaling up
+will create blurry results:</p>
 <p class="canvas-container">
   <span id="canvas-resize-stretch-tiny-container" class="canvas-subcontainer" style="width: 80px; height: 40px;">
     <canvas id="canvas-resize-stretch-tiny" class="black" style="width: 100%; height: 100%;"></canvas>
@@ -730,9 +729,8 @@ create a blurry mess:</p>
 </script>
 <h4 id="debounced-redraw" tabindex="-1"><a class="permalink" href="#debounced-redraw">Debounced redraw</a></h4>
 <p>We can watch for the resizing of the canvas and redraw the scene on a debounce.
-This way, we let the canvas get resampled while a resize is still in progress,
-but then ensure the scene is rendered at the correct proportions once the
-resizing stops.</p>
+This approach allows resampling during resizing but ensures accurate proportions
+once resizing stops.</p>
 <p>Let's do this efficiently. To watch for resizing, we'll use the <code>ResizeObserver</code>
 browser API:</p>
 <pre><code class="language-js">// One could always use Lodash's debounce
@@ -956,8 +954,8 @@ render('canvas-stroke', {
 });
 </script>
 <p>The stroke width is not affected by the intrinsic resolution of the canvas. When
-you set the stroke width to 3, it will always be 3 logical pixels wide. However,
-the font size needs to be adjusted.</p>
+you set the stroke width to 3, it will always be 3 logical pixels wide. Font
+size, however, needs to account for DPR adjustments.</p>
 <p>Here's the same scene without the DPR adjustment:</p>
 <p class="canvas-container">
   <canvas id="canvas-stroke-no-dpr" class="fit black"></canvas>
@@ -969,8 +967,7 @@ render('canvas-stroke-no-dpr', {
 </script>
 <p>If your DPR is greater than 1, the border should still appear more or less the
 same thickness as the previous one, but blurrier.</p>
-<p>Solid shapes, images and text should be rendered with the DPR in mind. Strokes
-not so.</p>
+<p>Solid shapes, images, and text should consider DPR for clarity. Strokes not so.</p>
 </div>
 </article>
 </main>
