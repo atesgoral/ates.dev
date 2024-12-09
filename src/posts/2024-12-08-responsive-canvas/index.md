@@ -5,6 +5,7 @@ description: "Techniques for responsive canvas rendering to maintain crisp visua
 image: i/responsive-canvas.png
 alt: "A filled circle and an empty circle on an HTML canvas, with a zoomed-in view of the anti-aliasing at their edges."
 date: 2024-12-08
+bluesky: https://bsky.app/profile/ates.dev/post/3lctuxtbaxs2z
 ---
 
 <script>
@@ -710,8 +711,10 @@ We can watch for the resizing of the canvas and redraw the scene on a debounce.
 This approach allows resampling during resizing but ensures accurate proportions
 once resizing stops.
 
-Let's do this efficiently. To watch for resizing, we'll use the `ResizeObserver`
-browser API:
+Let's do this efficiently. To watch for resizing, we'll use the
+[ResizeObserver][ResizeObserver] browser API:
+
+[ResizeObserver]: https://developer.mozilla.org/en-US/docs/Web/API/ResizeObserver
 
 ```js
 // One could always use Lodash's debounce

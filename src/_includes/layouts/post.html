@@ -8,4 +8,12 @@ type: article
   <p class="meta">Posted on {{ date | date: "%b %d, %Y" }}</p>
 
   <div class="content">{{ content }}</div>
+
+  {% if bluesky %}
+  <h3>Discourse</h3>
+  <p class="meta">
+    Comments, questions, corrections? Please drop them on
+    <a href="{{ bluesky }}">Bluesky!</a>
+  </p>
+  {% endif %}
 </article>

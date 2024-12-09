@@ -5,6 +5,7 @@ description: "An exploration of a technique that simplifies the implementation o
 image: i/corner.png
 alt: "The vectors involved in moving the bottom right corner of a crop rectangle while obeying the aspect ratio constraint"
 date: 2024-11-28
+bluesky: https://bsky.app/profile/ates.dev/post/3lbyjgfrxkc2j
 ---
 
 The movement constraints of all 8 drag handles of a crop rectangle can be implemented by reusing the implementation of one corner.
