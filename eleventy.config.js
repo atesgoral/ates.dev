@@ -4,6 +4,8 @@ import path from 'path';
 
 /** @param {import("@11ty/eleventy").UserConfig} eleventyConfig */
 export default function (eleventyConfig) {
+  const isDev = process.env.ELEVENTY_RUN_MODE === 'serve';
+
   eleventyConfig.addPassthroughCopy('src/service-worker.js');
   eleventyConfig.addPassthroughCopy('assets/**/*');
   eleventyConfig.addPassthroughCopy('src/pages/*/i/*');
@@ -59,16 +61,10 @@ export default function (eleventyConfig) {
     },
   });
 
-  eleventyConfig.addGlobalData('baseUrl', 'https://ates.dev');
-
-  // eleventyConfig.addWatchTarget("./src/**/*", {
-  // resetConfig: true,
-  // });
-
-  // eleventyConfig.setChokidarConfig({
-  // usePolling: true,
-  // interval: 500,
-  // });
+  eleventyConfig.addGlobalData(
+    'baseUrl',
+    isDev ? 'http://localhost:8080' : 'https://ates.dev',
+  );
 
   eleventyConfig.setInputDirectory('src');
 }
