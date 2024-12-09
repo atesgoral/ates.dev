@@ -3,8 +3,7 @@ layout: layouts/post
 title: "Responsive Canvas Rendering"
 description: "The techniques I use for responsive canvas rendering, to maintain crisp visuals across different screen sizes."
 image: i/responsive-canvas.png
-date: 2024-12-01
-draft: true
+date: 2024-12-08
 ---
 
 <script>
@@ -158,20 +157,12 @@ definition from [Wikipedia][1]:
 > satisfaction.
 
 Here, I will share a few key techniques I always apply when rendering pixels on
-a [`<canvas>`][2] element, while keeping the rendering properly respond to these
-factors:
-
-1. Canvas size
-2. [Device Pixel Ratio][3] (DPR)
-3. Time
-
-Also, how to compose a scene (i.e. define the dimensions of elements) while
-taking 1-3 into consideration, without getting into an unmaintainable mess.
+a [`<canvas>`][2] element, while keeping the rendering properly respond to
+canvas size and [Device Pixel Ratio][3] (DPR).
 
 This is not a comprehensive tutorial that aims to teach on canvas rendering from
 scratch. Code excerpts are partial, only highlighting key changes from the
-previous example. Knowledge of JavaScript and some algebra is assumed. This
-will progressively get more complicated, fast.
+previous example. Knowledge of JavaScript and some algebra is assumed.
 
 [1]: https://en.wikipedia.org/wiki/Responsive_web_design
 [2]: https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API
@@ -976,58 +967,3 @@ same thickness as the previous one, but blurrier.
 Solid shapes, images and text should be rendered with the DPR in mind. Strokes
 not so.
 
-### Time
-
-Let's get moving!
-
-<p class="canvas-container">
-  <canvas id="canvas-starfield" class="fit black"></canvas>
-</p>
-
-<script>
-  render('canvas-starfield', {
-    init: (canvas, _ctx) => {
-      const {width, height} = canvas.getBoundingClientRect();
-
-      const dpr = window.devicePixelRatio;
-
-      canvas.width = width * dpr;
-      canvas.height = height * dpr;
-
-      const STAR_COUNT = 50;
-
-      this.stars ||= Array(STAR_COUNT).fill().map(() => ({
-        x: Math.random() * canvas.width,
-        y: Math.random() * canvas.height,
-        z: Math.random()
-      }));
-    },
-    draw: (ctx) => {
-      const canvas = ctx.canvas;
-      const dpr = window.devicePixelRatio;
-
-      const SIZE = 5;
-      const VELOCITY = 3;
-      const PERSPECTIVE = 5;
-
-      ctx.fillStyle = 'black';
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-      ctx.fillStyle = 'white';
-
-      for (const star of this.stars) {
-        const {x, y, z} = star;
-        const size = SIZE / (1 + z * PERSPECTIVE);
-
-        ctx.fillRect(
-          x - size / 2 * dpr,
-          y - size / 2 * dpr,
-          size * dpr,
-          size * dpr
-        )
-
-        star.x = (star.x + VELOCITY * (1 - z)) % canvas.width;
-      }
-    }
-  });
-</script>
