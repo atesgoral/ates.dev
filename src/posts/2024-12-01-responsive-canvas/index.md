@@ -45,19 +45,18 @@ const resizeObserver = new ResizeObserver((entries) => {
 function render(id, {init, draw, resize = true}) {
   const canvas = document.querySelector(`#${id}`);
   const ctx = canvas.getContext("2d");
+  const state = {};
   let visible = false;
   let rafId = null;
 
   function initOnRaf() {
-    requestAnimationFrame(() => {
-      init(canvas, ctx);
-    });
+    requestAnimationFrame(() => init.call(state, canvas, ctx));
   }
 
   function raf(draw) {
     rafId = requestAnimationFrame((t) => {
       raf(draw);
-      draw(ctx, t);
+      draw.call(state, ctx, t);
     });
   }
 
@@ -981,4 +980,54 @@ not so.
 
 Let's get moving!
 
-TO BE CONTINUED
+<p class="canvas-container">
+  <canvas id="canvas-starfield" class="fit black"></canvas>
+</p>
+
+<script>
+  render('canvas-starfield', {
+    init: (canvas, _ctx) => {
+      const {width, height} = canvas.getBoundingClientRect();
+
+      const dpr = window.devicePixelRatio;
+
+      canvas.width = width * dpr;
+      canvas.height = height * dpr;
+
+      const STAR_COUNT = 50;
+
+      this.stars ||= Array(STAR_COUNT).fill().map(() => ({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        z: Math.random()
+      }));
+    },
+    draw: (ctx) => {
+      const canvas = ctx.canvas;
+      const dpr = window.devicePixelRatio;
+
+      const SIZE = 5;
+      const VELOCITY = 3;
+      const PERSPECTIVE = 5;
+
+      ctx.fillStyle = 'black';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      ctx.fillStyle = 'white';
+
+      for (const star of this.stars) {
+        const {x, y, z} = star;
+        const size = SIZE / (1 + z * PERSPECTIVE);
+
+        ctx.fillRect(
+          x - size / 2 * dpr,
+          y - size / 2 * dpr,
+          size * dpr,
+          size * dpr
+        )
+
+        star.x = (star.x + VELOCITY * (1 - z)) % canvas.width;
+      }
+    }
+  });
+</script>
