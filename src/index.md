@@ -115,7 +115,8 @@ camera, showing an image being transmitted through reflection">
 </p>
 
 <p class="meta">
-  <a href="http://atesgoral.github.io/hrm-solutions/">http://atesgoral.github.io/hrm-solutions</a> &middot;
+  <a href="https://atesgoral.github.io/airgap/">https://atesgoral.github.io/airgap/</a> &middot;
+  <a href="https://github.com/atesgoral/airgap">https://github.com/atesgoral/airgap</a> &middot;
   2015
 </p>
 
