@@ -21,8 +21,14 @@ code {
 
 pre {
   margin: 1rlh 0;
+  font-size: 0.875rlh;
+  background: rgba(207, 47, 151, 0.1568627451);
+  padding: 0.5rlh;
+  border-radius: 4px;
 }
-
+pre.dweet {
+  white-space: pre-wrap;
+}
 pre > code {
   display: block;
   font-size: inherit;
@@ -44,12 +50,12 @@ pre > code::-webkit-scrollbar-thumb {
 pre > code::-webkit-scrollbar-thumb:hover {
   background: #555;
 }
-
-pre {
-  font-size: 0.875rlh;
-  background: rgba(207, 47, 151, 0.1568627451);
-  padding: 0.5rlh;
-  border-radius: 4px;
+pre > .length {
+  position: absolute;
+  bottom: -0.5rlh;
+  font-size: 0.625rlh;
+  right: 0.25rlh;
+  opacity: 0.5;
 }
 
 pre:has(.language-html), pre:has(.language-js), pre:has(.language-css) {

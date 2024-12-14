@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta property="og:title" content="Dweet" />
+    <meta property="og:type" content="article" />
+    <meta property="og:description" content="" />
+    
+    <meta
+      property="og:image"
+      content="https://ates.dev/posts/2024-12-13-dweet/i/default-dweet.png"
+    />
+    <meta property="og:image:alt" content="" />
+    
+    <meta property="og:locale" content="en_CA" />
+    <meta property="og:site_name" content="ates.dev" />
+    <title>ates.dev &middot; Dweet</title>
+    <script>
+      (() => {
+        const themeOverride = localStorage.getItem('theme-override');
+        const lightMode = themeOverride && themeOverride === 'light';
+        document.documentElement.classList.toggle('light-mode', lightMode);
+      })();
+    </script>
+    <link
+      rel="preload"
+      href="/assets/fonts/varelaround-regular-webfont.woff2"
+      as="font"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="preload"
+      href="/assets/logos/bluesky.svg"
+      as="image"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="preload"
+      href="/assets/logos/github.svg"
+      as="image"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      href="/assets/icons/favicon-96x96.png"
+      sizes="96x96"
+    />
+    <link rel="icon" type="image/svg+xml" href="/assets/icons/favicon.svg" />
+    <link rel="shortcut icon" href="/assets/icons/favicon.ico" />
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="/assets/icons/apple-touch-icon.png"
+    />
+    <meta name="apple-mobile-web-app-title" content="ates.dev" />
+    <link rel="manifest" href="/assets/icons/site.webmanifest" />
+    <link rel="stylesheet" href="/styles/style.css" />
+    <link rel="me" href="https://bsky.app/profile/ates.dev" />
+    <link rel="me" href="https://www.dwitter.net/u/magna" />
+    <link rel="me" href="https://github.com/atesgoral" />
+    <link rel="me" href="https://www.npmjs.com/~atesgoral" />
+    <link rel="me" href="https://hackaday.io/atesgoral" />
+    <link rel="me" href="https://www.instagram.com/atesgoral" />
+    <link rel="me" href="https://stackoverflow.com/users/23501/ates-goral" />
+    <link rel="me" href="https://www.linkedin.com/in/atesgoral/" />
+    <link rel="me" href="https://twitter.com/atesgoral" />
+    <link rel="me" href="https://x.com/atesgoral" />
+    <script src="/assets/js/prog.js?bust=1"></script>
+  </head>
+  <body>
+    <header>
+      <h1>
+        <a href="/">ates.dev</a>
+      </h1>
+      <nav>
+        <ul>
+          <li>
+            <a href="/">Home</a>
+          </li>
+          <li>
+            <a
+              href="/pages/all-posts"
+              >Posts</a
+            >
+          </li>
+          <li>
+            <a
+              href="/pages/all-pages"
+              >Pages</a
+            >
+          </li>
+          <li>
+            <a
+              href="/pages/about"
+              >About</a
+            >
+          </li>
+          <li class="break"></li>
+          <li>
+            <a
+              href="https://bsky.app/profile/ates.dev"
+              rel="me"
+              class="bluesky logo"
+              >Bluesky</a
+            >
+          </li>
+          <li>
+            <a href="https://github.com/atesgoral" rel="me" class="github logo"
+              >GitHub</a
+            >
+          </li>
+        </ul>
+      </nav>
+    </header>
+
+    <main>
+<article>
+  <h2>Dweet</h2>
+  <p class="meta">Posted on Dec 13, 2024</p>
+
+  <div class="content"><script>
+function tailDebounce(fn, delay) {
+  let timer;
+
+  return function (...args) {
+    clearTimeout(timer);
+    timer = setTimeout(() => fn.apply(this, args), delay);
+  };
+}
+
+function clamp(v, min, max) {
+  return Math.min(Math.max(v, min), max);
+}
+
+const visibilityCallbacks = new WeakMap();
+
+const visibilityObserver = new IntersectionObserver((entries) => {
+  for (const entry of entries) {
+    entry.target.setAttribute('data-in-viewport', entry.isIntersecting);
+    visibilityCallbacks.get(entry.target)?.(entry.isIntersecting);
+  }
+}, {
+  threshold: 0.75,
+});
+
+const resizeCallbacks = new WeakMap();
+
+const resizeObserver = new ResizeObserver((entries) => {
+  for (const entry of entries) {
+    if (entry.contentRect) {
+      resizeCallbacks.get(entry.target)?.();
+    }
+  }
+});
+
+function render(idOrNode, {init, draw, resize = true}) {
+  const canvas = typeof id === 'string'
+    ? document.querySelector(`#${idOrNode}`)
+    : idOrNode;
+  const ctx = canvas.getContext("2d");
+  const state = {};
+  let visible = false;
+  let rafId = null;
+
+  function initOnRaf() {
+    requestAnimationFrame(() => init.call(state, canvas, ctx));
+  }
+
+  function raf(draw) {
+    rafId = requestAnimationFrame((t) => {
+      raf(draw);
+      try {
+        draw.call(state, ctx, t);
+      } catch (error) {
+        console.error('Error on draw', error);
+        cancelAnimationFrame(rafId);
+      }
+    });
+  }
+
+  if (init) {
+    initOnRaf();
+  }
+
+  if (draw) {
+    visibilityCallbacks.set(canvas, (newVisible) => {
+      if (newVisible) {
+        if (!visible) {
+          raf(draw);
+        }
+      } else {
+        if (visible && rafId) {
+          cancelAnimationFrame(rafId);
+          rafId = null;
+        }
+      }
+
+      visible = newVisible;
+    });
+
+    visibilityObserver.observe(canvas);
+  }
+
+  if (resize && init) {
+    const debouncedInitOnRaf = tailDebounce(initOnRaf, 100);
+
+    resizeCallbacks.set(canvas, debouncedInitOnRaf);
+    resizeObserver.observe(canvas);
+  }
+}
+
+function dweetRenderer(src) {
+  const u = new Function('t', src);
+
+  const wrapped = new Function('state', 'time', `
+    with (state) {
+      (${u})(time);
+    }
+  `);
+
+  const minFrameTimeMs = 1000 / 60
+  let lastRenderTime = null;
+
+  return {
+    init(canvas, ctx) {
+      canvas.width = 1920;
+      canvas.height = 1080;
+
+      Object.assign(this, {
+        frame: 0,
+        c: canvas,
+        x: ctx,
+        S: Math.sin,
+        C: Math.cos,
+        T: Math.tan,
+        R: (r,g,b,a) => {
+          a = a === undefined ? 1 : a;
+          return 'rgba(' + (r | 0) + ',' + (g | 0) + ',' + (b | 0) + ',' + a + ')';
+        },
+      });
+    },
+    draw(ctx, t) {
+      const now = performance.now();
+
+      if (lastRenderTime === null) {
+        lastRenderTime = now - minFrameTimeMs;
+      } else {
+        const elapsedTime = now - lastRenderTime;
+
+        if (elapsedTime >= minFrameTimeMs) {
+          lastRenderTime = now;
+
+          let time = this.frame / 60;
+
+          if (time * 60 | 0 == this.frame - 1) {
+            time += 0.000001;
+          }
+
+          this.frame++;
+
+          wrapped(this, time);
+        }
+      }
+    },
+    resize: false,
+  }
+}
+</script>
+<script>
+window.addEventListener('DOMContentLoaded', () => {
+  const lengthTemplate = document.querySelector('#dweet-length-template');
+  const playerTemplate = document.querySelector('#dweet-player-template');
+  const playableDweets = document.querySelectorAll('.dweet.play');
+
+  playableDweets.forEach((playableDweet) => {
+    const src = playableDweet.querySelector('code').textContent.trim();
+    const length = lengthTemplate.querySelector('div').cloneNode(true);
+    const player = playerTemplate.querySelector('p').cloneNode(true);
+    const canvas = player.querySelector('canvas');
+
+    length.querySelector('span').innerText = src.length;
+
+    playableDweet.appendChild(length);
+
+    playableDweet.parentNode.insertBefore(player, playableDweet.nextSibling);
+
+    render(canvas, dweetRenderer(src));
+  });
+});
+</script>
+<div id="dweet-length-template" style="display: none">
+  <div class="length"><span></span>/140</div>
+</div>
+<div id="dweet-player-template" style="display: none">
+  <p class="canvas-container">
+    <span class="canvas-subcontainer">
+      <canvas class="fit white"></canvas>
+    </span>
+  </p>
+</div>
+<pre class="dweet play"><code class="language-js">c.width = 1920; //clear the canvas
+for (i = 0; i < 9; i++) x.fillRect(400 + i * 100 + S(t) * 300, 400, 50, 200); //render 50x200 rectangles
+</code></pre>
+<h3 id="obvious-things" tabindex="-1"><a class="permalink" href="#obvious-things">Obvious things</a></h3>
+<pre class="dweet"><code class="language-js">c.width=1920;for(i=0;i<9;i++)x.fillRect(400+i*100+S(t)*300,400,50,200)
+</code></pre>
+<h3 id="idempotency" tabindex="-1"><a class="permalink" href="#idempotency">Idempotency</a></h3>
+<pre><code>c.width=1920
+c.width|=0
+++++++++++--
+</code></pre>
+<h3 id="loop-inversion" tabindex="-1"><a class="permalink" href="#loop-inversion">Loop inversion</a></h3>
+<pre><code>for(i=0;i&lt;9;i++)
+for(i=9;i--;)
++++++++++++++---
+</code></pre>
+<pre class="dweet"><code class="language-js">c.width|=0;for(i=9;i--;)x.fillRect(400+i*100+S(t)*300,400,50,200)
+</code></pre>
+<h3 id="compromising" tabindex="-1"><a class="permalink" href="#compromising">Compromising</a></h3>
+<pre><code>c.width|=0;for(i=9;i--;)
+for(c.width|=i=9;i--;)
+++++++++++++++++++++++--
+</code></pre>
+<pre class="dweet play"><code class="language-js">for(c.width|=i=9;i--;)x.fillRect(400+i*100+S(t)*300,400,50,200)
+</code></pre>
+<pre class="dweet play"><code class="language-js">x.beginPath();x.arc(960,540,400,0,Math.PI*2);x.fill()
+</code></pre>
+<pre><code>Math.PI*2
+7
++--------
+</code></pre>
+<pre class="dweet play"><code class="language-js">x.beginPath();x.arc(960,540,400,0,7);x.fill()
+</code></pre>
+</div>
+
+  
+</article>
+</main>
+
+    <footer>
+      <hr />
+      <p class="footer meta">
+        &copy; Ate<span class="sh">s</span> Göral &middot;
+        <a href="https://github.com/atesgoral/ates.dev">src</a> &middot;
+        <a href="https://www.11ty.dev/">11ty</a>
+      </p>
+    </footer>
+  </body>
+</html>

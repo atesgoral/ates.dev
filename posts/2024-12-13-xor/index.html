@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta property="og:title" content="A Brain Teaser and a Digression into XOR" />
+    <meta property="og:type" content="article" />
+    <meta property="og:description" content="" />
+    
+    <meta
+      property="og:image"
+      content="https://ates.dev/posts/2024-12-13-xor/i/missing-item-with-xor.png"
+    />
+    <meta property="og:image:alt" content="" />
+    
+    <meta property="og:locale" content="en_CA" />
+    <meta property="og:site_name" content="ates.dev" />
+    <title>ates.dev &middot; A Brain Teaser and a Digression into XOR</title>
+    <script>
+      (() => {
+        const themeOverride = localStorage.getItem('theme-override');
+        const lightMode = themeOverride && themeOverride === 'light';
+        document.documentElement.classList.toggle('light-mode', lightMode);
+      })();
+    </script>
+    <link
+      rel="preload"
+      href="/assets/fonts/varelaround-regular-webfont.woff2"
+      as="font"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="preload"
+      href="/assets/logos/bluesky.svg"
+      as="image"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="preload"
+      href="/assets/logos/github.svg"
+      as="image"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      href="/assets/icons/favicon-96x96.png"
+      sizes="96x96"
+    />
+    <link rel="icon" type="image/svg+xml" href="/assets/icons/favicon.svg" />
+    <link rel="shortcut icon" href="/assets/icons/favicon.ico" />
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="/assets/icons/apple-touch-icon.png"
+    />
+    <meta name="apple-mobile-web-app-title" content="ates.dev" />
+    <link rel="manifest" href="/assets/icons/site.webmanifest" />
+    <link rel="stylesheet" href="/styles/style.css" />
+    <link rel="me" href="https://bsky.app/profile/ates.dev" />
+    <link rel="me" href="https://www.dwitter.net/u/magna" />
+    <link rel="me" href="https://github.com/atesgoral" />
+    <link rel="me" href="https://www.npmjs.com/~atesgoral" />
+    <link rel="me" href="https://hackaday.io/atesgoral" />
+    <link rel="me" href="https://www.instagram.com/atesgoral" />
+    <link rel="me" href="https://stackoverflow.com/users/23501/ates-goral" />
+    <link rel="me" href="https://www.linkedin.com/in/atesgoral/" />
+    <link rel="me" href="https://twitter.com/atesgoral" />
+    <link rel="me" href="https://x.com/atesgoral" />
+    <script src="/assets/js/prog.js?bust=1"></script>
+  </head>
+  <body>
+    <header>
+      <h1>
+        <a href="/">ates.dev</a>
+      </h1>
+      <nav>
+        <ul>
+          <li>
+            <a href="/">Home</a>
+          </li>
+          <li>
+            <a
+              href="/pages/all-posts"
+              >Posts</a
+            >
+          </li>
+          <li>
+            <a
+              href="/pages/all-pages"
+              >Pages</a
+            >
+          </li>
+          <li>
+            <a
+              href="/pages/about"
+              >About</a
+            >
+          </li>
+          <li class="break"></li>
+          <li>
+            <a
+              href="https://bsky.app/profile/ates.dev"
+              rel="me"
+              class="bluesky logo"
+              >Bluesky</a
+            >
+          </li>
+          <li>
+            <a href="https://github.com/atesgoral" rel="me" class="github logo"
+              >GitHub</a
+            >
+          </li>
+        </ul>
+      </nav>
+    </header>
+
+    <main>
+<article>
+  <h2>A Brain Teaser and a Digression into XOR</h2>
+  <p class="meta">Posted on Dec 13, 2024</p>
+
+  <div class="content"><p>Suppose there’s a 100-item array made up of integers 0 through 99 (inclusive). One item is randomly taken out of the array. If you’re only given the resultant 99-item array, how would you find the the number that was taken out? Assume the array is not sorted.</p>
+<p>Perhaps due to the “not sorted” qualifier acting as a red herring, one might be inclined to sorting the array as a first step:</p>
+<p>Sort the array, and then walk through it once, looking at the difference between subsequent items. The missing number can be found at the point the difference is not 1.</p>
+<p>This is a valid algorithm, but would be unnecessarily computationally expensive due to the sorting that is involved. What about a solution that would only require iterating through the array once?</p>
+<p>What follows is just one of several optimal answers. Afterwards, I'll show an alternative, more “hacky” answer — and it is that answer that prompted me to write this short article in the first place.</p>
+<p>If you add all the items in the 99-item array, and if you know the expected sum of all integers between 0 and 99, you can find the missing number by subtracting the sum of the items in the array from this expected sum.</p>
+<p>The sum of integers 0..n ] can be calculated using [the following formula:</p>
+<pre><code class="language-js">n \* (n + 1) / 2
+</code></pre>
+<p>So, for integers [0..99 ] we know the sum to be:</p>
+<pre><code class="language-js">99 \* (99 + 1) / 2 === 4950
+</code></pre>
+<p>By the way, here’s how an array with a missing number can be prepared (not part of the question or answer, but you can use this setup to test different answers):</p>
+<pre><code class="language-js">const n = 99;
+
+// Will hold all numbers [0..99 ]
+const all = [ ];
+
+for (let i = 0; i Math.random() - 0.5);
+
+// Get a clone not to mess with the original array
+const partial = all.slice(0);
+
+// Remove a random item
+partial.splice(partial.length \* Math.random() | 0, 1);
+</code></pre>
+<p>Then, a conventional implementation for our answer would be:</p>
+<pre><code class="language-js">const expectedSum = 99 \* (99 + 1) / 2;
+
+let partialSum = 0;
+
+for (let i = 0; i s + n);
+</code></pre>
+<p>And if we just hard-code the known sum, we get this terse one-liner that directly evaluates to the missing number:</p>
+<pre><code class="language-js">const missingNumber = 4950 - partial.reduce((s, n) =&gt; s + n);
+</code></pre>
+<p>We now have the answer in missingNumber. For all intents and purposes, this is a correct answer and we’re done.</p>
+<p>In the above answer, we used summation to find the missing number directly by subtracting the partial sum from the expected sum. We are essentially using a known checksum to find a discrepancy (e.g. a missing item) in a set of values.</p>
+<p>Summation is not the only operation that comes into play at computing checksums. A useful operator that pops up in checksum computations as well as cryptography is XOR (exclusive or.)</p>
+<p>Another way we can directly find the missing number is by XORing the XOR of all items in the partial array with the known XOR of all integers [0..99 ]. The resulting implementation simply looks a lot more interesting. We’ll get to it in a bit.</p>
+<p>First, a quick recap of what XOR (^) does. At the bit level:</p>
+<pre><code class="language-js">0 ^ (0 === 0);
+0 ^ (1 === 1);
+1 ^ (0 === 1);
+1 ^ (1 === 0);
+</code></pre>
+<p>Beyond single bits, XORing any two numbers means aligning their bits by their least significant bits and XORing each aligned bit pair. Let’s take 3 ^ 5 as an example. 3 in binary is 011 and 5 in binary is 101:</p>
+<pre><code>  011
+^ 101
+-----
+  110
+</code></pre>
+<p>Therefore the result of 3 ^ 5 in binary is110. Or in decimal, 6.</p>
+<p>XOR has the following properties of interest to us:</p>
+<ol>
+<li>0 is the identity element: a ^ 0 === a</li>
+<li>Each number is its own inverse element: a ^ a === 0</li>
+<li>Associativity: (a ^ b) ^ c === a ^ (b ^ c)</li>
+</ol>
+<p>From the above, it follows that you can restore the value of a number a by XORing it twice with any number b. Suppose c is obtained by:</p>
+<pre><code class="language-js">c = a ^ b;
+</code></pre>
+<p>Then what is the result of XORing c again with b? In 4 steps:</p>
+<ol>
+<li>Substitution: c ^ b === (a ^ b) ^ b</li>
+<li>Associativity: c ^ b === a ^ (b ^ b)</li>
+<li>Inverse element: c ^ b === a ^ 0</li>
+<li>Identity: c ^ b === a</li>
+</ol>
+<p>We get the original value, <code>a</code>.</p>
+<p>From this we can intuit the following: Given a number <code>a</code>, if we first XOR it with 99 other numbers and then XOR the result with the same 99 numbers, we should get back <code>a</code>.</p>
+<p>We can therefore find the missing number in the question by:</p>
+<ol>
+<li>Computing or hard-coding the XOR of all 100 numbers [0..99 ]</li>
+<li>Computing the XOR of all 99 numbers given to us in the partial array</li>
+<li>XORing the two results from above to directly find the missing number</li>
+</ol>
+<p>So, let’s compute the XOR of all numbers <code>[0..99]</code> in order to hard-code it in our answer. But let’s do this while watching the intermediate values of xor:</p>
+<pre><code class="language-js">let xor = 0; // 0 is the identity for XOR
+
+for (var n = 0; n x ^ n);
+</code></pre>
+<p>Using XOR in this context is nothing technically groundbreaking. It’s just serendipitous that the XOR of numbers [0..99 ] turns out to be 0, which makes the second answer look a lot more interesting, and creates a good excuse to write a digression into XOR like this.</p>
+<p>Bonus</p>
+<p>I dabble in JavaScript code golfing and hang out at the jsgolf Slack team. I asked this question there to see to what extremes the golfing community would take the already-very-terse a.reduce((x,n)=&gt;x^n) (called the array a and removed the spaces) answer.</p>
+<p>Here’s the result:</p>
+<p>eval(a.join ^ )</p>
+<p>Credits for the above answer go to veubeke and corruptio.</p>
+<p>P.S. Thanks to Leigh Bryant for copy-editing an earlier version of this article.</p>
+</div>
+
+  
+</article>
+</main>
+
+    <footer>
+      <hr />
+      <p class="footer meta">
+        &copy; Ate<span class="sh">s</span> Göral &middot;
+        <a href="https://github.com/atesgoral/ates.dev">src</a> &middot;
+        <a href="https://www.11ty.dev/">11ty</a>
+      </p>
+    </footer>
+  </body>
+</html>
