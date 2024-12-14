@@ -203,30 +203,24 @@ x.fillRect(400+i*100+S(t)*300,400,50,200) // draw 50x200 rects
 
 ### Idempotency
 
-```
-c.width=1920
+<pre><code>c.width=19<span class="remove">20</span>
 c.width|=0
-++++++++++--
-```
+</code></pre>
 
 ### Loop inversion
 
-```
-for(i=0;i<9;i++)
+<pre><code>for(i=0;i<9;i<span class="remove">++)</span>
 for(i=9;i--;)
-+++++++++++++---
-```
+</code></pre>
 
 <pre class="dweet"><code class="language-js">c.width|=0;for(i=9;i--;)x.fillRect(400+i*100+S(t)*300,400,50,200)
 </code></pre>
 
 ### Compromising
 
-```
-c.width|=0;for(i=9;i--;)
+<pre><code>c.width|=0;for(i=9;i--<span class="remove">;)</span>
 for(c.width|=i=9;i--;)
-++++++++++++++++++++++--
-```
+</code></pre>
 
 <pre class="dweet play"><code class="language-js">for(c.width|=i=9;i--;)x.fillRect(400+i*100+S(t)*300,400,50,200)
 </code></pre>
@@ -234,11 +228,9 @@ for(c.width|=i=9;i--;)
 <pre class="dweet play"><code class="language-js">x.beginPath();x.arc(960,540,400,0,Math.PI*2);x.fill()
 </code></pre>
 
-```
-Math.PI*2
+<pre><code>M<span class="remove">ath.PI*2</span>
 7
-+--------
-```
+</code></pre>
 
 <pre class="dweet play"><code class="language-js">x.beginPath();x.arc(960,540,400,0,7);x.fill()
 </code></pre>

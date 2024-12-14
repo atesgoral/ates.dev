@@ -55,6 +55,17 @@ pre {
     &::-webkit-scrollbar-thumb:hover {
       background: #555; // Color of the thumb on hover
     }
+
+    > span.add {
+      // color: #00ff00;
+    }
+
+    > span.remove {
+      // opacity: 0.75;
+      // text-decoration: underline;
+      box-sizing: border-box;
+      border-bottom: 3px dotted rgb(255, 55, 0);
+    }
   }
 
   & > .length {
