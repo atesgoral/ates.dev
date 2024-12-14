@@ -156,6 +156,10 @@ pre > code::-webkit-scrollbar-thumb {
 pre > code::-webkit-scrollbar-thumb:hover {
   background: #555;
 }
+pre > code > span.remove {
+  box-sizing: border-box;
+  border-bottom: 3px dotted rgb(255, 55, 0);
+}
 pre > .length {
   position: absolute;
   bottom: -0.5rlh;
