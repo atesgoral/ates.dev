@@ -153,24 +153,79 @@
 <p>The page selector in Photoshop's color picker display a sample color from each page. This offset specifies which of the colors on a page will be used as the page sample. &quot;0&quot; means the first (topmost) color. &quot;1&quot; means the second one and so on. If the offset exceeds or is equal to the number of colors on the page, the last color is used.</p>
 <h4 id="color-spacelibrary-identifier" tabindex="-1"><a class="permalink" href="#color-spacelibrary-identifier">Color Space/Library Identifier</a></h4>
 <p>A 16-bit integer that specifies the color space/library. Values that Photoshop 7.0 recognizes are:</p>
-<ul>
-<li>0 -- RGB</li>
-<li>2 -- CMYK</li>
-<li>7 -- Lab</li>
-</ul>
+<table>
+<thead>
+<tr>
+<th>Value</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>RGB</td>
+</tr>
+<tr>
+<td>2</td>
+<td>CMYK</td>
+</tr>
+<tr>
+<td>7</td>
+<td>Lab</td>
+</tr>
+</tbody>
+</table>
 <p>The rest of the values can be found in the official &quot;Adobe Photoshop 6.0 File Formats Specification&quot;, but they apparently don't work for color books. Note that the 6.0 specification has no information on color book files. The full range of color space/library identifier values are:</p>
-<ul>
-<li>0 -- RGB</li>
-<li>1 -- HSB (HSV)</li>
-<li>2 -- CMYK</li>
-<li>3 -- Pantone</li>
-<li>4 -- Focoltone</li>
-<li>5 -- Trumatch</li>
-<li>6 -- Toyo</li>
-<li>7 -- Lab (CIELAB D50)</li>
-<li>8 -- Grayscale</li>
-<li>10 -- HKS</li>
-</ul>
+<table>
+<thead>
+<tr>
+<th>Value</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>RGB</td>
+</tr>
+<tr>
+<td>1</td>
+<td>HSB (HSV)</td>
+</tr>
+<tr>
+<td>2</td>
+<td>CMYK</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Pantone</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Focoltone</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Trumatch</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Toyo</td>
+</tr>
+<tr>
+<td>7</td>
+<td>Lab (CIELAB D50)</td>
+</tr>
+<tr>
+<td>8</td>
+<td>Grayscale</td>
+</tr>
+<tr>
+<td>10</td>
+<td>HKS</td>
+</tr>
+</tbody>
+</table>
 <h3 id="color-records" tabindex="-1"><a class="permalink" href="#color-records">Color Records</a></h3>
 <p>Immediately following the header are the individual color records. There are exactly as many color records as there was specified by the <a href="#color-count">Color Count</a> field.</p>
 <p>Photoshop may display fewer colors then there are in the color book file because some color records are dummy records used for padding purposes. When a page has to contain fewer colors than the number specified by <a href="#page-size">Page Size</a>, dummy records are inserted. Photoshop doesn't display these records.</p>

@@ -662,3 +662,30 @@ canvas.fit {
 .hidden {
   display: none;
 }
+
+table {
+  line-height: 1rlh;
+  margin: 0.5rlh 0;
+  border-spacing: 0.5rlh 0;
+}
+
+th, td {
+  padding: 0;
+}
+
+th {
+  position: relative;
+  padding-bottom: 0.5rlh;
+  text-align: left;
+}
+th:after {
+  content: "";
+  display: block;
+  height: 2px;
+  border-radius: 1px;
+  background-color: rgba(204, 204, 204, 0.5019607843);
+  position: absolute;
+  bottom: 0.25rlh;
+  left: 0;
+  width: 100%;
+}
