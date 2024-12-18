@@ -70,22 +70,26 @@ The page selector in Photoshop's color picker display a sample color from each p
 
 A 16-bit integer that specifies the color space/library. Values that Photoshop 7.0 recognizes are:
 
-- 0 -- RGB
-- 2 -- CMYK
-- 7 -- Lab
+| Value | Meaning |
+| ----- | ------- |
+| 0     | RGB     |
+| 2     | CMYK    |
+| 7     | Lab     |
 
 The rest of the values can be found in the official "Adobe Photoshop 6.0 File Formats Specification", but they apparently don't work for color books. Note that the 6.0 specification has no information on color book files. The full range of color space/library identifier values are:
 
-- 0 -- RGB
-- 1 -- HSB (HSV)
-- 2 -- CMYK
-- 3 -- Pantone
-- 4 -- Focoltone
-- 5 -- Trumatch
-- 6 -- Toyo
-- 7 -- Lab (CIELAB D50)
-- 8 -- Grayscale
-- 10 -- HKS
+| Value | Meaning          |
+| ----- | ---------------- |
+| 0     | RGB              |
+| 1     | HSB (HSV)        |
+| 2     | CMYK             |
+| 3     | Pantone          |
+| 4     | Focoltone        |
+| 5     | Trumatch         |
+| 6     | Toyo             |
+| 7     | Lab (CIELAB D50) |
+| 8     | Grayscale        |
+| 10    | HKS              |
 
 ### Color Records
 
