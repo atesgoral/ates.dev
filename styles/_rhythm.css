@@ -1,3 +1,4 @@
+@charset "UTF-8";
 html, body {
   font-size: 100%;
 }
@@ -68,6 +69,22 @@ dd,
 dt {
   font-size: 0.75rlh;
   line-height: 1rlh;
+}
+
+blockquote {
+  margin: 0.5rlh 0 0.5rlh 1.5rlh;
+  opacity: 0.85;
+  position: relative;
+}
+blockquote:before {
+  line-height: 1rlh;
+  font-size: 2rlh;
+  content: "“";
+  text-align: center;
+  position: absolute;
+  left: -1.5rlh;
+  top: 0.5rlh;
+  opacity: 0.5;
 }
 
 .avatar > img {
