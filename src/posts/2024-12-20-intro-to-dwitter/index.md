@@ -1,10 +1,9 @@
 ---
 layout: layouts/post
 title: 'A Short Introduction to Dwitter and JavaScript Golfing'
-description: ''
+description: 'A very short introduction to JavaScript golfing on Dwitter, with a focus on the "default dweet".'
 image: i/default-dweet.png
 date: 2024-12-20
-draft: true
 ---
 
 <script>
