@@ -70,6 +70,9 @@
     <script src="/assets/js/prog.js?bust=1"></script>
   </head>
   <body>
+    {% for lib in libs %}
+    <script src="/lib/{{ lib }}.js"></script>
+    {% endfor %}
     <header>
       <h1>
         {% if page.url == '/' %}ates.dev{% else %}<a href="/">ates.dev</a>{%

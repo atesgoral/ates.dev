@@ -1,95 +1,18 @@
 ---
 layout: layouts/post
-title: "Responsive Canvas Rendering"
-description: "Techniques for responsive canvas rendering to maintain crisp visuals across varying screen sizes."
+title: 'Responsive Canvas Rendering'
+description: 'Techniques for responsive canvas rendering to maintain crisp visuals across varying screen sizes.'
 image: i/responsive-canvas.png
-alt: "A filled circle and an empty circle on an HTML canvas, with a zoomed-in view of the anti-aliasing at their edges."
+alt: 'A filled circle and an empty circle on an HTML canvas, with a zoomed-in view of the anti-aliasing at their edges.'
 date: 2024-12-08
+libs:
+  - render
 bluesky: https://bsky.app/profile/ates.dev/post/3lctuxtbaxs2z
 ---
 
 <script>
-function tailDebounce(fn, delay) {
-  let timer;
-
-  return function (...args) {
-    clearTimeout(timer);
-    timer = setTimeout(() => fn.apply(this, args), delay);
-  };
-}
-
 function clamp(v, min, max) {
   return Math.min(Math.max(v, min), max);
-}
-
-const visibilityCallbacks = new WeakMap();
-
-const visibilityObserver = new IntersectionObserver((entries) => {
-  for (const entry of entries) {
-    entry.target.setAttribute('data-in-viewport', entry.isIntersecting);
-    visibilityCallbacks.get(entry.target)?.(entry.isIntersecting);
-  }
-}, {
-  threshold: 0.75,
-});
-
-const resizeCallbacks = new WeakMap();
-
-const resizeObserver = new ResizeObserver((entries) => {
-  for (const entry of entries) {
-    if (entry.contentRect) {
-      resizeCallbacks.get(entry.target)?.();
-    }
-  }
-});
-
-function render(id, {init, draw, resize = true}) {
-  const canvas = document.querySelector(`#${id}`);
-  const ctx = canvas.getContext("2d");
-  const state = {};
-  let visible = false;
-  let rafId = null;
-
-  function initOnRaf() {
-    requestAnimationFrame(() => init.call(state, canvas, ctx));
-  }
-
-  function raf(draw) {
-    rafId = requestAnimationFrame((t) => {
-      raf(draw);
-      draw.call(state, ctx, t);
-    });
-  }
-
-  if (init) {
-    initOnRaf();
-  }
-
-  if (draw) {
-    visibilityCallbacks.set(canvas, (newVisible) => {
-      if (newVisible) {
-        if (!visible) {
-          raf(draw);
-        }
-      } else {
-        if (visible && rafId) {
-          cancelAnimationFrame(rafId);
-          rafId = null;
-        }
-      }
-
-      visible = newVisible;
-    });
-
-    visibilityObserver.observe(canvas);
-  }
-
-  if (resize && init) {
-    const debouncedInitOnRaf = tailDebounce(initOnRaf, 100);
-
-    resizeCallbacks.set(canvas, debouncedInitOnRaf);
-    resizeObserver.observe(canvas);
-  }
 }
 
 function initDprDemo(canvas, ctx, forceDpr) {
@@ -197,19 +120,19 @@ Now, let's fill it black and then render a 100x100 white square in its middle:
 ```
 
 ```js
-const canvas = document.querySelector("#canvas");
-const ctx = canvas.getContext("2d");
+const canvas = document.querySelector('#canvas');
+const ctx = canvas.getContext('2d');
 
 ctx.fillRect(0, 0, canvas.width, canvas.height);
 
 const SIZE = 100;
 
-ctx.fillStyle = "white";
+ctx.fillStyle = 'white';
 ctx.fillRect(
   canvas.width / 2 - SIZE / 2,
   canvas.height / 2 - SIZE / 2,
   SIZE,
-  SIZE
+  SIZE,
 );
 ```
 
@@ -368,13 +291,7 @@ the drawing primitives:
 const radius = RADIUS * dpr;
 
 ctx.beginPath();
-ctx.arc(
-  canvas.width / 2,
-  canvas.height / 2,
-  radius,
-  0,
-  Math.PI * 2
-);
+ctx.arc(canvas.width / 2, canvas.height / 2, radius, 0, Math.PI * 2);
 ctx.fill();
 
 // Display DPR
@@ -509,13 +426,7 @@ const radius = canvas.height / 3;
 
 ctx.fillStyle = 'white';
 ctx.beginPath();
-ctx.arc(
-  canvas.width / 2,
-  canvas.height / 2,
-  radius,
-  0,
-  Math.PI * 2
-);
+ctx.arc(canvas.width / 2, canvas.height / 2, radius, 0, Math.PI * 2);
 ctx.fill();
 ```
 
@@ -609,13 +520,7 @@ function draw() {
 
   ctx.fillStyle = 'white';
   ctx.beginPath();
-  ctx.arc(
-    canvas.width / 2,
-    canvas.height / 2,
-    radius,
-    0,
-    Math.PI * 2
-  );
+  ctx.arc(canvas.width / 2, canvas.height / 2, radius, 0, Math.PI * 2);
   ctx.fill();
 }
 
@@ -746,13 +651,7 @@ const draw = () => {
 
     ctx.fillStyle = 'white';
     ctx.beginPath();
-    ctx.arc(
-      canvas.width / 2,
-      canvas.height / 2,
-      radius,
-      0,
-      Math.PI * 2
-    );
+    ctx.arc(canvas.width / 2, canvas.height / 2, radius, 0, Math.PI * 2);
     ctx.fill();
   });
 };
@@ -851,13 +750,7 @@ ctx.lineWidth = 3;
 
 ctx.strokeStyle = 'white';
 ctx.beginPath();
-ctx.arc(
-  canvas.width / 2,
-  canvas.height / 2,
-  radius,
-  0,
-  Math.PI * 2
-);
+ctx.arc(canvas.width / 2, canvas.height / 2, radius, 0, Math.PI * 2);
 ctx.stroke();
 
 const fontSize = 1 * dpr;
@@ -967,4 +860,3 @@ If your DPR is greater than 1, the border should still appear more or less the
 same thickness as the previous one, but blurrier.
 
 Solid shapes, images, and text should consider DPR for clarity. Strokes not so.
-

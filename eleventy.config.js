@@ -13,6 +13,7 @@ export default function (eleventyConfig) {
   eleventyConfig.addPassthroughCopy('src/pages/*/*.pde');
   eleventyConfig.addPassthroughCopy('src/posts/*/i/*');
   eleventyConfig.addPassthroughCopy('src/posts/*/*.js');
+  eleventyConfig.addPassthroughCopy('src/lib/*.js');
 
   eleventyConfig.addFilter('debug', (value) => Object.keys(value));
 

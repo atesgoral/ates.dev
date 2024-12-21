@@ -4,99 +4,11 @@ title: 'A Short Introduction to Dwitter and JavaScript Golfing'
 description: 'A very short introduction to JavaScript golfing on Dwitter, with a focus on the "default dweet".'
 image: i/default-dweet.png
 date: 2024-12-20
+libs:
+  - render
 ---
 
 <script>
-function tailDebounce(fn, delay) {
-  let timer;
-
-  return function (...args) {
-    clearTimeout(timer);
-    timer = setTimeout(() => fn.apply(this, args), delay);
-  };
-}
-
-function clamp(v, min, max) {
-  return Math.min(Math.max(v, min), max);
-}
-
-const visibilityCallbacks = new WeakMap();
-
-const visibilityObserver = new IntersectionObserver((entries) => {
-  for (const entry of entries) {
-    entry.target.setAttribute('data-in-viewport', entry.isIntersecting);
-    visibilityCallbacks.get(entry.target)?.(entry.isIntersecting);
-  }
-}, {
-  threshold: 0.75,
-});
-
-const resizeCallbacks = new WeakMap();
-
-const resizeObserver = new ResizeObserver((entries) => {
-  for (const entry of entries) {
-    if (entry.contentRect) {
-      resizeCallbacks.get(entry.target)?.();
-    }
-  }
-});
-
-function render(idOrNode, {init, draw, resize = true}) {
-  const canvas = typeof id === 'string'
-    ? document.querySelector(`#${idOrNode}`)
-    : idOrNode;
-  const ctx = canvas.getContext("2d");
-  const state = {};
-  let visible = false;
-  let rafId = null;
-
-  function initOnRaf() {
-    requestAnimationFrame(() => init.call(state, canvas, ctx));
-  }
-
-  function raf(draw) {
-    rafId = requestAnimationFrame((t) => {
-      raf(draw);
-      try {
-        draw.call(state, ctx, t);
-      } catch (error) {
-        console.error('Error on draw', error);
-        cancelAnimationFrame(rafId);
-      }
-    });
-  }
-
-  if (init) {
-    initOnRaf();
-  }
-
-  if (draw) {
-    visibilityCallbacks.set(canvas, (newVisible) => {
-      if (newVisible) {
-        if (!visible) {
-          raf(draw);
-        }
-      } else {
-        if (visible && rafId) {
-          cancelAnimationFrame(rafId);
-          rafId = null;
-        }
-      }
-
-      visible = newVisible;
-    });
-
-    visibilityObserver.observe(canvas);
-  }
-
-  if (resize && init) {
-    const debouncedInitOnRaf = tailDebounce(initOnRaf, 100);
-
-    resizeCallbacks.set(canvas, debouncedInitOnRaf);
-    resizeObserver.observe(canvas);
-  }
-}
-
 function dweetRenderer(src) {
   const u = new Function('t', src);
 
