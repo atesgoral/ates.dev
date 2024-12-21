@@ -73,6 +73,8 @@
     
     <script src="/lib/render.js"></script>
     
+    <script src="/lib/dweet.js"></script>
+    
     <header>
       <h1>
         <a href="/">ates.dev</a>
@@ -123,100 +125,7 @@
   <h2>A Short Introduction to Dwitter and JavaScript Golfing</h2>
   <p class="meta">Posted on Dec 20, 2024</p>
 
-  <div class="content"><script>
-function dweetRenderer(src) {
-  const u = new Function('t', src);
-
-  const wrapped = new Function('state', 'time', `
-    with (state) {
-      (${u})(time);
-    }
-  `);
-
-  const minFrameTimeMs = 1000 / 60
-  let lastRenderTime = null;
-
-  return {
-    init(canvas, ctx) {
-      canvas.width = 1920;
-      canvas.height = 1080;
-
-      Object.assign(this, {
-        frame: 0,
-        c: canvas,
-        x: ctx,
-        S: Math.sin,
-        C: Math.cos,
-        T: Math.tan,
-        R: (r,g,b,a) => {
-          a = a === undefined ? 1 : a;
-          return 'rgba(' + (r | 0) + ',' + (g | 0) + ',' + (b | 0) + ',' + a + ')';
-        },
-      });
-    },
-    draw(ctx, t) {
-      const now = performance.now();
-
-      if (lastRenderTime === null) {
-        lastRenderTime = now - minFrameTimeMs;
-      } else {
-        const elapsedTime = now - lastRenderTime;
-
-        if (elapsedTime >= minFrameTimeMs) {
-          lastRenderTime = now;
-
-          let time = this.frame / 60;
-
-          if (time * 60 | 0 == this.frame - 1) {
-            time += 0.000001;
-          }
-
-          this.frame++;
-
-          wrapped(this, time);
-        }
-      }
-    },
-    resize: false,
-  }
-}
-</script>
-<script>
-window.addEventListener('DOMContentLoaded', () => {
-  const lengthTemplate = document.querySelector('#dweet-length-template');
-  const playerTemplate = document.querySelector('#dweet-player-template');
-  const dweets = document.querySelectorAll('.dweet');
-
-  dweets.forEach((dweet) => {
-    const src = dweet.querySelector('code').textContent.trim();
-    const length = lengthTemplate.querySelector('div').cloneNode(true);
-
-    length.querySelector('span').innerText = src.length;
-
-    dweet.appendChild(length);
-
-    if (dweet.classList.contains('play')) {
-      const player = playerTemplate.querySelector('p').cloneNode(true);
-      const canvas = player.querySelector('canvas');
-
-      dweet.parentNode.insertBefore(player, dweet.nextSibling);
-
-      render(canvas, dweetRenderer(src));
-    }
-  });
-});
-</script>
-<div id="dweet-length-template" style="display: none">
-  <div class="length"><span></span>/140</div>
-</div>
-<div id="dweet-player-template" style="display: none">
-  <p class="canvas-container">
-    <span class="canvas-subcontainer">
-      <canvas class="fit white"></canvas>
-    </span>
-  </p>
-</div>
-<p>This is a brief introduction to <a href="https://en.wikipedia.org/wiki/Code_golf">JavaScript golfing</a> — not the competitive
+  <div class="content"><p>This is a brief introduction to <a href="https://en.wikipedia.org/wiki/Code_golf">JavaScript golfing</a> — not the competitive
 kind, but the kind on <a href="https://www.dwitter.net/">Dwitter</a>: a community for sharing visual JavaScript
 demos in 140 characters.</p>
 <p>The Dwitter community has a friendly and collaborative remix culture (where
@@ -345,5 +254,17 @@ for(c.width|=i=9;i--;)
         <a href="https://www.11ty.dev/">11ty</a>
       </p>
     </footer>
+
+    <div id="dweet-length-template" style="display: none">
+      <div class="length"><span></span>/140</div>
+    </div>
+
+    <div id="dweet-player-template" style="display: none">
+      <p class="canvas-container">
+        <span class="canvas-subcontainer">
+          <canvas class="fit white"></canvas>
+        </span>
+      </p>
+    </div>
   </body>
 </html>
