@@ -73,7 +73,14 @@ pre {
     bottom: -0.5rlh;
     font-size: 0.625rlh;
     right: 0.25rlh;
-    opacity: 0.5;
+
+    &.too-long > span {
+      color: #ff6600;
+    }
+  }
+
+  &.no-length > .length {
+    display: none;
   }
 }
 
