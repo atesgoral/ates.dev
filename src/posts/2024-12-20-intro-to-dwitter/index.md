@@ -7,6 +7,7 @@ date: 2024-12-20
 libs:
   - render
   - dweet
+bluesky: https://bsky.app/profile/ates.dev/post/3ldou6c244k2x
 ---
 
 This is a brief introduction to [JavaScript golfing][1] &mdash; not the competitive
@@ -138,6 +139,3 @@ We shave another 2 characters off.
 Down to 63.
 
 And with that, one Dwitter article down, `n` to go.
-
-<p class="meta">This was a short one, but there's more where this came from.
-</p>
