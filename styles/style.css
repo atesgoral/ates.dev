@@ -181,7 +181,12 @@ pre > .length {
   bottom: -0.5rlh;
   font-size: 0.625rlh;
   right: 0.25rlh;
-  opacity: 0.5;
+}
+pre > .length.too-long > span {
+  color: #ff6600;
+}
+pre.no-length > .length {
+  display: none;
 }
 
 pre:has(.language-html), pre:has(.language-js), pre:has(.language-css) {
