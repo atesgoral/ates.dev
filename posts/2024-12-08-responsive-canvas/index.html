@@ -70,6 +70,9 @@
     <script src="/assets/js/prog.js?bust=1"></script>
   </head>
   <body>
+    
+    <script src="/lib/render.js"></script>
+    
     <header>
       <h1>
         <a href="/">ates.dev</a>
@@ -121,87 +124,8 @@
   <p class="meta">Posted on Dec 08, 2024</p>
 
   <div class="content"><script>
-function tailDebounce(fn, delay) {
-  let timer;
-
-  return function (...args) {
-    clearTimeout(timer);
-    timer = setTimeout(() => fn.apply(this, args), delay);
-  };
-}
-
 function clamp(v, min, max) {
   return Math.min(Math.max(v, min), max);
-}
-
-const visibilityCallbacks = new WeakMap();
-
-const visibilityObserver = new IntersectionObserver((entries) => {
-  for (const entry of entries) {
-    entry.target.setAttribute('data-in-viewport', entry.isIntersecting);
-    visibilityCallbacks.get(entry.target)?.(entry.isIntersecting);
-  }
-}, {
-  threshold: 0.75,
-});
-
-const resizeCallbacks = new WeakMap();
-
-const resizeObserver = new ResizeObserver((entries) => {
-  for (const entry of entries) {
-    if (entry.contentRect) {
-      resizeCallbacks.get(entry.target)?.();
-    }
-  }
-});
-
-function render(id, {init, draw, resize = true}) {
-  const canvas = document.querySelector(`#${id}`);
-  const ctx = canvas.getContext("2d");
-  const state = {};
-  let visible = false;
-  let rafId = null;
-
-  function initOnRaf() {
-    requestAnimationFrame(() => init.call(state, canvas, ctx));
-  }
-
-  function raf(draw) {
-    rafId = requestAnimationFrame((t) => {
-      raf(draw);
-      draw.call(state, ctx, t);
-    });
-  }
-
-  if (init) {
-    initOnRaf();
-  }
-
-  if (draw) {
-    visibilityCallbacks.set(canvas, (newVisible) => {
-      if (newVisible) {
-        if (!visible) {
-          raf(draw);
-        }
-      } else {
-        if (visible && rafId) {
-          cancelAnimationFrame(rafId);
-          rafId = null;
-        }
-      }
-
-      visible = newVisible;
-    });
-
-    visibilityObserver.observe(canvas);
-  }
-
-  if (resize && init) {
-    const debouncedInitOnRaf = tailDebounce(initOnRaf, 100);
-
-    resizeCallbacks.set(canvas, debouncedInitOnRaf);
-    resizeObserver.observe(canvas);
-  }
 }
 
 function initDprDemo(canvas, ctx, forceDpr) {
@@ -289,19 +213,19 @@ position on the page.</p>
 <p>Now, let's fill it black and then render a 100x100 white square in its middle:</p>
 <pre><code class="language-html">&lt;canvas id=&quot;canvas&quot;&gt;&lt;/canvas&gt;
 </code></pre>
-<pre><code class="language-js">const canvas = document.querySelector(&quot;#canvas&quot;);
-const ctx = canvas.getContext(&quot;2d&quot;);
+<pre><code class="language-js">const canvas = document.querySelector('#canvas');
+const ctx = canvas.getContext('2d');
 
 ctx.fillRect(0, 0, canvas.width, canvas.height);
 
 const SIZE = 100;
 
-ctx.fillStyle = &quot;white&quot;;
+ctx.fillStyle = 'white';
 ctx.fillRect(
   canvas.width / 2 - SIZE / 2,
   canvas.height / 2 - SIZE / 2,
   SIZE,
-  SIZE
+  SIZE,
 );
 </code></pre>
 <p class="canvas-container">
@@ -433,13 +357,7 @@ the drawing primitives:</p>
 const radius = RADIUS * dpr;
 
 ctx.beginPath();
-ctx.arc(
-  canvas.width / 2,
-  canvas.height / 2,
-  radius,
-  0,
-  Math.PI * 2
-);
+ctx.arc(canvas.width / 2, canvas.height / 2, radius, 0, Math.PI * 2);
 ctx.fill();
 
 // Display DPR
@@ -562,13 +480,7 @@ radius of 1/3 of the canvas height:</p>
 
 ctx.fillStyle = 'white';
 ctx.beginPath();
-ctx.arc(
-  canvas.width / 2,
-  canvas.height / 2,
-  radius,
-  0,
-  Math.PI * 2
-);
+ctx.arc(canvas.width / 2, canvas.height / 2, radius, 0, Math.PI * 2);
 ctx.fill();
 </code></pre>
 <script>
@@ -648,13 +560,7 @@ use a <a href="https://developer.mozilla.org/en-US/docs/Web/API/window/requestAn
 
   ctx.fillStyle = 'white';
   ctx.beginPath();
-  ctx.arc(
-    canvas.width / 2,
-    canvas.height / 2,
-    radius,
-    0,
-    Math.PI * 2
-  );
+  ctx.arc(canvas.width / 2, canvas.height / 2, radius, 0, Math.PI * 2);
   ctx.fill();
 }
 
@@ -762,13 +668,7 @@ const draw = () =&gt; {
 
     ctx.fillStyle = 'white';
     ctx.beginPath();
-    ctx.arc(
-      canvas.width / 2,
-      canvas.height / 2,
-      radius,
-      0,
-      Math.PI * 2
-    );
+    ctx.arc(canvas.width / 2, canvas.height / 2, radius, 0, Math.PI * 2);
     ctx.fill();
   });
 };
@@ -860,13 +760,7 @@ for at least 100ms, the scene is redrawn and the crispiness is restored.</p>
 
 ctx.strokeStyle = 'white';
 ctx.beginPath();
-ctx.arc(
-  canvas.width / 2,
-  canvas.height / 2,
-  radius,
-  0,
-  Math.PI * 2
-);
+ctx.arc(canvas.width / 2, canvas.height / 2, radius, 0, Math.PI * 2);
 ctx.stroke();
 
 const fontSize = 1 * dpr;
