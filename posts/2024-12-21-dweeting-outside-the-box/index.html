@@ -130,8 +130,29 @@ overview of <a href="https://www.dwitter.net/">Dwitter</a> and a few JavaScript 
 <p>The subject was the &quot;default dweet&quot;, which renders 9 bars swaying back and
 forth. I'll keep the subject the same, but show rendering those 9 bars in
 different ways.</p>
+<p>Changing up how you render a scene often opens up new opportunities for visual
+effects because it's like stepping into another dimension.</p>
 <p>Let's start with recalling the default dweet:</p>
 <pre class="dweet play"><code class="language-js">c.width|=0;for(i=9;i--;)x.fillRect(400+i*100+S(t)*300,400,50,200)
+</code></pre>
+<h3 id="scale" tabindex="-1"><a class="permalink" href="#scale">Scale</a></h3>
+<p>Seeing that the bars click into a 50x50 grid, one might be tempted to scale the
+context to save on digits. Let's scale the context by 50 and divide all
+dimensions by 50:</p>
+<pre class="dweet play"><code class="language-js">c.width|=0;x.scale(50,50);for(i=9;i--;)x.fillRect(8+i*2+S(t)*6,8,1,4)
+</code></pre>
+<p>I this particular case, the extra length of <code>x.scale(50,50)</code> is not offset by
+the savings we got from fewer digits. We went from 65 to 69 characters.</p>
+<p>In tiny-space coding, intuitions often don't pan out. You just have to try
+things for fit.</p>
+<p>We can also scale the canvas itself, but we'll heavily compromise on rendering
+quality. However, it's often an aesthetic choice to get things super blurry.</p>
+<p>Let's make the canvas ~50 times smaller. <code>1920 / 50 = 38.4</code>. <code>38</code> should be
+good enough for our purposes.</p>
+<pre class="dweet play"><code class="language-js">c.width=38;for(i=9;i--;)x.fillRect(8+i*2+S(t)*6,8,1,4)
+</code></pre>
+<h3 id="transform" tabindex="-1"><a class="permalink" href="#transform">Transform</a></h3>
+<pre class="dweet play"><code class="language-js">for(c.width|=i=9,Z=1,A=0;i--;x.fillRect(-560+i*100+S(t)*300,-140,50,200))x.setTransform(k=C(A)*Z,z=S(A)*Z,-z,k,960,540)
 </code></pre>
 <h3 id="punching-holes" tabindex="-1"><a class="permalink" href="#punching-holes">Punching holes</a></h3>
 <p>You can use <code>clearRect()</code> whenever you want to render a white rectangle over a
@@ -177,22 +198,32 @@ x.clearRect(0,400,X,200)
 x.clearRect(X+850,400,1070-X,200)
 for(i=8;i--;)x.clearRect(X+50+i*100,400,50,200)
 </code></pre>
-<p>Let's properly golf this down to fit in 140 characters.</p>
+<p>Let's golf this down to fit in 140 characters.</p>
 <h4 id="exponential-notation" tabindex="-1"><a class="permalink" href="#exponential-notation">Exponential notation</a></h4>
 <p><code>2e3</code>, which means <code>2 * 10^3</code>, is shorter than <code>2000</code>. And 2000 is a perfectly
-good substitute for <code>1920</code> and <code>1080</code>. The canvas API doesn't mind if you
-draw or clear outside of it. Let's replace some numbers:</p>
+good substitute for 1920 and 1080. The canvas API doesn't mind if you draw or
+clear outside of it.</p>
+<p>And since the minimum value of <code>X</code> is 100, the minimum value of <code>1070-X</code> is 970.
+We could use <code>970</code> or <code>1e3</code>, to the same effect.</p>
+<p>Let's replace some numbers:</p>
 <pre class="dweet play"><code class="language-js">x.fillRect(0,0,2e3,2e3)
 x.clearRect(0,0,2e3,400)
 x.clearRect(0,600,2e3,480)
 X=400+S(t)*300
 x.clearRect(0,400,X,200)
-x.clearRect(X+850,400,1070-X,200)
+x.clearRect(X+850,400,1e3,200)
 for(i=8;i--;)x.clearRect(X+50+i*100,400,50,200)
 </code></pre>
-<p>And let's introduce a utility function to clear rectangles to reduce repetition:</p>
-<p class="meta">Check out my originals and remixes
-over at Dwitter under "<a href="https://www.dwitter.net/u/magna/top">magna</a>" to see some of these tricks in action.</p>
+<p>And let's introduce a utility function, <code>p</code>, to reduce repetition:</p>
+<pre class="dweet play"><code class="language-js">p=(X,Y,W,H)=>x.clearRect(X,Y,W,H)
+x.fillRect(0,0,2e3,2e3)
+p(0,0,2e3,400)
+p(0,600,2e3,480)
+X=400+S(t)*300
+p(0,400,X,200)
+p(X+850,400,1e3,200)
+for(i=8;i--;)p(X+50+i*100,400,50,200)
+</code></pre>
 </div>
 
   
