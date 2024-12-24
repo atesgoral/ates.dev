@@ -43,6 +43,66 @@ the savings we got from fewer digits. We went from 65 to 69 characters.
 In tiny-space coding, intuitions often don't pan out. You just have to try
 things for fit.
 
+### Transform
+
+Instead of positioning the elements of the scene by x and y offsets from the top
+left, we can use `translate()` to shift the frame of reference to the center of
+the canvas. This can yield two benefits:
+
+1. If there are multiple primitives in the scene, we don't have to repeat adding
+   offsets to them and therefore save on characters.
+2. We can use `rotate()` to rotate them around the center of the canvas.
+
+`translate(960, 540)` moves the origin `(0, 0)` to the center of the canvas.
+Assume we're going to rotate by angle `A` using `rotate(A)`. We can combine
+these stacked transformations into a single `setTransform()` call, saving
+precious space. Let's also throw `Z`, the zoom factor, into the mix. The verbose
+form is:
+
+```js
+x.setTransform(C(A) * Z, S(A) * Z, -S(A) * Z, C(A) * Z, 960, 540);
+```
+
+Here's the default scene using such combined transformations:
+
+<pre class="dweet play"><code class="language-js">for(c.width|=i=9,Z=1,A=0;i--;x.fillRect(-560+i*100+S(t)*300,-140,50,200))x.setTransform(k=C(A)*Z,z=S(A)*Z,-z,k,960,540)
+</code></pre>
+
+This transformation setup unlocks perfect-loop opportunities like [so][3]:
+
+[3]: https://www.dwitter.net/d/21975
+
+<pre class="dweet play"><code class="language-js">for(c.width|=i=9;i--;x.fillRect(-425+i*100,-103,99-p**.3*50,206))p=t/2%1,Z=2.26+p*7.34,x.setTransform(k=C(A=1.57*p)*Z,z=S(A)*Z,-z,k,960,540)
+</code></pre>
+
+And [so][4]:
+
+[4]: https://www.dwitter.net/d/13859
+
+<pre class="dweet play"><code class="language-js">eval(unescape(escape`挮睩摴桼㵦㵢㴾房❣汥慲剥捴✺❦楬汒散琧㭳㵓⡴⤻娽㤵〪猪⨴⬵〻甽䌨琩⩚㭸学⡵㸰⥝⠰ⰰⰲ攳ⰲ攳⤻砮瑲慮獦潲洨甬稽猪娬⵺Ⱶⰹ㘰ⰵ㐰⤻景爨椽ㄸ㭩ⴭ㬩硛昨椦ㄩ崨椭㤬ⴲⰱⰴ⤻`.replace(/u(..)/g,"$1%")))
+</code></pre>
+
+That gibberish? It's an oft-used compression hack to stuff more than 140
+characters into a dweet. The raw characters are encoded as UTF-16 code units,
+and then escaped as UTF-8 code units. It doesn't necessarily go against the
+"140 characters" rule of Dwitter, because the rule was never about "bytes", but
+rather "characters". But it's not as pleasing as fitting a dweet into 140
+characters without compression.
+
+A quick way to see what the uncompressed version is, is to replace the `eval()`
+with a `throw`. The [perpetual-beta version of Dwitter][5] comes with a toggle
+to show uncompressed code.
+
+To compress, you can use the wonderful [CapJS][6] tool created by the one and
+only [Frank Force][7].
+
+[5]: https://beta.dwitter.net/
+[6]: https://capjs.3d2k.com/
+[7]: https://frankforce.com/
+
+<!--
+# Attic
+
 We can also scale the canvas itself, but we'll heavily compromise on rendering
 quality. However, it's often an aesthetic choice to get things super blurry.
 
@@ -50,11 +110,6 @@ Let's make the canvas ~50 times smaller. `1920 / 50 = 38.4`. `38` should be
 good enough for our purposes.
 
 <pre class="dweet play"><code class="language-js">c.width=38;for(i=9;i--;)x.fillRect(8+i*2+S(t)*6,8,1,4)
-</code></pre>
-
-### Transform
-
-<pre class="dweet play"><code class="language-js">for(c.width|=i=9,Z=1,A=0;i--;x.fillRect(-560+i*100+S(t)*300,-140,50,200))x.setTransform(k=C(A)*Z,z=S(A)*Z,-z,k,960,540)
 </code></pre>
 
 ### Punching holes
@@ -140,3 +195,4 @@ p(0,400,X,200)
 p(X+850,400,1e3,200)
 for(i=8;i--;)p(X+50+i*100,400,50,200)
 </code></pre>
+-->
