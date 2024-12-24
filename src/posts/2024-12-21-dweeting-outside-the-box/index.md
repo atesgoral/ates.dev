@@ -93,6 +93,11 @@ A quick way to see what the uncompressed version is, is to replace the `eval()`
 with a `throw`. The [perpetual-beta version of Dwitter][5] comes with a toggle
 to show uncompressed code.
 
+Here's the uncompressed version of the dweet above:
+
+<pre class="dweet"><code class="language-js">c.width|=f=b=>b?'clearRect':'fillRect';s=S(t);Z=950*s**4+50;u=C(t)*Z;x[f(u>0)](0,0,2e3,2e3);x.transform(u,z=s*Z,-z,u,960,540);for(i=18;i--;)x[f(i&1)](i-9,-2,1,4)
+</code></pre>
+
 To compress, you can use the wonderful [CapJS][6] tool created by the one and
 only [Frank Force][7].
 
