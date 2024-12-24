@@ -652,9 +652,15 @@ html {
   display: flex;
   transition: opacity 0.3s ease-in-out;
 }
-
 .canvas-subcontainer[data-in-viewport=false] {
   opacity: 0.5;
+}
+.canvas-subcontainer.dweet-container {
+  height: 150px;
+  aspect-ratio: 16/9;
+}
+.canvas-subcontainer.dweet-container > canvas {
+  width: 100%;
 }
 
 canvas {

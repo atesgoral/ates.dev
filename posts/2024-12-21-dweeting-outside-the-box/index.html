@@ -145,20 +145,62 @@ dimensions by 50:</p>
 the savings we got from fewer digits. We went from 65 to 69 characters.</p>
 <p>In tiny-space coding, intuitions often don't pan out. You just have to try
 things for fit.</p>
-<p>We can also scale the canvas itself, but we'll heavily compromise on rendering
-quality. However, it's often an aesthetic choice to get things super blurry.</p>
-<p>Let's make the canvas ~50 times smaller. <code>1920 / 50 = 38.4</code>. <code>38</code> should be
-good enough for our purposes.</p>
-<pre class="dweet play"><code class="language-js">c.width=38;for(i=9;i--;)x.fillRect(8+i*2+S(t)*6,8,1,4)
-</code></pre>
 <h3 id="transform" tabindex="-1"><a class="permalink" href="#transform">Transform</a></h3>
+<p>Instead of positioning the elements of the scene by x and y offsets from the top
+left, we can use <code>translate()</code> to shift the frame of reference to the center of
+the canvas. This can yield two benefits:</p>
+<ol>
+<li>If there are multiple primitives in the scene, we don't have to repeat adding
+offsets to them and therefore save on characters.</li>
+<li>We can use <code>rotate()</code> to rotate them around the center of the canvas.</li>
+</ol>
+<p><code>translate(960, 540)</code> moves the origin <code>(0, 0)</code> to the center of the canvas.
+Assume we're going to rotate by angle <code>A</code> using <code>rotate(A)</code>. We can combine
+these stacked transformations into a single <code>setTransform()</code> call, saving
+precious space. Let's also throw <code>Z</code>, the zoom factor, into the mix. The verbose
+form is:</p>
+<pre><code class="language-js">x.setTransform(C(A) * Z, S(A) * Z, -S(A) * Z, C(A) * Z, 960, 540);
+</code></pre>
+<p>Here's the default scene using such combined transformations:</p>
 <pre class="dweet play"><code class="language-js">for(c.width|=i=9,Z=1,A=0;i--;x.fillRect(-560+i*100+S(t)*300,-140,50,200))x.setTransform(k=C(A)*Z,z=S(A)*Z,-z,k,960,540)
 </code></pre>
-<h3 id="punching-holes" tabindex="-1"><a class="permalink" href="#punching-holes">Punching holes</a></h3>
-<p>You can use <code>clearRect()</code> whenever you want to render a white rectangle over a
-dark background because Dwitter sets the background of the canvas to white.</p>
-<p>First, let's render our hole punchers in different colors to see their
-positions:</p>
+<p>This transformation setup unlocks perfect-loop opportunities like <a href="https://www.dwitter.net/d/21975">so</a>:</p>
+<pre class="dweet play"><code class="language-js">for(c.width|=i=9;i--;x.fillRect(-425+i*100,-103,99-p**.3*50,206))p=t/2%1,Z=2.26+p*7.34,x.setTransform(k=C(A=1.57*p)*Z,z=S(A)*Z,-z,k,960,540)
+</code></pre>
+<p>And <a href="https://www.dwitter.net/d/13859">so</a>:</p>
+<pre class="dweet play"><code class="language-js">eval(unescape(escape`挮睩摴桼㵦㵢㴾房❣汥慲剥捴✺❦楬汒散琧㭳㵓⡴⤻娽㤵〪猪⨴⬵〻甽䌨琩⩚㭸学⡵㸰⥝⠰ⰰⰲ攳ⰲ攳⤻砮瑲慮獦潲洨甬稽猪娬⵺Ⱶⰹ㘰ⰵ㐰⤻景爨椽ㄸ㭩ⴭ㬩硛昨椦ㄩ崨椭㤬ⴲⰱⰴ⤻`.replace(/u(..)/g,"$1%")))
+</code></pre>
+<p>That gibberish? It's an oft-used compression hack to stuff more than 140
+characters into a dweet. The raw characters are encoded as UTF-16 code units,
+and then escaped as UTF-8 code units. It doesn't necessarily go against the
+&quot;140 characters&quot; rule of Dwitter, because the rule was never about &quot;bytes&quot;, but
+rather &quot;characters&quot;. But it's not as pleasing as fitting a dweet into 140
+characters without compression.</p>
+<p>A quick way to see what the uncompressed version is, is to replace the <code>eval()</code>
+with a <code>throw</code>. The <a href="https://beta.dwitter.net/">perpetual-beta version of Dwitter</a> comes with a toggle
+to show uncompressed code.</p>
+<p>To compress, you can use the wonderful <a href="https://capjs.3d2k.com/">CapJS</a> tool created by the one and
+only <a href="https://frankforce.com/">Frank Force</a>.</p>
+<!--
+# Attic
+
+We can also scale the canvas itself, but we'll heavily compromise on rendering
+quality. However, it's often an aesthetic choice to get things super blurry.
+
+Let's make the canvas ~50 times smaller. `1920 / 50 = 38.4`. `38` should be
+good enough for our purposes.
+
+<pre class="dweet play"><code class="language-js">c.width=38;for(i=9;i--;)x.fillRect(8+i*2+S(t)*6,8,1,4)
+</code></pre>
+
+### Punching holes
+
+You can use `clearRect()` whenever you want to render a white rectangle over a
+dark background because Dwitter sets the background of the canvas to white.
+
+First, let's render our hole punchers in different colors to see their
+positions:
+
 <pre class="dweet play no-length"><code class="language-js">// black background
 x.fillStyle = "black";
 x.fillRect(0, 0, 1920, 1080);
@@ -188,8 +230,10 @@ for (i = 8; i--; ) {
   x.fillRect(X + 50 + i * 100, 400, 50, 200);
 }
 </code></pre>
-<p>And with actually clearing out the rectangles, and with some minimal effort in
-golfing this down in length:</p>
+
+And with actually clearing out the rectangles, and with some minimal effort in
+golfing this down in length:
+
 <pre class="dweet play"><code class="language-js">x.fillRect(0,0,1920,1080)
 x.clearRect(0,0,1920,400)
 x.clearRect(0,600,1920,480)
@@ -198,14 +242,20 @@ x.clearRect(0,400,X,200)
 x.clearRect(X+850,400,1070-X,200)
 for(i=8;i--;)x.clearRect(X+50+i*100,400,50,200)
 </code></pre>
-<p>Let's golf this down to fit in 140 characters.</p>
-<h4 id="exponential-notation" tabindex="-1"><a class="permalink" href="#exponential-notation">Exponential notation</a></h4>
-<p><code>2e3</code>, which means <code>2 * 10^3</code>, is shorter than <code>2000</code>. And 2000 is a perfectly
+
+Let's golf this down to fit in 140 characters.
+
+#### Exponential notation
+
+`2e3`, which means `2 * 10^3`, is shorter than `2000`. And 2000 is a perfectly
 good substitute for 1920 and 1080. The canvas API doesn't mind if you draw or
-clear outside of it.</p>
-<p>And since the minimum value of <code>X</code> is 100, the minimum value of <code>1070-X</code> is 970.
-We could use <code>970</code> or <code>1e3</code>, to the same effect.</p>
-<p>Let's replace some numbers:</p>
+clear outside of it.
+
+And since the minimum value of `X` is 100, the minimum value of `1070-X` is 970.
+We could use `970` or `1e3`, to the same effect.
+
+Let's replace some numbers:
+
 <pre class="dweet play"><code class="language-js">x.fillRect(0,0,2e3,2e3)
 x.clearRect(0,0,2e3,400)
 x.clearRect(0,600,2e3,480)
@@ -214,7 +264,9 @@ x.clearRect(0,400,X,200)
 x.clearRect(X+850,400,1e3,200)
 for(i=8;i--;)x.clearRect(X+50+i*100,400,50,200)
 </code></pre>
-<p>And let's introduce a utility function, <code>p</code>, to reduce repetition:</p>
+
+And let's introduce a utility function, `p`, to reduce repetition:
+
 <pre class="dweet play"><code class="language-js">p=(X,Y,W,H)=>x.clearRect(X,Y,W,H)
 x.fillRect(0,0,2e3,2e3)
 p(0,0,2e3,400)
@@ -224,6 +276,7 @@ p(0,400,X,200)
 p(X+850,400,1e3,200)
 for(i=8;i--;)p(X+50+i*100,400,50,200)
 </code></pre>
+-->
 </div>
 
   
@@ -245,8 +298,8 @@ for(i=8;i--;)p(X+50+i*100,400,50,200)
 
     <div id="dweet-player-template" style="display: none">
       <p class="canvas-container">
-        <span class="canvas-subcontainer">
-          <canvas class="fit white"></canvas>
+        <span class="canvas-subcontainer dweet-container">
+          <canvas class="white" width="1920" height="1080"></canvas>
         </span>
       </p>
     </div>
