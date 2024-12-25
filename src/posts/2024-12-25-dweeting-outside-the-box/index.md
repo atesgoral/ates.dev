@@ -37,10 +37,12 @@ dimensions by 50:
 <pre class="dweet play"><code class="language-js">c.width|=0;x.scale(50,50);for(i=9;i--;)x.fillRect(8+i*2+S(t)*6,8,1,4)
 </code></pre>
 
-I this particular case, the extra length of `x.scale(50,50)` is not offset by
-the savings we got from fewer digits. We went from 65 to 69 characters.
+In this particular case, the extra length of `x.scale(50,50)` is not offset by
+the savings we got from fewer digits. We went from 65 to 69 characters. The
+function call overhead (`x.scale()`) costs more characters than what we save by
+using smaller numbers.
 
-In tiny-space coding, intuitions often don't pan out. You just have to try
+In tiny-space coding, intuitions often don't pan out, you just have to try
 things for fit.
 
 ### Transform
@@ -68,7 +70,7 @@ Here's the default scene using such combined transformations:
 <pre class="dweet play"><code class="language-js">for(c.width|=i=9,Z=1,A=0;i--;x.fillRect(-560+i*100+S(t)*300,-140,50,200))x.setTransform(k=C(A)*Z,z=S(A)*Z,-z,k,960,540)
 </code></pre>
 
-This transformation setup unlocks perfect-loop opportunities like [so][3]:
+This transformation setup enables perfect-loop animations like [so][3]:
 
 [3]: https://www.dwitter.net/d/21975
 
@@ -107,33 +109,29 @@ only [Frank Force][7].
 
 ### Slice and Dice
 
-https://www.dwitter.net/d/2384
+We can chop up the bars into tiny squares and perturb their individual positions
+or colors to create interesting effects. Like [this][8] twirl:
+
+[8]: https://www.dwitter.net/d/2384
 
 <pre class="dweet play"><code class="language-js">c.width|=0;for(j=9;j--;)for(i=100;i--;X=i%5+j*10+S(t)*30,Y=i/5|0,x.fillRect(400+X*10+S(t+X+Y)*C(t)*9,400+Y*10,10,10));
 </code></pre>
 
-https://www.dwitter.net/d/24492
+And [this][9] specular highlight:
 
-<pre class="dweet play"><code class="language-js">c.width|=0
-for(i=6800;i--;p&&x.fillRect(400+X*5+S(t+S(t/2.3)**9*(C(Math.atan2(85-X,20-Y)*99)))*300,400+Y*5,5,5))X=i%170,Y=i/170|0,p=X/10&1^1
-</code></pre>
-
-https://www.dwitter.net/d/7283
+[9]: https://www.dwitter.net/d/7283
 
 <pre class="dweet play"><code class="language-js">c.width|=0;for(j=n=10;--j;)for(i=100;i--;X=i%5+j*n+S(t)*30,Y=i/5|0,x.fillStyle=R(r=255-(X-50)**2-Y**2,r,r),x.fillRect(400+X*n,400+Y*n,n,n));
 </code></pre>
 
-https://www.dwitter.net/d/24494
-
-<pre class="dweet play"><code class="language-js">c.width|=0
-for(i=6800;i--;X/10&1||x.fillRect(400+X*5+S(t)*300+C(t+Math.PI)**1*(Math.hypot(X-85,Y-20))*3,400+Y*5,6,6))X=i%170,Y=i/170|0
-</code></pre>
-
-### SDF
-
 ### XOR
 
-https://www.dwitter.net/d/22551
+We can also play with different [compositing operations][10]. [Here][11], I'm
+overlaying a bunch of rectangles in XOR mode to let them alternate between black
+and white to create the default bars:
+
+[10]: https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/globalCompositeOperation
+[11]: https://www.dwitter.net/d/22551
 
 <pre class="dweet play"><code class="language-js">c.width=1920
 x.globalCompositeOperation='xor'
@@ -142,7 +140,10 @@ for(i=18;i--;)x.fillRect(400+i*50+S(t)*300,400+i*S(t/9)**9*200,2e3,200)
 
 ### Unicode
 
-https://www.dwitter.net/d/22874
+[Here'a][12] silly one with printing text "▮▮▮▮▮▮▮▮▮" instead of rendering
+rectangles. The scaling makes the characters stretched out to create the bars:
+
+[12]: https://www.dwitter.net/d/22874
 
 <pre class="dweet play"><code class="language-js">c.width|=0
 x.scale(.5,1)
@@ -150,113 +151,21 @@ x.font='8cm"'
 x.fillText('▮▮▮▮▮▮▮▮▮',800+S(t)*600,600)
 </code></pre>
 
-### Thematic
+Note the `'8cm"'` as the font value. The `"` character creates a word boundary
+after the size unit, "cm". `"` is not a valid font name, but browsers are
+forgiving of bad syntax and bad names. This browser forgiveness is a goldmine
+for code golfers - we can use `"` instead of valid font names like `Arial` or
+`sans-serif`, saving precious characters.
 
-https://www.dwitter.net/d/29243
+### Thematic End
+
+And here's a [thematic end][13] to this post. Not quite the default bars, but
+they're hidden in there:
+
+[13]: https://www.dwitter.net/d/29243
 
 <pre class="dweet play"><code class="language-js">c.width|=0
 for(i=17;i--;)for(j=5;j--;)[2057,1,32897,0,2057][j]+87380&1&lt;&lt;i&&x.fillRect(1200-i*50+S(t)*300,400+j*40,50,40)
 </code></pre>
 
-<!--
-# Attic
-
-We can also scale the canvas itself, but we'll heavily compromise on rendering
-quality. However, it's often an aesthetic choice to get things super blurry.
-
-Let's make the canvas ~50 times smaller. `1920 / 50 = 38.4`. `38` should be
-good enough for our purposes.
-
-<pre class="dweet play"><code class="language-js">c.width=38;for(i=9;i--;)x.fillRect(8+i*2+S(t)*6,8,1,4)
-</code></pre>
-
-### Punching holes
-
-You can use `clearRect()` whenever you want to render a white rectangle over a
-dark background because Dwitter sets the background of the canvas to white.
-
-First, let's render our hole punchers in different colors to see their
-positions:
-
-<pre class="dweet play no-length"><code class="language-js">// black background
-x.fillStyle = "black";
-x.fillRect(0, 0, 1920, 1080);
-
-// punch out top
-x.fillStyle = "hsl(0,100%,50%)";
-x.fillRect(0, 0, 1920, 400);
-
-// punch out bottom
-x.fillStyle = "hsl(30,100%,50%)";
-x.fillRect(0, 600, 1920, 480);
-
-// left edge of bars
-X = 400 + S(t) * 300;
-
-// punch out left
-x.fillStyle = "hsl(60,100%,50%)";
-x.fillRect(0, 400, X, 200);
-
-// punch out right
-x.fillStyle = "hsl(90,100%,50%)";
-x.fillRect(X + 850, 400, 1070 - X, 200); // punch out right
-
-// punch out bars
-for (i = 8; i--; ) {
-  x.fillStyle = `hsl(${120 + i * 30},100%,50%)`;
-  x.fillRect(X + 50 + i * 100, 400, 50, 200);
-}
-</code></pre>
-
-And with actually clearing out the rectangles, and with some minimal effort in
-golfing this down in length:
-
-<pre class="dweet play"><code class="language-js">x.fillRect(0,0,1920,1080)
-x.clearRect(0,0,1920,400)
-x.clearRect(0,600,1920,480)
-X=400+S(t)*300
-x.clearRect(0,400,X,200)
-x.clearRect(X+850,400,1070-X,200)
-for(i=8;i--;)x.clearRect(X+50+i*100,400,50,200)
-</code></pre>
-
-Let's golf this down to fit in 140 characters.
-
-#### Exponential notation
-
-`2e3`, which means `2 * 10^3`, is shorter than `2000`. And 2000 is a perfectly
-good substitute for 1920 and 1080. The canvas API doesn't mind if you draw or
-clear outside of it.
-
-And since the minimum value of `X` is 100, the minimum value of `1070-X` is 970.
-We could use `970` or `1e3`, to the same effect.
-
-Let's replace some numbers:
-
-<pre class="dweet play"><code class="language-js">x.fillRect(0,0,2e3,2e3)
-x.clearRect(0,0,2e3,400)
-x.clearRect(0,600,2e3,480)
-X=400+S(t)*300
-x.clearRect(0,400,X,200)
-x.clearRect(X+850,400,1e3,200)
-for(i=8;i--;)x.clearRect(X+50+i*100,400,50,200)
-</code></pre>
-
-And let's introduce a utility function, `p`, to reduce repetition:
-
-<pre class="dweet play"><code class="language-js">p=(X,Y,W,H)=>x.clearRect(X,Y,W,H)
-x.fillRect(0,0,2e3,2e3)
-p(0,0,2e3,400)
-p(0,600,2e3,480)
-X=400+S(t)*300
-p(0,400,X,200)
-p(X+850,400,1e3,200)
-for(i=8;i--;)p(X+50+i*100,400,50,200)
-</code></pre>
-
-https://www.dwitter.net/d/28570
-
-<pre class="dweet play"><code class="language-js">eval(unescape(escape`󫌽󚍶󛍷󚜽󟬨󭬭󭼩󚬨󠼨󭌯󝌩󚼱󚜯󜬫󭼻󩭯󬬨󨼮󭽩󩍴󪌽󜼸󝌬󪜽󣜽󜼶󜌰󞽩󛜭󞽸󛭦󪝬󫍒󩝣󭌨󦌬󦜬󜜬󜜩󚝮󟝩󛽍󛍰󟝴󚽮󚬷󛍘󟜸󜌫󫌨󚍘󟝩󙜹󜌩󚼨󦌯󜜰󯌰󚜪󜜰󚽓󚍴󚜪󝬰󛍘󟜱󜜲󚽃󚍰󚜪󞜹󚜬󦜽󞌰󚽬󚍩󛼹󜍼󜌬󜬸󚽓󚍰󚜪󞜹󚜬󮌮󩭩󫍬󤽴󮝬󩜽󤬨󜌬󫌨󜌬󦜩󚜻`.replace(/u../g,'')))
-</code></pre>
-
--->
+A Merry Christmas and a Happy New Year!
