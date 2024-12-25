@@ -70,7 +70,7 @@ Here's the default scene using such combined transformations:
 <pre class="dweet play"><code class="language-js">for(c.width|=i=9,Z=1,A=0;i--;x.fillRect(-560+i*100+S(t)*300,-140,50,200))x.setTransform(k=C(A)*Z,z=S(A)*Z,-z,k,960,540)
 </code></pre>
 
-Note the `k` and `z` variables assignments that reduce repetition. It makes
+Note the `k` and `z` variable assignments that reduce repetition. It makes
 intuitive sense to assign repeated expressions to variables, but it only saves
 space when the expression we're substituting is longer than 2-3 characters, or
 when it's repeated for more than 2 times.
