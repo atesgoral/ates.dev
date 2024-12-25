@@ -127,7 +127,7 @@ And [this][9] specular highlight:
 
 We can also play with different [compositing operations][10]. [Here][11], I'm
 overlaying a bunch of rectangles in XOR mode to let them alternate between black
-and white to create the default bars:
+and white to create the default bars. You have to wait a bit to see the reveal:
 
 [10]: https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/globalCompositeOperation
 [11]: https://www.dwitter.net/d/22551
