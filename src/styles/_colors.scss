@@ -1,6 +1,20 @@
+:root {
+  --color-background: #1a091a;
+  --color-text: #f5ddf5;
+  --color-heading: #84ddff;
+  --color-link: #8356ff;
+  --color-link-visited: #652dff;
+  --color-link-hover: #ffa484;
+  --color-link-active: #ff652d;
+  --color-panel-background: #cf2f9728;
+  --color-panel-scrollbar-thumb: #cf2f9750;
+  --color-panel-scrollbar-thumb-hover: #cf2f97a0;
+  --color-panel-scrollbar-thumb-active: #cf2f97ff;
+}
+
 body {
-  background-color: #1a091a;
-  color: #f5ddf5;
+  background-color: var(--color-background);
+  color: var(--color-text);
   transition: color 0.3s ease-in-out, background-color 0.3s ease-in-out;
 }
 
@@ -10,6 +24,6 @@ h3,
 h4,
 h5,
 h6 {
-  color: #84ddff;
+  color: var(--color-heading);
   transition: color 0.3s ease-in-out;
 }

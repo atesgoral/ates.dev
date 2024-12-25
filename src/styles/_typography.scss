@@ -1,3 +1,5 @@
+@use "colors";
+
 @font-face {
   font-family: "Varela Round";
   src: url("../assets/fonts/varelaround-regular-webfont.woff2") format("woff2");
@@ -23,7 +25,7 @@ code {
 pre {
   margin: 1rlh 0;
   font-size: 0.875rlh;
-  background: #cf2f9728;
+  background: var(--color-panel-background);
   padding: 0.5rlh;
   border-radius: 4px;
 
@@ -36,6 +38,7 @@ pre {
     font-size: inherit;
     background: none;
     padding: 0;
+    padding-bottom: 0.5rlh;
     overflow-x: auto;
 
     &::-webkit-scrollbar {
@@ -43,17 +46,23 @@ pre {
     }
 
     &::-webkit-scrollbar-track {
-      background: #f1f1f1; // Background of the scrollbar track
-      border-radius: 4px; // Rounded corners for the thumb
+      background: var(--color-background);
+      border-radius: 0.25rlh;
     }
 
     &::-webkit-scrollbar-thumb {
-      background: #888; // Color of the scrollbar thumb
-      border-radius: 4px; // Rounded corners for the thumb
+      background: var(--color-panel-scrollbar-thumb);
+      border-radius: 0.25rlh;
+      cursor: grab;
     }
 
     &::-webkit-scrollbar-thumb:hover {
-      background: #555; // Color of the thumb on hover
+      background: var(--color-panel-scrollbar-thumb-hover);
+    }
+
+    &::-webkit-scrollbar-thumb:active {
+      background: var(--color-panel-scrollbar-thumb-active);
+      cursor: grabbing;
     }
 
     > span.add {
