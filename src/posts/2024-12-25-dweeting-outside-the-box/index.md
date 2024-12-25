@@ -7,7 +7,6 @@ date: 2024-12-25
 libs:
   - render
   - dweet
-draft: true
 ---
 
 This is a continuation of my [previous post][1] on Dwitter, where I gave an
