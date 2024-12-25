@@ -121,6 +121,36 @@ blockquote:before {
   clear: left;
 }
 
+:root {
+  --color-background: #1a091a;
+  --color-text: #f5ddf5;
+  --color-heading: #84ddff;
+  --color-link: #8356ff;
+  --color-link-visited: #652dff;
+  --color-link-hover: #ffa484;
+  --color-link-active: #ff652d;
+  --color-panel-background: #cf2f9728;
+  --color-panel-scrollbar-thumb: #cf2f9750;
+  --color-panel-scrollbar-thumb-hover: #cf2f97a0;
+  --color-panel-scrollbar-thumb-active: #cf2f97ff;
+}
+
+body {
+  background-color: var(--color-background);
+  color: var(--color-text);
+  transition: color 0.3s ease-in-out, background-color 0.3s ease-in-out;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: var(--color-heading);
+  transition: color 0.3s ease-in-out;
+}
+
 @font-face {
   font-family: "Varela Round";
   src: url("../assets/fonts/varelaround-regular-webfont.woff2") format("woff2");
@@ -144,7 +174,7 @@ code {
 pre {
   margin: 1rlh 0;
   font-size: 0.875rlh;
-  background: rgba(207, 47, 151, 0.1568627451);
+  background: var(--color-panel-background);
   padding: 0.5rlh;
   border-radius: 4px;
 }
@@ -156,21 +186,27 @@ pre > code {
   font-size: inherit;
   background: none;
   padding: 0;
+  padding-bottom: 0.5rlh;
   overflow-x: auto;
 }
 pre > code::-webkit-scrollbar {
   height: 0.5rlh;
 }
 pre > code::-webkit-scrollbar-track {
-  background: #f1f1f1;
-  border-radius: 4px;
+  background: var(--color-background);
+  border-radius: 0.25rlh;
 }
 pre > code::-webkit-scrollbar-thumb {
-  background: #888;
-  border-radius: 4px;
+  background: var(--color-panel-scrollbar-thumb);
+  border-radius: 0.25rlh;
+  cursor: grab;
 }
 pre > code::-webkit-scrollbar-thumb:hover {
-  background: #555;
+  background: var(--color-panel-scrollbar-thumb-hover);
+}
+pre > code::-webkit-scrollbar-thumb:active {
+  background: var(--color-panel-scrollbar-thumb-active);
+  cursor: grabbing;
 }
 pre > code > span.remove {
   box-sizing: border-box;
@@ -224,22 +260,6 @@ pre:has(.language-css):before {
   left: 0;
   width: 100%;
   top: 0.125lh;
-}
-
-body {
-  background-color: #1a091a;
-  color: #f5ddf5;
-  transition: color 0.3s ease-in-out, background-color 0.3s ease-in-out;
-}
-
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  color: #84ddff;
-  transition: color 0.3s ease-in-out;
 }
 
 #theme-toggle-label {
