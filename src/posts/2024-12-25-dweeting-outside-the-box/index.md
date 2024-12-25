@@ -56,7 +56,7 @@ the canvas. This can yield two benefits:
 2. We can use `rotate()` to rotate them around the center of the canvas.
 
 `translate(960, 540)` moves the origin `(0, 0)` to the center of the canvas.
-Assume we're going to rotate by angle `A` using `rotate(A)`. We can combine
+Assuming we want to rotate by angle `A` using `rotate(A)`, we can combine
 these stacked transformations into a single `setTransform()` call, saving
 precious space. Let's also throw `Z`, the zoom factor, into the mix. The verbose
 form is:
@@ -86,10 +86,9 @@ And [so][4]:
 
 That gibberish? It's an oft-used compression hack to stuff more than 140
 characters into a dweet. The raw characters are encoded as UTF-16 code units,
-and then escaped as UTF-8 code units. It doesn't necessarily go against the
-"140 characters" rule of Dwitter, because the rule was never about "bytes", but
-rather "characters". But it's not as pleasing as fitting a dweet into 140
-characters without compression.
+and then escaped as UTF-8 code units. While this doesn't technically violate the
+"140 characters" rule of Dwitter (since the rule was about characters, not bytes),
+it's not as pleasing as fitting a dweet into 140 characters without compression.
 
 A quick way to see what the uncompressed version is, is to replace the `eval()`
 with a `throw`. The [perpetual-beta version of Dwitter][5] comes with a toggle
@@ -152,8 +151,8 @@ x.fillText('▮▮▮▮▮▮▮▮▮',800+S(t)*600,600)
 </code></pre>
 
 Note the `'8cm"'` as the font value. The `"` character creates a word boundary
-after the size unit, "cm". `"` is not a valid font name, but browsers are
-forgiving of bad syntax and bad names. This browser forgiveness is a goldmine
+after the size unit "cm". While `"` is not a valid font name, browsers are
+forgiving of bad syntax and names. This browser forgiveness is a goldmine
 for code golfers - we can use `"` instead of valid font names like `Arial` or
 `sans-serif`, saving precious characters.
 
