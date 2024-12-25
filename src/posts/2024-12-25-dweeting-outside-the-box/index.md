@@ -7,6 +7,7 @@ date: 2024-12-25
 libs:
   - render
   - dweet
+bluesky: https://bsky.app/profile/ates.dev/post/3le5p4xyoyk22
 ---
 
 This is a continuation of my [previous post][1] on Dwitter, where I gave an
