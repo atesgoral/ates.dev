@@ -3,7 +3,7 @@ layout: layouts/post
 title: 'Dweeting Outside the Box'
 description: 'Demonstration of JavaScript golfing techniques by rendering the "default dweet" in different ways.'
 image: i/default-dweet.png
-date: 2024-12-21
+date: 2024-12-25
 libs:
   - render
   - dweet
@@ -105,6 +105,59 @@ only [Frank Force][7].
 [6]: https://capjs.3d2k.com/
 [7]: https://frankforce.com/
 
+### Slice and Dice
+
+https://www.dwitter.net/d/2384
+
+<pre class="dweet play"><code class="language-js">c.width|=0;for(j=9;j--;)for(i=100;i--;X=i%5+j*10+S(t)*30,Y=i/5|0,x.fillRect(400+X*10+S(t+X+Y)*C(t)*9,400+Y*10,10,10));
+</code></pre>
+
+https://www.dwitter.net/d/24492
+
+<pre class="dweet play"><code class="language-js">c.width|=0
+for(i=6800;i--;p&&x.fillRect(400+X*5+S(t+S(t/2.3)**9*(C(Math.atan2(85-X,20-Y)*99)))*300,400+Y*5,5,5))X=i%170,Y=i/170|0,p=X/10&1^1
+</code></pre>
+
+https://www.dwitter.net/d/7283
+
+<pre class="dweet play"><code class="language-js">c.width|=0;for(j=n=10;--j;)for(i=100;i--;X=i%5+j*n+S(t)*30,Y=i/5|0,x.fillStyle=R(r=255-(X-50)**2-Y**2,r,r),x.fillRect(400+X*n,400+Y*n,n,n));
+</code></pre>
+
+https://www.dwitter.net/d/24494
+
+<pre class="dweet play"><code class="language-js">c.width|=0
+for(i=6800;i--;X/10&1||x.fillRect(400+X*5+S(t)*300+C(t+Math.PI)**1*(Math.hypot(X-85,Y-20))*3,400+Y*5,6,6))X=i%170,Y=i/170|0
+</code></pre>
+
+### SDF
+
+### XOR
+
+https://www.dwitter.net/d/22551
+
+<pre class="dweet play"><code class="language-js">c.width=1920
+x.globalCompositeOperation='xor'
+for(i=18;i--;)x.fillRect(400+i*50+S(t)*300,400+i*S(t/9)**9*200,2e3,200)
+</code></pre>
+
+### Unicode
+
+https://www.dwitter.net/d/22874
+
+<pre class="dweet play"><code class="language-js">c.width|=0
+x.scale(.5,1)
+x.font='8cm"'
+x.fillText('▮▮▮▮▮▮▮▮▮',800+S(t)*600,600)
+</code></pre>
+
+### Thematic
+
+https://www.dwitter.net/d/29243
+
+<pre class="dweet play"><code class="language-js">c.width|=0
+for(i=17;i--;)for(j=5;j--;)[2057,1,32897,0,2057][j]+87380&1&lt;&lt;i&&x.fillRect(1200-i*50+S(t)*300,400+j*40,50,40)
+</code></pre>
+
 <!--
 # Attic
 
@@ -200,4 +253,10 @@ p(0,400,X,200)
 p(X+850,400,1e3,200)
 for(i=8;i--;)p(X+50+i*100,400,50,200)
 </code></pre>
+
+https://www.dwitter.net/d/28570
+
+<pre class="dweet play"><code class="language-js">eval(unescape(escape`󫌽󚍶󛍷󚜽󟬨󭬭󭼩󚬨󠼨󭌯󝌩󚼱󚜯󜬫󭼻󩭯󬬨󨼮󭽩󩍴󪌽󜼸󝌬󪜽󣜽󜼶󜌰󞽩󛜭󞽸󛭦󪝬󫍒󩝣󭌨󦌬󦜬󜜬󜜩󚝮󟝩󛽍󛍰󟝴󚽮󚬷󛍘󟜸󜌫󫌨󚍘󟝩󙜹󜌩󚼨󦌯󜜰󯌰󚜪󜜰󚽓󚍴󚜪󝬰󛍘󟜱󜜲󚽃󚍰󚜪󞜹󚜬󦜽󞌰󚽬󚍩󛼹󜍼󜌬󜬸󚽓󚍰󚜪󞜹󚜬󮌮󩭩󫍬󤽴󮝬󩜽󤬨󜌬󫌨󜌬󦜩󚜻`.replace(/u../g,'')))
+</code></pre>
+
 -->
