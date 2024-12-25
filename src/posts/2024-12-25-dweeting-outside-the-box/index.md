@@ -73,7 +73,7 @@ Here's the default scene using such combined transformations:
 Note the `k` and `z` variables assignments that reduce repetition. It makes
 intuitive sense to assign repeated expressions to variables, but it only saves
 space when the expression we're substituting is longer than 2-3 characters, or
-when it's repeated for more then 2 times.
+when it's repeated for more than 2 times.
 
 This transformation setup enables perfect-loop animations like [so][3]:
 
@@ -114,14 +114,14 @@ only [Frank Force][7].
 ### Slice and Dice
 
 We can chop up the bars into tiny squares and perturb their individual positions
-or colors to create interesting effects. Like [this][8] twirl:
+or colors to create interesting effects. Like [this][8] specular highlight:
 
 [8]: https://www.dwitter.net/d/7283
 
 <pre class="dweet play"><code class="language-js">c.width|=0;for(j=n=10;--j;)for(i=100;i--;X=i%5+j*n+S(t)*30,Y=i/5|0,x.fillStyle=R(r=255-(X-50)**2-Y**2,r,r),x.fillRect(400+X*n,400+Y*n,n,n));
 </code></pre>
 
-And [this][9] specular highlight:
+And [this][9] twirl:
 
 [9]: https://www.dwitter.net/d/2384
 
@@ -157,7 +157,7 @@ for(i=18;i--;)x.fillRect(400+i*50+S(t)*300,400+i*S(t/9)**9*200,2e3,200)
 
 ### Unicode
 
-[Here's a][12] silly one with printing text "▮▮▮▮▮▮▮▮▮" instead of rendering
+[Here's][12] a silly one with printing text "▮▮▮▮▮▮▮▮▮" instead of rendering
 rectangles. The scaling makes the characters stretched out to create the bars:
 
 [12]: https://www.dwitter.net/d/22874
