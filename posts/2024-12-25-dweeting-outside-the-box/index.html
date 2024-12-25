@@ -166,6 +166,10 @@ form is:</p>
 <p>Here's the default scene using such combined transformations:</p>
 <pre class="dweet play"><code class="language-js">for(c.width|=i=9,Z=1,A=0;i--;x.fillRect(-560+i*100+S(t)*300,-140,50,200))x.setTransform(k=C(A)*Z,z=S(A)*Z,-z,k,960,540)
 </code></pre>
+<p>Note the <code>k</code> and <code>z</code> variables assignments that reduce repetition. It makes
+intuitive sense to assign repeated expressions to variables, but it only saves
+space when the expression we're substituting is longer than 2-3 characters, or
+when it's repeated for more than 2 times.</p>
 <p>This transformation setup enables perfect-loop animations like <a href="https://www.dwitter.net/d/21975">so</a>:</p>
 <pre class="dweet play"><code class="language-js">for(c.width|=i=9;i--;x.fillRect(-425+i*100,-103,99-p**.3*50,206))p=t/2%1,Z=2.26+p*7.34,x.setTransform(k=C(A=1.57*p)*Z,z=S(A)*Z,-z,k,960,540)
 </code></pre>
@@ -187,22 +191,32 @@ to show uncompressed code.</p>
 only <a href="https://frankforce.com/">Frank Force</a>.</p>
 <h3 id="slice-and-dice" tabindex="-1"><a class="permalink" href="#slice-and-dice">Slice and Dice</a></h3>
 <p>We can chop up the bars into tiny squares and perturb their individual positions
-or colors to create interesting effects. Like <a href="https://www.dwitter.net/d/2384">this</a> twirl:</p>
-<pre class="dweet play"><code class="language-js">c.width|=0;for(j=9;j--;)for(i=100;i--;X=i%5+j*10+S(t)*30,Y=i/5|0,x.fillRect(400+X*10+S(t+X+Y)*C(t)*9,400+Y*10,10,10));
-</code></pre>
-<p>And <a href="https://www.dwitter.net/d/7283">this</a> specular highlight:</p>
+or colors to create interesting effects. Like <a href="https://www.dwitter.net/d/7283">this</a> specular highlight:</p>
 <pre class="dweet play"><code class="language-js">c.width|=0;for(j=n=10;--j;)for(i=100;i--;X=i%5+j*n+S(t)*30,Y=i/5|0,x.fillStyle=R(r=255-(X-50)**2-Y**2,r,r),x.fillRect(400+X*n,400+Y*n,n,n));
 </code></pre>
+<p>And <a href="https://www.dwitter.net/d/2384">this</a> twirl:</p>
+<pre class="dweet play"><code class="language-js">c.width|=0;for(j=9;j--;)for(i=100;i--;X=i%5+j*10+S(t)*30,Y=i/5|0,x.fillRect(400+X*10+S(t+X+Y)*C(t)*9,400+Y*10,10,10));
+</code></pre>
+<p>Note the <code>i/5|0</code> expression that exploits the fact that JavaScript floors
+numbers prior to performing binary operations like the binary OR used here. This
+is <strong>much</strong> shorter than <code>Math.floor(i/5)</code>.</p>
+<p>Another technique to note is the elimination of nested loops for X and Y. There
+is a single loop and the X and Y values are derived through modulo and division.
+This <strong>sometimes</strong> saves space, depending on how many times the X and Y values
+are used.</p>
+<p>Also note the abuse of the comma operator to perform multiple operations. This
+is usually shorter than creating a <code>{}</code> code block with statements separated by
+semicolons.</p>
 <h3 id="xor" tabindex="-1"><a class="permalink" href="#xor">XOR</a></h3>
 <p>We can also play with different <a href="https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/globalCompositeOperation">compositing operations</a>. <a href="https://www.dwitter.net/d/22551">Here</a>, I'm
 overlaying a bunch of rectangles in XOR mode to let them alternate between black
-and white to create the default bars:</p>
+and white to create the default bars. You have to wait a bit to see the reveal:</p>
 <pre class="dweet play"><code class="language-js">c.width=1920
 x.globalCompositeOperation='xor'
 for(i=18;i--;)x.fillRect(400+i*50+S(t)*300,400+i*S(t/9)**9*200,2e3,200)
 </code></pre>
 <h3 id="unicode" tabindex="-1"><a class="permalink" href="#unicode">Unicode</a></h3>
-<p><a href="https://www.dwitter.net/d/22874">Here'a</a> silly one with printing text &quot;▮▮▮▮▮▮▮▮▮&quot; instead of rendering
+<p><a href="https://www.dwitter.net/d/22874">Here's</a> a silly one with printing text &quot;▮▮▮▮▮▮▮▮▮&quot; instead of rendering
 rectangles. The scaling makes the characters stretched out to create the bars:</p>
 <pre class="dweet play"><code class="language-js">c.width|=0
 x.scale(.5,1)
