@@ -70,6 +70,11 @@ Here's the default scene using such combined transformations:
 <pre class="dweet play"><code class="language-js">for(c.width|=i=9,Z=1,A=0;i--;x.fillRect(-560+i*100+S(t)*300,-140,50,200))x.setTransform(k=C(A)*Z,z=S(A)*Z,-z,k,960,540)
 </code></pre>
 
+Note the `k` and `z` variables assignments that reduce repetition. It makes
+intuitive sense to assign repeated expressions to variables, but it only saves
+space when the expression we're substituting is longer than 2-3 characters, or
+when it's repeated for more then 2 times.
+
 This transformation setup enables perfect-loop animations like [so][3]:
 
 [3]: https://www.dwitter.net/d/21975
@@ -111,17 +116,30 @@ only [Frank Force][7].
 We can chop up the bars into tiny squares and perturb their individual positions
 or colors to create interesting effects. Like [this][8] twirl:
 
-[8]: https://www.dwitter.net/d/2384
+[8]: https://www.dwitter.net/d/7283
 
-<pre class="dweet play"><code class="language-js">c.width|=0;for(j=9;j--;)for(i=100;i--;X=i%5+j*10+S(t)*30,Y=i/5|0,x.fillRect(400+X*10+S(t+X+Y)*C(t)*9,400+Y*10,10,10));
+<pre class="dweet play"><code class="language-js">c.width|=0;for(j=n=10;--j;)for(i=100;i--;X=i%5+j*n+S(t)*30,Y=i/5|0,x.fillStyle=R(r=255-(X-50)**2-Y**2,r,r),x.fillRect(400+X*n,400+Y*n,n,n));
 </code></pre>
 
 And [this][9] specular highlight:
 
-[9]: https://www.dwitter.net/d/7283
+[9]: https://www.dwitter.net/d/2384
 
-<pre class="dweet play"><code class="language-js">c.width|=0;for(j=n=10;--j;)for(i=100;i--;X=i%5+j*n+S(t)*30,Y=i/5|0,x.fillStyle=R(r=255-(X-50)**2-Y**2,r,r),x.fillRect(400+X*n,400+Y*n,n,n));
+<pre class="dweet play"><code class="language-js">c.width|=0;for(j=9;j--;)for(i=100;i--;X=i%5+j*10+S(t)*30,Y=i/5|0,x.fillRect(400+X*10+S(t+X+Y)*C(t)*9,400+Y*10,10,10));
 </code></pre>
+
+Note the `i/5|0` expression that exploits the fact that JavaScript floors
+numbers prior to performing binary operations like the binary OR used here. This
+is **much** shorter than `Math.floor(i/5)`.
+
+Another technique to note is the elimination of nested loops for X and Y. There
+is a single loop and the X and Y values are derived through modulo and division.
+This **sometimes** saves space, depending on how many times the X and Y values
+are used.
+
+Also note the abuse of the comma operator to perform multiple operations. This
+is usually shorter than creating a `{}` code block with statements separated by
+semicolons.
 
 ### XOR
 
@@ -139,7 +157,7 @@ for(i=18;i--;)x.fillRect(400+i*50+S(t)*300,400+i*S(t/9)**9*200,2e3,200)
 
 ### Unicode
 
-[Here'a][12] silly one with printing text "▮▮▮▮▮▮▮▮▮" instead of rendering
+[Here's a][12] silly one with printing text "▮▮▮▮▮▮▮▮▮" instead of rendering
 rectangles. The scaling makes the characters stretched out to create the bars:
 
 [12]: https://www.dwitter.net/d/22874
