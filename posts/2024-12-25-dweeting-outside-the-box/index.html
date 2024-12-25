@@ -141,9 +141,11 @@ context to save on digits. Let's scale the context by 50 and divide all
 dimensions by 50:</p>
 <pre class="dweet play"><code class="language-js">c.width|=0;x.scale(50,50);for(i=9;i--;)x.fillRect(8+i*2+S(t)*6,8,1,4)
 </code></pre>
-<p>I this particular case, the extra length of <code>x.scale(50,50)</code> is not offset by
-the savings we got from fewer digits. We went from 65 to 69 characters.</p>
-<p>In tiny-space coding, intuitions often don't pan out. You just have to try
+<p>In this particular case, the extra length of <code>x.scale(50,50)</code> is not offset by
+the savings we got from fewer digits. We went from 65 to 69 characters. The
+function call overhead (<code>x.scale()</code>) costs more characters than what we save by
+using smaller numbers.</p>
+<p>In tiny-space coding, intuitions often don't pan out, you just have to try
 things for fit.</p>
 <h3 id="transform" tabindex="-1"><a class="permalink" href="#transform">Transform</a></h3>
 <p>Instead of positioning the elements of the scene by x and y offsets from the top
@@ -164,7 +166,7 @@ form is:</p>
 <p>Here's the default scene using such combined transformations:</p>
 <pre class="dweet play"><code class="language-js">for(c.width|=i=9,Z=1,A=0;i--;x.fillRect(-560+i*100+S(t)*300,-140,50,200))x.setTransform(k=C(A)*Z,z=S(A)*Z,-z,k,960,540)
 </code></pre>
-<p>This transformation setup unlocks perfect-loop opportunities like <a href="https://www.dwitter.net/d/21975">so</a>:</p>
+<p>This transformation setup enables perfect-loop animations like <a href="https://www.dwitter.net/d/21975">so</a>:</p>
 <pre class="dweet play"><code class="language-js">for(c.width|=i=9;i--;x.fillRect(-425+i*100,-103,99-p**.3*50,206))p=t/2%1,Z=2.26+p*7.34,x.setTransform(k=C(A=1.57*p)*Z,z=S(A)*Z,-z,k,960,540)
 </code></pre>
 <p>And <a href="https://www.dwitter.net/d/13859">so</a>:</p>
@@ -185,141 +187,41 @@ to show uncompressed code.</p>
 <p>To compress, you can use the wonderful <a href="https://capjs.3d2k.com/">CapJS</a> tool created by the one and
 only <a href="https://frankforce.com/">Frank Force</a>.</p>
 <h3 id="slice-and-dice" tabindex="-1"><a class="permalink" href="#slice-and-dice">Slice and Dice</a></h3>
-<p>https://www.dwitter.net/d/2384</p>
+<p>We can chop up the bars into tiny squares and perturb their individual positions
+or colors to create interesting effects. Like <a href="https://www.dwitter.net/d/2384">this</a> twirl:</p>
 <pre class="dweet play"><code class="language-js">c.width|=0;for(j=9;j--;)for(i=100;i--;X=i%5+j*10+S(t)*30,Y=i/5|0,x.fillRect(400+X*10+S(t+X+Y)*C(t)*9,400+Y*10,10,10));
 </code></pre>
-<p>https://www.dwitter.net/d/24492</p>
-<pre class="dweet play"><code class="language-js">c.width|=0
-for(i=6800;i--;p&&x.fillRect(400+X*5+S(t+S(t/2.3)**9*(C(Math.atan2(85-X,20-Y)*99)))*300,400+Y*5,5,5))X=i%170,Y=i/170|0,p=X/10&1^1
-</code></pre>
-<p>https://www.dwitter.net/d/7283</p>
+<p>And <a href="https://www.dwitter.net/d/7283">this</a> specular highlight:</p>
 <pre class="dweet play"><code class="language-js">c.width|=0;for(j=n=10;--j;)for(i=100;i--;X=i%5+j*n+S(t)*30,Y=i/5|0,x.fillStyle=R(r=255-(X-50)**2-Y**2,r,r),x.fillRect(400+X*n,400+Y*n,n,n));
 </code></pre>
-<p>https://www.dwitter.net/d/24494</p>
-<pre class="dweet play"><code class="language-js">c.width|=0
-for(i=6800;i--;X/10&1||x.fillRect(400+X*5+S(t)*300+C(t+Math.PI)**1*(Math.hypot(X-85,Y-20))*3,400+Y*5,6,6))X=i%170,Y=i/170|0
-</code></pre>
-<h3 id="sdf" tabindex="-1"><a class="permalink" href="#sdf">SDF</a></h3>
 <h3 id="xor" tabindex="-1"><a class="permalink" href="#xor">XOR</a></h3>
-<p>https://www.dwitter.net/d/22551</p>
+<p>We can also play with different <a href="https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/globalCompositeOperation">compositing operations</a>. <a href="https://www.dwitter.net/d/22551">Here</a>, I'm
+overlaying a bunch of rectangles in XOR mode to let them alternate between black
+and white to create the default bars:</p>
 <pre class="dweet play"><code class="language-js">c.width=1920
 x.globalCompositeOperation='xor'
 for(i=18;i--;)x.fillRect(400+i*50+S(t)*300,400+i*S(t/9)**9*200,2e3,200)
 </code></pre>
 <h3 id="unicode" tabindex="-1"><a class="permalink" href="#unicode">Unicode</a></h3>
-<p>https://www.dwitter.net/d/22874</p>
+<p><a href="https://www.dwitter.net/d/22874">Here'a</a> silly one with printing text &quot;▮▮▮▮▮▮▮▮▮&quot; instead of rendering
+rectangles. The scaling makes the characters stretched out to create the bars:</p>
 <pre class="dweet play"><code class="language-js">c.width|=0
 x.scale(.5,1)
 x.font='8cm"'
 x.fillText('▮▮▮▮▮▮▮▮▮',800+S(t)*600,600)
 </code></pre>
-<h3 id="thematic" tabindex="-1"><a class="permalink" href="#thematic">Thematic</a></h3>
-<p>https://www.dwitter.net/d/29243</p>
+<p>Note the <code>'8cm&quot;'</code> as the font value. The <code>&quot;</code> character creates a word boundary
+after the size unit, &quot;cm&quot;. <code>&quot;</code> is not a valid font name, but browsers are
+forgiving of bad syntax and bad names. This browser forgiveness is a goldmine
+for code golfers - we can use <code>&quot;</code> instead of valid font names like <code>Arial</code> or
+<code>sans-serif</code>, saving precious characters.</p>
+<h3 id="thematic-end" tabindex="-1"><a class="permalink" href="#thematic-end">Thematic End</a></h3>
+<p>And here's a <a href="https://www.dwitter.net/d/29243">thematic end</a> to this post. Not quite the default bars, but
+they're hidden in there:</p>
 <pre class="dweet play"><code class="language-js">c.width|=0
 for(i=17;i--;)for(j=5;j--;)[2057,1,32897,0,2057][j]+87380&1&lt;&lt;i&&x.fillRect(1200-i*50+S(t)*300,400+j*40,50,40)
 </code></pre>
-<!--
-# Attic
-
-We can also scale the canvas itself, but we'll heavily compromise on rendering
-quality. However, it's often an aesthetic choice to get things super blurry.
-
-Let's make the canvas ~50 times smaller. `1920 / 50 = 38.4`. `38` should be
-good enough for our purposes.
-
-<pre class="dweet play"><code class="language-js">c.width=38;for(i=9;i--;)x.fillRect(8+i*2+S(t)*6,8,1,4)
-</code></pre>
-
-### Punching holes
-
-You can use `clearRect()` whenever you want to render a white rectangle over a
-dark background because Dwitter sets the background of the canvas to white.
-
-First, let's render our hole punchers in different colors to see their
-positions:
-
-<pre class="dweet play no-length"><code class="language-js">// black background
-x.fillStyle = "black";
-x.fillRect(0, 0, 1920, 1080);
-
-// punch out top
-x.fillStyle = "hsl(0,100%,50%)";
-x.fillRect(0, 0, 1920, 400);
-
-// punch out bottom
-x.fillStyle = "hsl(30,100%,50%)";
-x.fillRect(0, 600, 1920, 480);
-
-// left edge of bars
-X = 400 + S(t) * 300;
-
-// punch out left
-x.fillStyle = "hsl(60,100%,50%)";
-x.fillRect(0, 400, X, 200);
-
-// punch out right
-x.fillStyle = "hsl(90,100%,50%)";
-x.fillRect(X + 850, 400, 1070 - X, 200); // punch out right
-
-// punch out bars
-for (i = 8; i--; ) {
-  x.fillStyle = `hsl(${120 + i * 30},100%,50%)`;
-  x.fillRect(X + 50 + i * 100, 400, 50, 200);
-}
-</code></pre>
-
-And with actually clearing out the rectangles, and with some minimal effort in
-golfing this down in length:
-
-<pre class="dweet play"><code class="language-js">x.fillRect(0,0,1920,1080)
-x.clearRect(0,0,1920,400)
-x.clearRect(0,600,1920,480)
-X=400+S(t)*300
-x.clearRect(0,400,X,200)
-x.clearRect(X+850,400,1070-X,200)
-for(i=8;i--;)x.clearRect(X+50+i*100,400,50,200)
-</code></pre>
-
-Let's golf this down to fit in 140 characters.
-
-#### Exponential notation
-
-`2e3`, which means `2 * 10^3`, is shorter than `2000`. And 2000 is a perfectly
-good substitute for 1920 and 1080. The canvas API doesn't mind if you draw or
-clear outside of it.
-
-And since the minimum value of `X` is 100, the minimum value of `1070-X` is 970.
-We could use `970` or `1e3`, to the same effect.
-
-Let's replace some numbers:
-
-<pre class="dweet play"><code class="language-js">x.fillRect(0,0,2e3,2e3)
-x.clearRect(0,0,2e3,400)
-x.clearRect(0,600,2e3,480)
-X=400+S(t)*300
-x.clearRect(0,400,X,200)
-x.clearRect(X+850,400,1e3,200)
-for(i=8;i--;)x.clearRect(X+50+i*100,400,50,200)
-</code></pre>
-
-And let's introduce a utility function, `p`, to reduce repetition:
-
-<pre class="dweet play"><code class="language-js">p=(X,Y,W,H)=>x.clearRect(X,Y,W,H)
-x.fillRect(0,0,2e3,2e3)
-p(0,0,2e3,400)
-p(0,600,2e3,480)
-X=400+S(t)*300
-p(0,400,X,200)
-p(X+850,400,1e3,200)
-for(i=8;i--;)p(X+50+i*100,400,50,200)
-</code></pre>
-
-https://www.dwitter.net/d/28570
-
-<pre class="dweet play"><code class="language-js">eval(unescape(escape`󫌽󚍶󛍷󚜽󟬨󭬭󭼩󚬨󠼨󭌯󝌩󚼱󚜯󜬫󭼻󩭯󬬨󨼮󭽩󩍴󪌽󜼸󝌬󪜽󣜽󜼶󜌰󞽩󛜭󞽸󛭦󪝬󫍒󩝣󭌨󦌬󦜬󜜬󜜩󚝮󟝩󛽍󛍰󟝴󚽮󚬷󛍘󟜸󜌫󫌨󚍘󟝩󙜹󜌩󚼨󦌯󜜰󯌰󚜪󜜰󚽓󚍴󚜪󝬰󛍘󟜱󜜲󚽃󚍰󚜪󞜹󚜬󦜽󞌰󚽬󚍩󛼹󜍼󜌬󜬸󚽓󚍰󚜪󞜹󚜬󮌮󩭩󫍬󤽴󮝬󩜽󤬨󜌬󫌨󜌬󦜩󚜻`.replace(/u../g,'')))
-</code></pre>
-
--->
+<p>A Merry Christmas and a Happy New Year!</p>
 </div>
 
   
