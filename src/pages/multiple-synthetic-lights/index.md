@@ -14,6 +14,8 @@ Quoting from [Synthetic Lighting for Photography](https://www.graficaobscura.com
 
 I've created an interactive application with three light sources with different colors.
 
+Hover/tap over the image to change the intensities of the three light sources.
+
 <p class="canvas-container" style="height: auto; padding: 0.5rlh;">
   <canvas id="canvas" class="black" width="250" height="250" style="cursor: crosshair;"></canvas>
 </p>
@@ -124,9 +126,9 @@ I've created an interactive application with three light sources with different 
   });
 </script>
 
-Hover over the image to change the intensities of the three light sources.
-
+<!--
 This was originally done using [Processing](https://processing.org/), then ported to Processing.js (deprecated), then ported to [p5.js](https://p5js.org/), and then finally directly done with plain old `<canvas>` and JavaScript.
+-->
 
 The images I've used are below. They're taken from [this article about lighting direction](https://web.archive.org/web/20071207230006/www.megapixel.net/html/articles/article-lightdir.php).
 
