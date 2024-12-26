@@ -215,19 +215,6 @@ and white to create the default bars. You have to wait a bit to see the reveal:<
 x.globalCompositeOperation='xor'
 for(i=18;i--;)x.fillRect(400+i*50+S(t)*300,400+i*S(t/9)**9*200,2e3,200)
 </code></pre>
-<h3 id="unicode" tabindex="-1"><a class="permalink" href="#unicode">Unicode</a></h3>
-<p><a href="https://www.dwitter.net/d/22874">Here's</a> a silly one with printing text &quot;▮▮▮▮▮▮▮▮▮&quot; instead of rendering
-rectangles. The scaling makes the characters stretched out to create the bars:</p>
-<pre class="dweet play"><code class="language-js">c.width|=0
-x.scale(.5,1)
-x.font='8cm"'
-x.fillText('▮▮▮▮▮▮▮▮▮',800+S(t)*600,600)
-</code></pre>
-<p>Note the <code>'8cm&quot;'</code> as the font value. The <code>&quot;</code> character creates a word boundary
-after the size unit &quot;cm&quot;. While <code>&quot;</code> is not a valid font name, browsers are
-forgiving of bad syntax and names. This browser forgiveness is a goldmine
-for code golfers - we can use <code>&quot;</code> instead of valid font names like <code>Arial</code> or
-<code>sans-serif</code>, saving precious characters.</p>
 <h3 id="thematic-end" tabindex="-1"><a class="permalink" href="#thematic-end">Thematic End</a></h3>
 <p>And here's a <a href="https://www.dwitter.net/d/29243">thematic end</a> to this post. Not quite the default bars, but
 they're hidden in there:</p>
