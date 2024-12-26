@@ -1,6 +1,8 @@
 ---
 layout: layouts/base
 title: Home
+description: 'Personal website of Ateş Göral'
+image: i/bd1k.png
 ---
 
 <div class="h-card">

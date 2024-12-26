@@ -1,6 +1,7 @@
 ---
 layout: layouts/page
 title: Adobe Color Book File Format Specification
+description: An unofficial file format specification for Adobe's color books
 image: i/custom_colors.jpg
 ---
 

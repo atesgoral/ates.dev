@@ -1,6 +1,7 @@
 ---
 layout: layouts/page
 title: About Me
+description: A bit about Ateş Göral
 omit: true
 ---
 
