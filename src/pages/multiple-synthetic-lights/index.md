@@ -15,7 +15,7 @@ Quoting from [Synthetic Lighting for Photography](https://www.graficaobscura.com
 I've created an interactive application with three light sources with different colors.
 
 <p class="canvas-container" style="height: auto; padding: 0.5rlh;">
-  <canvas id="canvas" width="250" height="250" style="cursor: crosshair;"></canvas>
+  <canvas id="canvas" class="black" width="250" height="250" style="cursor: crosshair;"></canvas>
 </p>
 
 <script type="module">
@@ -57,21 +57,43 @@ I've created an interactive application with three light sources with different 
       this.dataB = getImageData(imgB);
       this.dataC = getImageData(imgC);
 
-      this.ready = true;
+      // this.ready = true;
 
-      this.mouseX = 125;
-      this.mouseY = 125;
+      this.mouseX = canvas.width / 2;
+      this.mouseY = canvas.height / 2;
     },
     draw(ctx, t) {
-      if (!this.ready) return;
+      const canvas = ctx.canvas;
+
+      if (!this.ready) {
+        const radiusL = canvas.width / 16;
+        const radiusS = canvas.width / 64;
+        const vel = 2; // Rotations per second
+
+        const a = t / 1000 * Math.PI * 2 * vel;
+
+        canvas.width |= 0;
+
+        ctx.fillStyle = 'white';
+        ctx.beginPath();
+        ctx.arc(
+          canvas.width / 2 + Math.cos(a) * radiusL,
+          canvas.height / 2 + Math.sin(a) * radiusL,
+          radiusS,
+          0, Math.PI * 2
+        );
+        ctx.fill();
+
+        return;
+      }
 
       if (this.pmouseX === this.mouseX && this.pmouseY === this.mouseY) return;
 
       this.pmouseX = this.mouseX;
       this.pmouseY = this.mouseY;
 
-      const normX = this.mouseX / 250;
-      const normY = this.mouseY / 250;
+      const normX = this.mouseX / canvas.width;
+      const normY = this.mouseY / canvas.height;
 
       const coeffA = Math.sqrt(1 - normX);
       const coeffB = 1 - normY;
@@ -82,7 +104,7 @@ I've created an interactive application with three light sources with different 
       const colorB = [0x8A, 0x87, 0x68];
       const colorC = [0x29, 0x1D, 0x80];
 
-      const imageData = new ImageData(250, 250);
+      const imageData = new ImageData(canvas.width, canvas.height);
 
       for (let i = 0; i < imageData.data.length; i++) {
         const comp = i % 4;
