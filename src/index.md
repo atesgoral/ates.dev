@@ -419,6 +419,7 @@ Partly out of curiosity and partly because I needed the color data for a job, I 
 
 ---
 
+<!--
 #### GRAFICA Obscura Experiments
 
 <p class="project-thumbnail zoomable">
@@ -435,6 +436,8 @@ experiments">
 Two [Processing](https://processing.org/) (ported to [p5.js](https://p5js.org/)) experiments building on [GRAFICA Obscura](https://www.graficaobscura.com/) articles by [Paul Haeberli](https://en.wikipedia.org/wiki/Paul_Haeberli).
 
 ---
+
+-->
 
 ### 2002
 

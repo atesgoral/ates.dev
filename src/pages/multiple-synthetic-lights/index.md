@@ -4,6 +4,7 @@ title: Multiple Synthetic Lights
 image: i/lighting-09.jpg
 libs:
   - render
+omit: true
 ---
 
 Multiple photographs taken with different light sources can be blended together to create images that appear to have all the light sources simultaneously active. The light sources can be attributed arbitrary colors as well, allowing the creation of an infinite number of synthetic scenes.
