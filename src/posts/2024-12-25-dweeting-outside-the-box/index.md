@@ -155,25 +155,6 @@ x.globalCompositeOperation='xor'
 for(i=18;i--;)x.fillRect(400+i*50+S(t)*300,400+i*S(t/9)**9*200,2e3,200)
 </code></pre>
 
-### Unicode
-
-[Here's][12] a silly one with printing text "▮▮▮▮▮▮▮▮▮" instead of rendering
-rectangles. The scaling makes the characters stretched out to create the bars:
-
-[12]: https://www.dwitter.net/d/22874
-
-<pre class="dweet play"><code class="language-js">c.width|=0
-x.scale(.5,1)
-x.font='8cm"'
-x.fillText('▮▮▮▮▮▮▮▮▮',800+S(t)*600,600)
-</code></pre>
-
-Note the `'8cm"'` as the font value. The `"` character creates a word boundary
-after the size unit "cm". While `"` is not a valid font name, browsers are
-forgiving of bad syntax and names. This browser forgiveness is a goldmine
-for code golfers - we can use `"` instead of valid font names like `Arial` or
-`sans-serif`, saving precious characters.
-
 ### Thematic End
 
 And here's a [thematic end][13] to this post. Not quite the default bars, but
