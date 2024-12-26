@@ -57,7 +57,7 @@ I've created an interactive application with three light sources with different 
       this.dataB = getImageData(imgB);
       this.dataC = getImageData(imgC);
 
-      // this.ready = true;
+      this.ready = true;
 
       this.mouseX = canvas.width / 2;
       this.mouseY = canvas.height / 2;
