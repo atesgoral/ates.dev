@@ -74,14 +74,14 @@ Another way we can directly find the missing number is by XORing the XOR of all 
 
 First, a quick recap of what XOR (^) does. At the bit level:
 
-```js
-0 ^ (0 === 0);
-0 ^ (1 === 1);
-1 ^ (0 === 1);
-1 ^ (1 === 0);
-```
+| a   | b   | a ^ b |
+| --- | --- | ----- |
+| 0   | 0   | 0     |
+| 0   | 1   | 1     |
+| 1   | 0   | 1     |
+| 1   | 1   | 0     |
 
-Beyond single bits, XORing any two numbers means aligning their bits by their least significant bits and XORing each aligned bit pair. Let’s take 3 ^ 5 as an example. 3 in binary is 011 and 5 in binary is 101:
+Beyond single bits, XORing any two numbers means aligning their bits by their least significant bits and XORing each aligned bit pair. Let’s take `3 ^ 5` as an example. `3` in binary is `011` and `5` in binary is `101`:
 
 ```
   011
@@ -90,26 +90,26 @@ Beyond single bits, XORing any two numbers means aligning their bits by their le
   110
 ```
 
-Therefore the result of 3 ^ 5 in binary is110. Or in decimal, 6.
+Therefore the result of `3 ^ 5` in binary is `110`. Or in decimal, `6`.
 
 XOR has the following properties of interest to us:
 
-1. 0 is the identity element: a ^ 0 === a
-2. Each number is its own inverse element: a ^ a === 0
-3. Associativity: (a ^ b) ^ c === a ^ (b ^ c)
+1. `0` is the identity element: `a ^ 0 === a`
+2. Each number is its own inverse element: `a ^ a === 0`
+3. Associativity: `(a ^ b) ^ c === a ^ (b ^ c)`
 
-From the above, it follows that you can restore the value of a number a by XORing it twice with any number b. Suppose c is obtained by:
+From the above, it follows that you can restore the value of a number `a` by XORing it twice with any number `b`. Suppose `c` is obtained by:
 
 ```js
 c = a ^ b;
 ```
 
-Then what is the result of XORing c again with b? In 4 steps:
+Then what is the result of XORing `c` again with `b`? In 4 steps:
 
-1. Substitution: c ^ b === (a ^ b) ^ b
-2. Associativity: c ^ b === a ^ (b ^ b)
-3. Inverse element: c ^ b === a ^ 0
-4. Identity: c ^ b === a
+1. Substitution: `c ^ b === (a ^ b) ^ b`
+2. Associativity: `c ^ b === a ^ (b ^ b)`
+3. Inverse element: `c ^ b === a ^ 0`
+4. Identity: `c ^ b === a`
 
 We get the original value, `a`.
 
@@ -117,16 +117,24 @@ From this we can intuit the following: Given a number `a`, if we first XOR it wi
 
 We can therefore find the missing number in the question by:
 
-1. Computing or hard-coding the XOR of all 100 numbers [0..99 ]
+1. Computing or hard-coding the XOR of all 100 numbers `[0..99]`
 2. Computing the XOR of all 99 numbers given to us in the partial array
 3. XORing the two results from above to directly find the missing number
 
-So, let’s compute the XOR of all numbers `[0..99]` in order to hard-code it in our answer. But let’s do this while watching the intermediate values of xor:
+So, let’s compute the XOR of all numbers `[0..99]` in order to hard-code it in our answer. But let’s do this while watching the intermediate values of `xor`, as binary:
 
 ```js
+function binary(n) {
+  return n.toString(2).padStart(7, '0');
+}
+
 let xor = 0; // 0 is the identity for XOR
 
-for (var n = 0; n x ^ n);
+for (let n = 0; n < 100; n++) {
+  const newXor = xor ^ n;
+  console.log(`${binary(xor)} ^ ${binary(n)} === ${binary(newXor)}`);
+  xor = newXor;
+}
 ```
 
 Using XOR in this context is nothing technically groundbreaking. It’s just serendipitous that the XOR of numbers [0..99 ] turns out to be 0, which makes the second answer look a lot more interesting, and creates a good excuse to write a digression into XOR like this.
