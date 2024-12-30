@@ -32,7 +32,7 @@ the Atari ST:
   <img src="i/dweet-bitmap.png" width="192" height="108" alt="The Atari ST mouse pointer">
 </p>
 
-It's a 16x16 icon, but the bounding box of the black pixels are 8x14, so we can
+It's a 16x16 icon, but the bounding box of the black pixels is 8x14, so we can
 ignore pixel information that falls outside.
 
 The raw binary data to encode this information looks like this:
@@ -103,7 +103,7 @@ This is what we get:
 <pre><code class="language-js">const encoded = '<span class="remove">\x80</span>ÀàðøüþÿøØ<span class="remove">\x8C\f\x06\x06</span>';
 </code></pre>
 
-But note the extra baggage of the escaped characters in `\x##` form. Instead of
+But note the extra overhead of the escaped characters in `\x##` form. Instead of
 single characters, they're all encoded as 4 characters. There's also the `\f`
 form feed character.
 
@@ -126,8 +126,8 @@ within `0x0000` through `0xFFFF`: Characters within the Basic Multilingual Plane
 | `128` through `159` | C1 control characters |
 
 Keep in mind that `fromCharCode()` only works with BMP. We can't go beyond 16
-bits (or bitmap columns). There's `fromCodePoint()` to go past BMP, but I won't
-get into that.
+bits (or bitmap columns). There's `fromCodePoint()` to access characters past
+BMP, but I won't get into that.
 
 So, if we add `160` to the bit-packed value, we'll make sure we stay within the
 range that doesn't require escaping:
@@ -169,7 +169,7 @@ By doing more preparation outside of the dweet, we save space within.
 
 ### More preparation
 
-Mouse pointer icon flipped on the X axis and encoded again:
+Mouse pointer icon, flipped on the X axis and encoded again:
 
 ```
 const bytes = [
@@ -205,10 +205,10 @@ for(Y=14;Y--;)for(X=8;X--;)'¡£§¯¿ßğƟ¿»ÑÐĀĀ'.charCodeAt(Y)-160&1&lt
 
 ### Wait a minute...
 
-If we can add some offset, 160, to get us past the C1 block, what stops us from
-making this offset a power of 2? Since we're doing binary masking to test bits,
-we're already ignoring any bits that fall outside our most significant bit.
-Let's go up to next power of 2 that's larger than 160: `256`.
+If we can add some offset, 160, to get us past the C1 block, what prevents us
+from using a power of 2 as the offset? Since we're doing binary masking to test
+bits, we're already ignoring any bits that fall outside our most significant
+bit. Let's go up to next power of 2 that's larger than 160: `256`.
 
 ```
 const bytes = [
@@ -293,9 +293,10 @@ for(i=112;i--;'āăćďğĿſǿğěıİŠŠ'.charCodeAt(Y=i>>3)&1&lt;&lt;X&&x.fi
 
 Some final tricks that are used in the above:
 
-1. Add `1` and divide by `2` sine and cosine values to let them go between `0`
-   and `1` instead of `-1` and `1`. Though, in the above, I'm not dividing by 2
-   but multiplying by half the extents of the canvas to save space.
+1. Add `1` to the sine and cosine values, then divide by `2` to let them go
+   between `0` and `1` instead of `-1` and `1`. Though, in the above, I'm not
+   dividing by `2` but multiplying by half the extents of the canvas to save
+   space.
 2. Raise values to powers less then 1 to dampen and more than 1 to excite
    motion. I obtain the jolty motion by the `**5` and `**7`.
 3. Multiply angles with primes or "weird" values to prevent the motion to have a
