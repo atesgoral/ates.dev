@@ -7,7 +7,6 @@ date: 2024-12-30
 libs:
   - render
   - dweet
-draft: true
 ---
 
 This is a breakdown of one of my [older dweets][1], introducing a dweet
