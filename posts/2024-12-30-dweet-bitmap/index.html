@@ -139,7 +139,7 @@ the Atari ST:</p>
 <p class="center">
   <img src="i/dweet-bitmap.png" width="192" height="108" alt="The Atari ST mouse pointer">
 </p>
-<p>It's a 16x16 icon, but the bounding box of the black pixels are 8x14, so we can
+<p>It's a 16x16 icon, but the bounding box of the black pixels is 8x14, so we can
 ignore pixel information that falls outside.</p>
 <p>The raw binary data to encode this information looks like this:</p>
 <pre><code>10000000
@@ -192,7 +192,7 @@ const encoded = bytes.map((c) =&gt; String.fromCharCode(c)).join('');
 <p>This is what we get:</p>
 <pre><code class="language-js">const encoded = '<span class="remove">\x80</span>ÀàðøüþÿøØ<span class="remove">\x8C\f\x06\x06</span>';
 </code></pre>
-<p>But note the extra baggage of the escaped characters in <code>\x##</code> form. Instead of
+<p>But note the extra overhead of the escaped characters in <code>\x##</code> form. Instead of
 single characters, they're all encoded as 4 characters. There's also the <code>\f</code>
 form feed character.</p>
 <p>Depending on the size and content of the bitmap, you may get none, but you could
@@ -226,8 +226,8 @@ within <code>0x0000</code> through <code>0xFFFF</code>: Characters within the Ba
 </tbody>
 </table>
 <p>Keep in mind that <code>fromCharCode()</code> only works with BMP. We can't go beyond 16
-bits (or bitmap columns). There's <code>fromCodePoint()</code> to go past BMP, but I won't
-get into that.</p>
+bits (or bitmap columns). There's <code>fromCodePoint()</code> to access characters past
+BMP, but I won't get into that.</p>
 <p>So, if we add <code>160</code> to the bit-packed value, we'll make sure we stay within the
 range that doesn't require escaping:</p>
 <pre><code class="language-js">const bytes = [128, 192, 224, 240, 248, 252, 254, 255, 248, 216, 140, 12, 6, 6];
@@ -253,7 +253,7 @@ space. Instead of reversing that loop or replacing the bit accessor <code>i</cod
 <code>7-i</code> and wasting space, we can simply flip our image data before encoding.</p>
 <p>By doing more preparation outside of the dweet, we save space within.</p>
 <h3 id="more-preparation" tabindex="-1"><a class="permalink" href="#more-preparation">More preparation</a></h3>
-<p>Mouse pointer icon flipped on the X axis and encoded again:</p>
+<p>Mouse pointer icon, flipped on the X axis and encoded again:</p>
 <pre><code>const bytes = [
   0b00000001,
   0b00000011,
@@ -280,10 +280,10 @@ const encoded = bytes.map((c) =&gt; String.fromCharCode(c + 160)).join('');
 for(Y=14;Y--;)for(X=8;X--;)'¡£§¯¿ßğƟ¿»ÑÐĀĀ'.charCodeAt(Y)-160&1&lt;&lt;X&&x.fillRect(X*8,Y*8,8,8)
 </code></pre>
 <h3 id="wait-a-minute" tabindex="-1"><a class="permalink" href="#wait-a-minute">Wait a minute...</a></h3>
-<p>If we can add some offset, 160, to get us past the C1 block, what stops us from
-making this offset a power of 2? Since we're doing binary masking to test bits,
-we're already ignoring any bits that fall outside our most significant bit.
-Let's go up to next power of 2 that's larger than 160: <code>256</code>.</p>
+<p>If we can add some offset, 160, to get us past the C1 block, what prevents us
+from using a power of 2 as the offset? Since we're doing binary masking to test
+bits, we're already ignoring any bits that fall outside our most significant
+bit. Let's go up to next power of 2 that's larger than 160: <code>256</code>.</p>
 <pre><code>const bytes = [
   0b00000001,
   0b00000011,
@@ -345,9 +345,10 @@ for(i=112;i--;'āăćďğĿſǿğěıİŠŠ'.charCodeAt(Y=i>>3)&1&lt;&lt;X&&x.fi
 </code></pre>
 <p>Some final tricks that are used in the above:</p>
 <ol>
-<li>Add <code>1</code> and divide by <code>2</code> sine and cosine values to let them go between <code>0</code>
-and <code>1</code> instead of <code>-1</code> and <code>1</code>. Though, in the above, I'm not dividing by 2
-but multiplying by half the extents of the canvas to save space.</li>
+<li>Add <code>1</code> to the sine and cosine values, then divide by <code>2</code> to let them go
+between <code>0</code> and <code>1</code> instead of <code>-1</code> and <code>1</code>. Though, in the above, I'm not
+dividing by <code>2</code> but multiplying by half the extents of the canvas to save
+space.</li>
 <li>Raise values to powers less then 1 to dampen and more than 1 to excite
 motion. I obtain the jolty motion by the <code>**5</code> and <code>**7</code>.</li>
 <li>Multiply angles with primes or &quot;weird&quot; values to prevent the motion to have a
