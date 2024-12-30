@@ -167,7 +167,7 @@ space. Instead of reversing that loop or replacing the bit accessor `i` with
 
 By doing more preparation outside of the dweet, we save space within.
 
-### More preperation
+### More preparation
 
 Mouse pointer icon flipped on the X axis and encoded again:
 
