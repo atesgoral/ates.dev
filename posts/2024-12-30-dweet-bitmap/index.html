@@ -250,7 +250,7 @@ for(Y=14;Y--;)for(X=8;X--;)'ĠŠƀƐƘƜƞƟƘŸĬ¬¦¦'.charCodeAt(Y)-160&1&lt
 </code></pre>
 <p>That didn't quite work as expected because the X axis loop is reversed to save
 space. Instead of reversing that loop or replacing the bit accessor <code>i</code> with
-<code>8-i</code> and wasting space, we can simply flip our image data before encoding.</p>
+<code>7-i</code> and wasting space, we can simply flip our image data before encoding.</p>
 <p>By doing more preparation outside of the dweet, we save space within.</p>
 <h3 id="more-preparation" tabindex="-1"><a class="permalink" href="#more-preparation">More preparation</a></h3>
 <p>Mouse pointer icon flipped on the X axis and encoded again:</p>
