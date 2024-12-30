@@ -91,7 +91,7 @@ before drawing each frame.
 But what we really need is a no-op assignment to clear the canvas. Any
 idempotent operation will do. So we can binary OR the canvas width with 0:
 
-<pre><code>c.width=19<span class="remove">20</span>
+<pre><code class="language-js">c.width=19<span class="remove">20</span>
 c.width|=0
 </code></pre>
 
@@ -103,7 +103,7 @@ We could have added 0 or multiplied by 1. You get the idea.
 
 When loop order is unimportant, we can invert loops to shave characters.
 
-<pre><code>for(i=0;i<9;i<span class="remove">++)</span>
+<pre><code class="language-js">for(i=0;i<9;i<span class="remove">++)</span>
 for(i=9;i--;)
 </code></pre>
 
@@ -127,7 +127,7 @@ compromise and accept 1929 as the new 1920.
 
 OR'ing with 9 results in 1929 (`1920 | 9`), but the 9-pixel difference is imperceptible.
 
-<pre><code>c.width|=0;for(i=9;i--<span class="remove">;)</span>
+<pre><code class="language-js">c.width|=0;for(i=9;i--<span class="remove">;)</span>
 for(c.width|=i=9;i--;)
 </code></pre>
 
