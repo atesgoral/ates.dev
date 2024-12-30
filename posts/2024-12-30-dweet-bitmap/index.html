@@ -305,7 +305,7 @@ const encoded = bytes.map((c) =&gt; String.fromCharCode(c + 256)).join('');
 <p>We get:</p>
 <pre><code>encoded = 'āăćďğĿſǿğěıİŠŠ';
 </code></pre>
-<p>And we gloriously save 4 characters:</p>
+<p>And we gloriously save 4 characters by omitting the <code>-256</code> subtraction:</p>
 <pre class="dweet play"><code class="language-js">c.width|=0
 for(Y=14;Y--;)for(X=8;X--;)'āăćďğĿſǿğěıİŠŠ'.charCodeAt(Y)&1&lt;&lt;X&&x.fillRect(X*8,Y*8,8,8)
 </code></pre>
