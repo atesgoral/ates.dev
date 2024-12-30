@@ -163,7 +163,7 @@ for(Y=14;Y--;)for(X=8;X--;)'ĠŠƀƐƘƜƞƟƘŸĬ¬¦¦'.charCodeAt(Y)-160&1&lt
 
 That didn't quite work as expected because the X axis loop is reversed to save
 space. Instead of reversing that loop or replacing the bit accessor `i` with
-`8-i` and wasting space, we can simply flip our image data before encoding.
+`7-i` and wasting space, we can simply flip our image data before encoding.
 
 By doing more preparation outside of the dweet, we save space within.
 
