@@ -2,7 +2,7 @@
 layout: layouts/page
 title: Multiple Synthetic Lights
 image: i/lighting-09.jpg
-date: 2003
+date: 2003-01-01
 libs:
   - render
 omit: true
