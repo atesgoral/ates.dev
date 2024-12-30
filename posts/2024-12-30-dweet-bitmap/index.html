@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta property="og:title" content="Using Bitmaps in Dweets" />
+    <meta property="og:type" content="article" />
+    <meta property="og:description" content="A technique for encoding, decoding, and rendering bitmaps in dweets" />
+    
+    <meta
+      property="og:image"
+      content="https://ates.dev/posts/2024-12-30-dweet-bitmap/i/dweet-bitmap.png"
+    />
+    <meta property="og:image:alt" content="" />
+    
+    <meta property="og:locale" content="en_CA" />
+    <meta property="og:site_name" content="ates.dev" />
+    <title>ates.dev &middot; Using Bitmaps in Dweets</title>
+    <script>
+      (() => {
+        const themeOverride = localStorage.getItem('theme-override');
+        const lightMode = themeOverride && themeOverride === 'light';
+        document.documentElement.classList.toggle('light-mode', lightMode);
+      })();
+    </script>
+    <link
+      rel="preload"
+      href="/assets/fonts/varelaround-regular-webfont.woff2"
+      as="font"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="preload"
+      href="/assets/logos/bluesky.svg"
+      as="image"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="preload"
+      href="/assets/logos/github.svg"
+      as="image"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      href="/assets/icons/favicon-96x96.png"
+      sizes="96x96"
+    />
+    <link rel="icon" type="image/svg+xml" href="/assets/icons/favicon.svg" />
+    <link rel="shortcut icon" href="/assets/icons/favicon.ico" />
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="/assets/icons/apple-touch-icon.png"
+    />
+    <meta name="apple-mobile-web-app-title" content="ates.dev" />
+    <link rel="manifest" href="/assets/icons/site.webmanifest" />
+    <link rel="stylesheet" href="/styles/style.css" />
+    <link rel="me" href="https://bsky.app/profile/ates.dev" />
+    <link rel="me" href="https://www.dwitter.net/u/magna" />
+    <link rel="me" href="https://github.com/atesgoral" />
+    <link rel="me" href="https://www.npmjs.com/~atesgoral" />
+    <link rel="me" href="https://hackaday.io/atesgoral" />
+    <link rel="me" href="https://www.instagram.com/atesgoral" />
+    <link rel="me" href="https://stackoverflow.com/users/23501/ates-goral" />
+    <link rel="me" href="https://www.linkedin.com/in/atesgoral/" />
+    <link rel="me" href="https://twitter.com/atesgoral" />
+    <link rel="me" href="https://x.com/atesgoral" />
+    <script src="/assets/js/prog.js?bust=1"></script>
+  </head>
+  <body>
+    
+    <script src="/lib/render.js"></script>
+    
+    <script src="/lib/dweet.js"></script>
+    
+    <header>
+      <h1>
+        <a href="/">ates.dev</a>
+      </h1>
+      <nav>
+        <ul>
+          <li>
+            <a href="/">Home</a>
+          </li>
+          <li>
+            <a
+              href="/pages/all-posts"
+              >Posts</a
+            >
+          </li>
+          <li>
+            <a
+              href="/pages/all-pages"
+              >Pages</a
+            >
+          </li>
+          <li>
+            <a
+              href="/pages/about"
+              >About</a
+            >
+          </li>
+          <li class="break"></li>
+          <li>
+            <a
+              href="https://bsky.app/profile/ates.dev"
+              rel="me"
+              class="bluesky logo"
+              >Bluesky</a
+            >
+          </li>
+          <li>
+            <a href="https://github.com/atesgoral" rel="me" class="github logo"
+              >GitHub</a
+            >
+          </li>
+        </ul>
+      </nav>
+    </header>
+
+    <main>
+<article>
+  <h2>Using Bitmaps in Dweets</h2>
+  <p class="meta">Posted on Dec 30, 2024</p>
+
+  <div class="content"><p>This is a breakdown of one of my <a href="https://www.dwitter.net/d/3271">older dweets</a>, introducing a dweet
+rendering technique and a few general JavaScript golfing techniques.</p>
+<p>It's a follow-up to:</p>
+<ol>
+<li><a href="/posts/2024-12-20-intro-to-dwitter">A Short Introduction to Dwitter and JavaScript Golfing</a></li>
+<li><a href="/posts/2024-12-25-dweeting-outside-the-box">Dweeting Outside the Box</a></li>
+</ol>
+<h3 id="the-subject" tabindex="-1"><a class="permalink" href="#the-subject">The subject</a></h3>
+<p>Suppose we want to render a specific bitmap image in a Dweet. As an example,
+I'll nostalgically pick the mouse pointer icon of the TOS operating system on
+the Atari ST:</p>
+<p class="center">
+  <img src="i/dweet-bitmap.png" width="192" height="108" alt="The Atari ST mouse pointer">
+</p>
+<p>It's a 16x16 icon, but the bounding box of the black pixels are 8x14, so we can
+ignore pixel information that falls outside.</p>
+<p>The raw binary data to encode this information looks like this:</p>
+<pre><code>10000000
+11000000
+11100000
+11110000
+11111000
+11111100
+11111110
+11111111
+11111000
+11011000
+10001100
+00001100
+00000110
+00000110
+</code></pre>
+<p>If you squint, you should be able to make out the mouse pointer.</p>
+<p>In its raw form these ones and zeroes would take up <code>8 * 14 = 112</code> characters,
+not leaving much room in a 140-character dweet to incorporate code to actually
+render the pixels.</p>
+<h3 id="encoding-with-a-problem" tabindex="-1"><a class="permalink" href="#encoding-with-a-problem">Encoding, with a problem</a></h3>
+<p>Let's start with packing each of the rows into a byte. I'll prefix each row with
+<code>0b</code> to turn it into a binary number literal:</p>
+<pre><code>const bytes = [
+  0b10000000,
+  0b11000000,
+  0b11100000,
+  0b11110000,
+  0b11111000,
+  0b11111100,
+  0b11111110,
+  0b11111111,
+  0b11111000,
+  0b11011000,
+  0b10001100,
+  0b00001100,
+  0b00000110,
+  0b00000110,
+];
+</code></pre>
+<p>This is equivalent to:</p>
+<pre><code class="language-js">const bytes = [128, 192, 224, 240, 248, 252, 254, 255, 248, 216, 140, 12, 6, 6];
+</code></pre>
+<p>We can now use <code>String.fromCharCode()</code> to turn each number into characters and
+then concatenate them:</p>
+<pre><code class="language-js">const bytes = [128, 192, 224, 240, 248, 252, 254, 255, 248, 216, 140, 12, 6, 6];
+const encoded = bytes.map((c) =&gt; String.fromCharCode(c)).join('');
+</code></pre>
+<p>This is what we get:</p>
+<pre><code class="language-js">const encoded = '<span class="remove">\x80</span>ÀàðøüþÿøØ<span class="remove">\x8C\f\x06\x06</span>';
+</code></pre>
+<p>But note the extra baggage of the escaped characters in <code>\x##</code> form. Instead of
+single characters, they're all encoded as 4 characters. There's also the <code>\f</code>
+form feed character.</p>
+<p>Depending on the size and content of the bitmap, you may get none, but you could
+also get a lot of these escape sequences. They take up precious space.</p>
+<p>And when the bitmap size is wider than 8 pixels, you may venture into the much
+more verbose Unicode code point sequences, <code>\u####</code>.</p>
+<h3 id="more-efficient-encoding" tabindex="-1"><a class="permalink" href="#more-efficient-encoding">More efficient encoding</a></h3>
+<p>We can get around this by adding an offset to the character codes to put them
+within <code>0x0000</code> through <code>0xFFFF</code>: Characters within the Basic Multilingual Plane
+(BMP) don't require escaping except:</p>
+<table>
+<thead>
+<tr>
+<th>Values</th>
+<th>Designation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>0</code> through <code>31</code></td>
+<td>C0 control characters</td>
+</tr>
+<tr>
+<td><code>127</code></td>
+<td>Delete character</td>
+</tr>
+<tr>
+<td><code>128</code> through <code>159</code></td>
+<td>C1 control characters</td>
+</tr>
+</tbody>
+</table>
+<p>Keep in mind that <code>fromCharCode()</code> only works with BMP. We can't go beyond 16
+bits (or bitmap columns). There's <code>fromCodePoint()</code> to go past BMP, but I won't
+get into that.</p>
+<p>So, if we add <code>160</code> to the bit-packed value, we'll make sure we stay within the
+range that doesn't require escaping:</p>
+<pre><code class="language-js">const bytes = [128, 192, 224, 240, 248, 252, 254, 255, 248, 216, 140, 12, 6, 6];
+const encoded = bytes.map((c) =&gt; String.fromCharCode(c + 160)).join('');
+</code></pre>
+<p>This is what we get:</p>
+<pre><code class="language-js">const encoded = 'ĠŠƀƐƘƜƞƟƘŸĬ¬¦¦';
+</code></pre>
+<p>Nothing escaped!</p>
+<h3 id="initial-render" tabindex="-1"><a class="permalink" href="#initial-render">Initial render</a></h3>
+<p>Let's render our bitmap using 8x8 squares.</p>
+<p>We will pluck the character corresponding to the whole encoded row with
+<code>charCodeAt(Y)</code> and then test the bit corresponding to pixel at <code>X</code> by AND'ing
+with a bitmask we obtain by left-shifting <code>1</code> by <code>X</code> places.</p>
+<p>In verbose form, that's <code>(encoded.charCodeAt(Y) - 160) &amp; (1 &lt;&lt; X)</code>, but we can
+exploit operator precedence at the expense of human readability to make it much
+shorter: <code>encoded.charCodeAt(Y)-160&amp;1&lt;&lt;X</code>:</p>
+<pre class="dweet play"><code class="language-js">c.width|=0
+for(Y=14;Y--;)for(X=8;X--;)'ĠŠƀƐƘƜƞƟƘŸĬ¬¦¦'.charCodeAt(Y)-160&1&lt;&lt;X&&x.fillRect(X*8,Y*8,8,8)
+</code></pre>
+<p>That didn't quite work as expected because the X axis loop is reversed to save
+space. Instead of reversing that loop or replacing the bit accessor <code>i</code> with
+<code>8-i</code> and wasting space, we can simply flip our image data before encoding.</p>
+<p>By doing more preparation outside of the dweet, we save space within.</p>
+<h3 id="more-preperation" tabindex="-1"><a class="permalink" href="#more-preperation">More preperation</a></h3>
+<p>Mouse pointer icon flipped on the X axis and encoded again:</p>
+<pre><code>const bytes = [
+  0b00000001,
+  0b00000011,
+  0b00000111,
+  0b00001111,
+  0b00011111,
+  0b00111111,
+  0b01111111,
+  0b11111111,
+  0b00011111,
+  0b00011011,
+  0b00110001,
+  0b00110000,
+  0b01100000,
+  0b01100000,
+];
+const encoded = bytes.map((c) =&gt; String.fromCharCode(c + 160)).join('');
+</code></pre>
+<p>We get:</p>
+<pre><code>encoded = '¡£§¯¿ßğƟ¿»ÑÐĀĀ';
+</code></pre>
+<p>And then we can render the icon facing the right way with no extra code:</p>
+<pre class="dweet play"><code class="language-js">c.width|=0
+for(Y=14;Y--;)for(X=8;X--;)'¡£§¯¿ßğƟ¿»ÑÐĀĀ'.charCodeAt(Y)-160&1&lt;&lt;X&&x.fillRect(X*8,Y*8,8,8)
+</code></pre>
+<h3 id="wait-a-minute" tabindex="-1"><a class="permalink" href="#wait-a-minute">Wait a minute...</a></h3>
+<p>If we can add some offset, 160, to get us past the C1 block, what stops us from
+making this offset a power of 2? Since we're doing binary masking to test bits,
+we're already ignoring any bits that fall outside our most significant bit.
+Let's go up to next power of 2 that's larger than 160: <code>256</code>.</p>
+<pre><code>const bytes = [
+  0b00000001,
+  0b00000011,
+  0b00000111,
+  0b00001111,
+  0b00011111,
+  0b00111111,
+  0b01111111,
+  0b11111111,
+  0b00011111,
+  0b00011011,
+  0b00110001,
+  0b00110000,
+  0b01100000,
+  0b01100000,
+];
+const encoded = bytes.map((c) =&gt; String.fromCharCode(c + 256)).join('');
+</code></pre>
+<p>We get:</p>
+<pre><code>encoded = 'āăćďğĿſǿğěıİŠŠ';
+</code></pre>
+<p>And we gloriously save 4 characters:</p>
+<pre class="dweet play"><code class="language-js">c.width|=0
+for(Y=14;Y--;)for(X=8;X--;)'āăćďğĿſǿğěıİŠŠ'.charCodeAt(Y)&1&lt;&lt;X&&x.fillRect(X*8,Y*8,8,8)
+</code></pre>
+<h3 id="loop-collapse" tabindex="-1"><a class="permalink" href="#loop-collapse">Loop collapse</a></h3>
+<p>A JavaScript golfing technique that can <strong>sometimes</strong> save space: Joining two
+nested loops into one.</p>
+<p>We can loop over all 112 pixels and then compute the <code>X</code> and <code>Y</code> values.</p>
+<p>For <code>Y</code>, the verbose way would be dividing the iterator <code>i</code> with the number of
+columns and flooring the value: <code>Math.floor(i/8)</code>. We can also exploit binary
+operators to coerce the result into an integer: <code>i/8|0</code>. However, since in this
+case we're lucky enough to have exactly 8 columns, we can simply bit-shift the
+value by 3 bits: <code>i&gt;&gt;3</code>.</p>
+<p>For <code>X</code>, a modulo would work: <code>X=i%8</code>. However, since 8 is a power of two, we
+can use a binary AND with 7 to the same effect: <code>X=i&amp;7</code>. It's symmetrical with
+our use of bit shifting for <code>Y</code> and it also truncates the result in case <code>i</code>
+were to be not an integer — something modulo doesn't provide.</p>
+<p>When you have creative freedom in picking dimensions in a dweet, sticking to
+powers of 2 can yield savings.</p>
+<p>Here's the collapsed loop version:</p>
+<pre class="dweet play"><code class="language-js">c.width|=0
+for(i=112;i--;'āăćďğĿſǿğěıİŠŠ'.charCodeAt(Y=i>>3)&1&lt;&lt;X&&x.fillRect(X*8,Y*8,8,8))X=i&7
+</code></pre>
+<p>Note that we're now using the &quot;final expression&quot; slot of the <code>for</code> loop to do
+the rendering. This slot doesn't have to be only used for
+incrementing/decrementing a loop variable. We've left the <code>X=i&amp;7</code> assigned
+within the loop because we then don't have to create an empty loop body with a
+<code>;</code> character and we don't need to use a <code>,</code> operator with the final expression.</p>
+<p>Also note a common trick where we can store the value of an expression while we
+use it for the first time, as in <code>charCodeAt(Y=i&gt;&gt;3)</code>.</p>
+<p>Just saved 2 characters, but it's worth it!</p>
+<h3 id="when-you-have-extra-space" tabindex="-1"><a class="permalink" href="#when-you-have-extra-space">When you have extra space</a></h3>
+<p>Since we still have a <strong>whopping 44 characters</strong> until the 140 character limit,
+we can throw in some fun.</p>
+<p>Mouse hijack!</p>
+<pre class="dweet play"><code class="language-js">c.width|=0
+for(i=112;i--;'āăćďğĿſǿğěıİŠŠ'.charCodeAt(Y=i>>3)&1&lt;&lt;X&&x.fillRect(X*8+(S(t*3.1)**5+1)*960,Y*8+(C(t*5.3)**7+1)*540,8,8))X=i&7
+</code></pre>
+<p>Some final tricks that are used in the above:</p>
+<ol>
+<li>Add <code>1</code> and divide by <code>2</code> sine and cosine values to let them go between <code>0</code>
+and <code>1</code> instead of <code>-1</code> and <code>1</code>. Though, in the above, I'm not dividing by 2
+but multiplying by half the extents of the canvas to save space.</li>
+<li>Raise values to powers less then 1 to dampen and more than 1 to excite
+motion. I obtain the jolty motion by the <code>**5</code> and <code>**7</code>.</li>
+<li>Multiply angles with primes or &quot;weird&quot; values to prevent the motion to have a
+short loop cycle. The curves will take a long time converging back on their
+starting positions thanks to the <code>*3.1</code> and <code>*5.3</code>.</li>
+</ol>
+<!--
+<pre class="dweet play"><code class="language-js">c.width|=0
+s=64
+x.fillStyle='white';x.fillRect(0,0,1920,1080)
+x.fillStyle='black'
+for(j=14;j--;)for(i=8;i--;)'ŁŃŇŏşſƿȿşśűŰƠƠ'.charCodeAt(j)-320&1&lt;&lt;i&&x.fillRect(i*64+(c.width-8*s)/2,j*64+(c.height-14*s)/2,64,64)
+</code></pre>
+-->
+</div>
+
+  
+</article>
+</main>
+
+    <footer>
+      <hr />
+      <p class="footer meta">
+        &copy; Ate<span class="sh">s</span> Göral &middot;
+        <a href="https://github.com/atesgoral/ates.dev">src</a> &middot;
+        <a href="https://www.11ty.dev/">11ty</a>
+      </p>
+    </footer>
+
+    <div id="dweet-length-template" style="display: none">
+      <div class="length"><span></span>/140</div>
+    </div>
+
+    <div id="dweet-player-template" style="display: none">
+      <p class="canvas-container">
+        <span class="canvas-subcontainer dweet-container">
+          <canvas class="white" width="1920" height="1080"></canvas>
+        </span>
+      </p>
+    </div>
+  </body>
+</html>
