@@ -7,6 +7,7 @@ date: 2024-12-30
 libs:
   - render
   - dweet
+bluesky: https://bsky.app/profile/ates.dev/post/3lekjrr65w22j
 ---
 
 This is a breakdown of one of my [older dweets][1], introducing a dweet
