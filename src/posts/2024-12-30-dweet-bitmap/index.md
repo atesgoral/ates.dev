@@ -236,7 +236,7 @@ We get:
 encoded = 'āăćďğĿſǿğěıİŠŠ';
 ```
 
-And we gloriously save 4 characters:
+And we gloriously save 4 characters by omitting the `-256` subtraction:
 
 <pre class="dweet play"><code class="language-js">c.width|=0
 for(Y=14;Y--;)for(X=8;X--;)'āăćďğĿſǿğěıİŠŠ'.charCodeAt(Y)&1&lt;&lt;X&&x.fillRect(X*8,Y*8,8,8)
