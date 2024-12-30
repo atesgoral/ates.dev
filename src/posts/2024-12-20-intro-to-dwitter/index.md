@@ -50,7 +50,7 @@ following global variables:
 
 The `R` function takes four optional parameters: red, green, blue, and alpha. e.g. `R(255, 0, 0, 0.5)` is a semi-transparent red color. Skipped arguments default to 0 except for alpha, which defaults to 1.
 
-### The Default Scene
+### The default scene
 
 When you hit the **New** button on Dwitter, you're presented with this default
 scene:
