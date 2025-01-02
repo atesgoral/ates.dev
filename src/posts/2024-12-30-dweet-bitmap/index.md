@@ -116,14 +116,18 @@ more verbose Unicode code point sequences, `\u####`.
 ### More efficient encoding
 
 We can get around this by adding an offset to the character codes to put them
-within `0x0000` through `0xFFFF`: Characters within the Basic Multilingual Plane
-(BMP) don't require escaping except:
+within `0x0000` through `0xFFFF`. Characters within the [Basic Multilingual Plane
+(BMP)][4] don't require escaping, except:
 
-| Values              | Designation           |
-| ------------------- | --------------------- |
-| `0` through `31`    | C0 control characters |
-| `127`               | Delete character      |
-| `128` through `159` | C1 control characters |
+| Values              | Designation      |
+| ------------------- | ---------------- |
+| `0` through `31`    | [C0 controls][5] |
+| `127`               | DEL (delete)     |
+| `128` through `159` | [C1 controls][6] |
+
+[4]: https://en.wikipedia.org/wiki/Plane_(Unicode)#Basic_Multilingual_Plane
+[5]: https://en.wikipedia.org/wiki/C0_and_C1_control_codes#C0_controls
+[6]: https://en.wikipedia.org/wiki/C0_and_C1_control_codes#C1_controls
 
 Keep in mind that `fromCharCode()` only works with BMP. We can't go beyond 16
 bits (or bitmap columns). There's `fromCodePoint()` to access characters past
