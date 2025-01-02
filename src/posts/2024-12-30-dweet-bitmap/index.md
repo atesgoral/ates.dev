@@ -103,7 +103,7 @@ This is what we get:
 <pre><code class="language-js">const encoded = '<span class="remove">\x80</span>ÀàðøüþÿøØ<span class="remove">\x8C\f\x06\x06</span>';
 </code></pre>
 
-But note the extra overhead of the escaped characters in `\x##` form. Instead of
+Note the extra overhead of the escaped characters in `\x##` form. Instead of
 single characters, they're all encoded as 4 characters. There's also the `\f`
 form feed character.
 
