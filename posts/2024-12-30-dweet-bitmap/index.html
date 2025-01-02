@@ -192,7 +192,7 @@ const encoded = bytes.map((c) =&gt; String.fromCharCode(c)).join('');
 <p>This is what we get:</p>
 <pre><code class="language-js">const encoded = '<span class="remove">\x80</span>ÀàðøüþÿøØ<span class="remove">\x8C\f\x06\x06</span>';
 </code></pre>
-<p>But note the extra overhead of the escaped characters in <code>\x##</code> form. Instead of
+<p>Note the extra overhead of the escaped characters in <code>\x##</code> form. Instead of
 single characters, they're all encoded as 4 characters. There's also the <code>\f</code>
 form feed character.</p>
 <p>Depending on the size and content of the bitmap, you may get none, but you could
