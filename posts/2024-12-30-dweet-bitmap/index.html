@@ -201,8 +201,8 @@ also get a lot of these escape sequences. They take up precious space.</p>
 more verbose Unicode code point sequences, <code>\u####</code>.</p>
 <h3 id="more-efficient-encoding" tabindex="-1"><a class="permalink" href="#more-efficient-encoding">More efficient encoding</a></h3>
 <p>We can get around this by adding an offset to the character codes to put them
-within <code>0x0000</code> through <code>0xFFFF</code>: Characters within the Basic Multilingual Plane
-(BMP) don't require escaping except:</p>
+within <code>0x0000</code> through <code>0xFFFF</code>. Characters within the <a href="https://en.wikipedia.org/wiki/Plane_(Unicode)#Basic_Multilingual_Plane">Basic Multilingual Plane
+(BMP)</a> don't require escaping, except:</p>
 <table>
 <thead>
 <tr>
@@ -213,15 +213,15 @@ within <code>0x0000</code> through <code>0xFFFF</code>: Characters within the Ba
 <tbody>
 <tr>
 <td><code>0</code> through <code>31</code></td>
-<td>C0 control characters</td>
+<td><a href="https://en.wikipedia.org/wiki/C0_and_C1_control_codes#C0_controls">C0 controls</a></td>
 </tr>
 <tr>
 <td><code>127</code></td>
-<td>Delete character</td>
+<td>DEL (delete)</td>
 </tr>
 <tr>
 <td><code>128</code> through <code>159</code></td>
-<td>C1 control characters</td>
+<td><a href="https://en.wikipedia.org/wiki/C0_and_C1_control_codes#C1_controls">C1 controls</a></td>
 </tr>
 </tbody>
 </table>
