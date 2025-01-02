@@ -271,9 +271,9 @@ for(i=112;i--;'āăćďğĿſǿğěıİŠŠ'.charCodeAt(Y=i>>3)&1&lt;&lt;X&&x.fi
 
 Note that we're now using the "final expression" slot of the `for` loop to do
 the rendering. This slot doesn't have to be only used for
-incrementing/decrementing a loop variable. We've left the `X=i&7` assigned
+incrementing/decrementing a loop variable. We've left the `X=i&7` assignment
 within the loop because we then don't have to create an empty loop body with a
-`;` character and we don't need to use a `,` operator with the final expression.
+`;` character and we don't need to use a `,` operator within the final expression.
 
 Also note a common trick where we can store the value of an expression while we
 use it for the first time, as in `charCodeAt(Y=i>>3)`.
