@@ -1,0 +1,1300 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xml:base="https://ates.dev/" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>ates.dev</title>
+    <link>https://ates.dev/</link>
+    <atom:link href="https://ates.dev/feed.xml" rel="self" type="application/rss+xml" />
+    <description>Personal website of Ateş Göral</description>
+    <language>en</language>
+    <item>
+      <title>Using Bitmaps in Dweets</title>
+      <link>https://ates.dev/posts/2024-12-30-dweet-bitmap/</link>
+      <description>&lt;p&gt;This is a breakdown of one of my &lt;a href=&quot;https://www.dwitter.net/d/3271&quot;&gt;older dweets&lt;/a&gt;, introducing a dweet
+rendering technique and a few general JavaScript golfing techniques.&lt;/p&gt;
+&lt;p&gt;It&#39;s a follow-up to:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;a href=&quot;https://ates.dev/posts/2024-12-20-intro-to-dwitter&quot;&gt;A Short Introduction to Dwitter and JavaScript Golfing&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://ates.dev/posts/2024-12-25-dweeting-outside-the-box&quot;&gt;Dweeting Outside the Box&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id=&quot;the-subject&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;permalink&quot; href=&quot;https://ates.dev/posts/2024-12-30-dweet-bitmap/#the-subject&quot;&gt;The subject&lt;/a&gt;&lt;/h3&gt;
+&lt;p&gt;Suppose we want to render a specific bitmap image in a Dweet. As an example,
+I&#39;ll nostalgically pick the mouse pointer icon of the TOS operating system on
+the Atari ST:&lt;/p&gt;
+&lt;p class=&quot;center&quot;&gt;
+  &lt;img src=&quot;https://ates.dev/posts/2024-12-30-dweet-bitmap/i/dweet-bitmap.png&quot; width=&quot;192&quot; height=&quot;108&quot; alt=&quot;The Atari ST mouse pointer&quot;&gt;
+&lt;/p&gt;
+&lt;p&gt;It&#39;s a 16x16 icon, but the bounding box of the black pixels is 8x14, so we can
+ignore pixel information that falls outside.&lt;/p&gt;
+&lt;p&gt;The raw binary data to encode this information looks like this:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;10000000
+11000000
+11100000
+11110000
+11111000
+11111100
+11111110
+11111111
+11111000
+11011000
+10001100
+00001100
+00000110
+00000110
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;If you squint, you should be able to make out the mouse pointer.&lt;/p&gt;
+&lt;p&gt;In its raw form these ones and zeroes would take up &lt;code&gt;8 * 14 = 112&lt;/code&gt; characters,
+not leaving much room in a 140-character dweet to incorporate code to actually
+render the pixels.&lt;/p&gt;
+&lt;h3 id=&quot;encoding-with-a-problem&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;permalink&quot; href=&quot;https://ates.dev/posts/2024-12-30-dweet-bitmap/#encoding-with-a-problem&quot;&gt;Encoding, with a problem&lt;/a&gt;&lt;/h3&gt;
+&lt;p&gt;Let&#39;s start with packing each of the rows into a byte. I&#39;ll prefix each row with
+&lt;code&gt;0b&lt;/code&gt; to turn it into a binary number literal:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;const bytes = [
+  0b10000000,
+  0b11000000,
+  0b11100000,
+  0b11110000,
+  0b11111000,
+  0b11111100,
+  0b11111110,
+  0b11111111,
+  0b11111000,
+  0b11011000,
+  0b10001100,
+  0b00001100,
+  0b00000110,
+  0b00000110,
+];
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;This is equivalent to:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-js&quot;&gt;const bytes = [128, 192, 224, 240, 248, 252, 254, 255, 248, 216, 140, 12, 6, 6];
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;We can now use &lt;code&gt;String.fromCharCode()&lt;/code&gt; to turn each number into characters and
+then concatenate them:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-js&quot;&gt;const bytes = [128, 192, 224, 240, 248, 252, 254, 255, 248, 216, 140, 12, 6, 6];
+const encoded = bytes.map((c) =&amp;gt; String.fromCharCode(c)).join(&#39;&#39;);
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;This is what we get:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-js&quot;&gt;const encoded = &#39;&lt;span class=&quot;remove&quot;&gt;&#92;x80&lt;/span&gt;ÀàðøüþÿøØ&lt;span class=&quot;remove&quot;&gt;&#92;x8C&#92;f&#92;x06&#92;x06&lt;/span&gt;&#39;;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Note the extra overhead of the escaped characters in &lt;code&gt;&#92;x##&lt;/code&gt; form. Instead of
+single characters, they&#39;re all encoded as 4 characters. There&#39;s also the &lt;code&gt;&#92;f&lt;/code&gt;
+form feed character.&lt;/p&gt;
+&lt;p&gt;Depending on the size and content of the bitmap, you may get none, but you could
+also get a lot of these escape sequences. They take up precious space.&lt;/p&gt;
+&lt;p&gt;And when the bitmap size is wider than 8 pixels, you may venture into the much
+more verbose Unicode code point sequences, &lt;code&gt;&#92;u####&lt;/code&gt;.&lt;/p&gt;
+&lt;h3 id=&quot;more-efficient-encoding&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;permalink&quot; href=&quot;https://ates.dev/posts/2024-12-30-dweet-bitmap/#more-efficient-encoding&quot;&gt;More efficient encoding&lt;/a&gt;&lt;/h3&gt;
+&lt;p&gt;We can get around this by adding an offset to the character codes to put them
+within &lt;code&gt;0x0000&lt;/code&gt; through &lt;code&gt;0xFFFF&lt;/code&gt;. Characters within the &lt;a href=&quot;https://en.wikipedia.org/wiki/Plane_(Unicode)#Basic_Multilingual_Plane&quot;&gt;Basic Multilingual Plane
+(BMP)&lt;/a&gt; don&#39;t require escaping, except:&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Values&lt;/th&gt;
+&lt;th&gt;Designation&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;0&lt;/code&gt; through &lt;code&gt;31&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/C0_and_C1_control_codes#C0_controls&quot;&gt;C0 controls&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;127&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;DEL (delete)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;128&lt;/code&gt; through &lt;code&gt;159&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/C0_and_C1_control_codes#C1_controls&quot;&gt;C1 controls&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;Keep in mind that &lt;code&gt;fromCharCode()&lt;/code&gt; only works with BMP. We can&#39;t go beyond 16
+bits (or bitmap columns). There&#39;s &lt;code&gt;fromCodePoint()&lt;/code&gt; to access characters past
+BMP, but I won&#39;t get into that.&lt;/p&gt;
+&lt;p&gt;So, if we add &lt;code&gt;160&lt;/code&gt; to the bit-packed value, we&#39;ll make sure we stay within the
+range that doesn&#39;t require escaping:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-js&quot;&gt;const bytes = [128, 192, 224, 240, 248, 252, 254, 255, 248, 216, 140, 12, 6, 6];
+const encoded = bytes.map((c) =&amp;gt; String.fromCharCode(c + 160)).join(&#39;&#39;);
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;This is what we get:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-js&quot;&gt;const encoded = &#39;ĠŠƀƐƘƜƞƟƘŸĬ¬¦¦&#39;;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Nothing escaped!&lt;/p&gt;
+&lt;h3 id=&quot;initial-render&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;permalink&quot; href=&quot;https://ates.dev/posts/2024-12-30-dweet-bitmap/#initial-render&quot;&gt;Initial render&lt;/a&gt;&lt;/h3&gt;
+&lt;p&gt;Let&#39;s render our bitmap using 8x8 squares.&lt;/p&gt;
+&lt;p&gt;We will pluck the character corresponding to the whole encoded row with
+&lt;code&gt;charCodeAt(Y)&lt;/code&gt; and then test the bit corresponding to pixel at &lt;code&gt;X&lt;/code&gt; by AND&#39;ing
+with a bitmask we obtain by left-shifting &lt;code&gt;1&lt;/code&gt; by &lt;code&gt;X&lt;/code&gt; places.&lt;/p&gt;
+&lt;p&gt;In verbose form, that&#39;s &lt;code&gt;(encoded.charCodeAt(Y) - 160) &amp;amp; (1 &amp;lt;&amp;lt; X)&lt;/code&gt;, but we can
+exploit operator precedence at the expense of human readability to make it much
+shorter: &lt;code&gt;encoded.charCodeAt(Y)-160&amp;amp;1&amp;lt;&amp;lt;X&lt;/code&gt;:&lt;/p&gt;
+&lt;pre class=&quot;dweet play&quot;&gt;&lt;code class=&quot;language-js&quot;&gt;c.width|=0
+for(Y=14;Y--;)for(X=8;X--;)&#39;ĠŠƀƐƘƜƞƟƘŸĬ¬¦¦&#39;.charCodeAt(Y)-160&amp;1&amp;lt;&amp;lt;X&amp;&amp;x.fillRect(X*8,Y*8,8,8)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;That didn&#39;t quite work as expected because the X axis loop is reversed to save
+space. Instead of reversing that loop or replacing the bit accessor &lt;code&gt;i&lt;/code&gt; with
+&lt;code&gt;7-i&lt;/code&gt; and wasting space, we can simply flip our image data before encoding.&lt;/p&gt;
+&lt;p&gt;By doing more preparation outside of the dweet, we save space within.&lt;/p&gt;
+&lt;h3 id=&quot;more-preparation&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;permalink&quot; href=&quot;https://ates.dev/posts/2024-12-30-dweet-bitmap/#more-preparation&quot;&gt;More preparation&lt;/a&gt;&lt;/h3&gt;
+&lt;p&gt;Mouse pointer icon, flipped on the X axis and encoded again:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;const bytes = [
+  0b00000001,
+  0b00000011,
+  0b00000111,
+  0b00001111,
+  0b00011111,
+  0b00111111,
+  0b01111111,
+  0b11111111,
+  0b00011111,
+  0b00011011,
+  0b00110001,
+  0b00110000,
+  0b01100000,
+  0b01100000,
+];
+const encoded = bytes.map((c) =&amp;gt; String.fromCharCode(c + 160)).join(&#39;&#39;);
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;We get:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;encoded = &#39;¡£§¯¿ßğƟ¿»ÑÐĀĀ&#39;;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;And then we can render the icon facing the right way with no extra code:&lt;/p&gt;
+&lt;pre class=&quot;dweet play&quot;&gt;&lt;code class=&quot;language-js&quot;&gt;c.width|=0
+for(Y=14;Y--;)for(X=8;X--;)&#39;¡£§¯¿ßğƟ¿»ÑÐĀĀ&#39;.charCodeAt(Y)-160&amp;1&amp;lt;&amp;lt;X&amp;&amp;x.fillRect(X*8,Y*8,8,8)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&quot;wait-a-minute&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;permalink&quot; href=&quot;https://ates.dev/posts/2024-12-30-dweet-bitmap/#wait-a-minute&quot;&gt;Wait a minute...&lt;/a&gt;&lt;/h3&gt;
+&lt;p&gt;If we can add some offset, 160, to get us past the C1 block, what prevents us
+from using a power of 2 as the offset? Since we&#39;re doing binary masking to test
+bits, we&#39;re already ignoring any bits that fall outside our most significant
+bit. Let&#39;s go up to next power of 2 that&#39;s larger than 160: &lt;code&gt;256&lt;/code&gt;.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;const bytes = [
+  0b00000001,
+  0b00000011,
+  0b00000111,
+  0b00001111,
+  0b00011111,
+  0b00111111,
+  0b01111111,
+  0b11111111,
+  0b00011111,
+  0b00011011,
+  0b00110001,
+  0b00110000,
+  0b01100000,
+  0b01100000,
+];
+const encoded = bytes.map((c) =&amp;gt; String.fromCharCode(c + 256)).join(&#39;&#39;);
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;We get:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;encoded = &#39;āăćďğĿſǿğěıİŠŠ&#39;;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;And we gloriously save 4 characters by omitting the &lt;code&gt;-256&lt;/code&gt; subtraction:&lt;/p&gt;
+&lt;pre class=&quot;dweet play&quot;&gt;&lt;code class=&quot;language-js&quot;&gt;c.width|=0
+for(Y=14;Y--;)for(X=8;X--;)&#39;āăćďğĿſǿğěıİŠŠ&#39;.charCodeAt(Y)&amp;1&amp;lt;&amp;lt;X&amp;&amp;x.fillRect(X*8,Y*8,8,8)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&quot;loop-collapse&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;permalink&quot; href=&quot;https://ates.dev/posts/2024-12-30-dweet-bitmap/#loop-collapse&quot;&gt;Loop collapse&lt;/a&gt;&lt;/h3&gt;
+&lt;p&gt;A JavaScript golfing technique that can &lt;strong&gt;sometimes&lt;/strong&gt; save space: Joining two
+nested loops into one.&lt;/p&gt;
+&lt;p&gt;We can loop over all 112 pixels and then compute the &lt;code&gt;X&lt;/code&gt; and &lt;code&gt;Y&lt;/code&gt; values.&lt;/p&gt;
+&lt;p&gt;For &lt;code&gt;Y&lt;/code&gt;, the verbose way would be dividing the iterator &lt;code&gt;i&lt;/code&gt; with the number of
+columns and flooring the value: &lt;code&gt;Math.floor(i/8)&lt;/code&gt;. We can also exploit binary
+operators to coerce the result into an integer: &lt;code&gt;i/8|0&lt;/code&gt;. However, since in this
+case we&#39;re lucky enough to have exactly 8 columns, we can simply bit-shift the
+value by 3 bits: &lt;code&gt;i&amp;gt;&amp;gt;3&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;For &lt;code&gt;X&lt;/code&gt;, a modulo would work: &lt;code&gt;X=i%8&lt;/code&gt;. However, since 8 is a power of two, we
+can use a binary AND with 7 to the same effect: &lt;code&gt;X=i&amp;amp;7&lt;/code&gt;. It&#39;s symmetrical with
+our use of bit shifting for &lt;code&gt;Y&lt;/code&gt; and it also truncates the result in case &lt;code&gt;i&lt;/code&gt;
+were to be not an integer — something modulo doesn&#39;t provide.&lt;/p&gt;
+&lt;p&gt;When you have creative freedom in picking dimensions in a dweet, sticking to
+powers of 2 can yield savings.&lt;/p&gt;
+&lt;p&gt;Here&#39;s the collapsed loop version:&lt;/p&gt;
+&lt;pre class=&quot;dweet play&quot;&gt;&lt;code class=&quot;language-js&quot;&gt;c.width|=0
+for(i=112;i--;&#39;āăćďğĿſǿğěıİŠŠ&#39;.charCodeAt(Y=i&gt;&gt;3)&amp;1&amp;lt;&amp;lt;X&amp;&amp;x.fillRect(X*8,Y*8,8,8))X=i&amp;7
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Note that we&#39;re now using the &amp;quot;final expression&amp;quot; slot of the &lt;code&gt;for&lt;/code&gt; loop to do
+the rendering. This slot doesn&#39;t have to be only used for
+incrementing/decrementing a loop variable. We&#39;ve left the &lt;code&gt;X=i&amp;amp;7&lt;/code&gt; assignment
+within the loop because we then don&#39;t have to create an empty loop body with a
+&lt;code&gt;;&lt;/code&gt; character and we don&#39;t need to use a &lt;code&gt;,&lt;/code&gt; operator within the final expression.&lt;/p&gt;
+&lt;p&gt;Also note a common trick where we can store the value of an expression while we
+use it for the first time, as in &lt;code&gt;charCodeAt(Y=i&amp;gt;&amp;gt;3)&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;Just saved 2 characters, but it&#39;s worth it!&lt;/p&gt;
+&lt;h3 id=&quot;when-you-have-extra-space&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;permalink&quot; href=&quot;https://ates.dev/posts/2024-12-30-dweet-bitmap/#when-you-have-extra-space&quot;&gt;When you have extra space&lt;/a&gt;&lt;/h3&gt;
+&lt;p&gt;Since we still have a &lt;strong&gt;whopping 44 characters&lt;/strong&gt; until the 140 character limit,
+we can throw in some fun.&lt;/p&gt;
+&lt;p&gt;Mouse hijack!&lt;/p&gt;
+&lt;pre class=&quot;dweet play&quot;&gt;&lt;code class=&quot;language-js&quot;&gt;c.width|=0
+for(i=112;i--;&#39;āăćďğĿſǿğěıİŠŠ&#39;.charCodeAt(Y=i&gt;&gt;3)&amp;1&amp;lt;&amp;lt;X&amp;&amp;x.fillRect(X*8+(S(t*3.1)**5+1)*960,Y*8+(C(t*5.3)**7+1)*540,8,8))X=i&amp;7
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Some final tricks that are used in the above:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Add &lt;code&gt;1&lt;/code&gt; to the sine and cosine values, then divide by &lt;code&gt;2&lt;/code&gt; to let them go
+between &lt;code&gt;0&lt;/code&gt; and &lt;code&gt;1&lt;/code&gt; instead of &lt;code&gt;-1&lt;/code&gt; and &lt;code&gt;1&lt;/code&gt;. Though, in the above, I&#39;m not
+dividing by &lt;code&gt;2&lt;/code&gt; but multiplying by half the extents of the canvas to save
+space.&lt;/li&gt;
+&lt;li&gt;Raise values to powers less then 1 to dampen and more than 1 to excite
+motion. I obtain the jolty motion by the &lt;code&gt;**5&lt;/code&gt; and &lt;code&gt;**7&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;Multiply angles with primes or &amp;quot;weird&amp;quot; values to prevent the motion to have a
+short loop cycle. The curves will take a long time converging back on their
+starting positions thanks to the &lt;code&gt;*3.1&lt;/code&gt; and &lt;code&gt;*5.3&lt;/code&gt;.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;!--
+&lt;pre class=&quot;dweet play&quot;&gt;&lt;code class=&quot;language-js&quot;&gt;c.width|=0
+s=64
+x.fillStyle=&#39;white&#39;;x.fillRect(0,0,1920,1080)
+x.fillStyle=&#39;black&#39;
+for(j=14;j--;)for(i=8;i--;)&#39;ŁŃŇŏşſƿȿşśűŰƠƠ&#39;.charCodeAt(j)-320&amp;1&amp;lt;&amp;lt;i&amp;&amp;x.fillRect(i*64+(c.width-8*s)/2,j*64+(c.height-14*s)/2,64,64)
+&lt;/code&gt;&lt;/pre&gt;
+--&gt;
+</description>
+      <pubDate>Mon, 30 Dec 2024 24:00:00 GMT</pubDate>
+      <dc:creator>Ateş Göral</dc:creator>
+      <guid>https://ates.dev/posts/2024-12-30-dweet-bitmap/</guid>
+    </item>
+    <item>
+      <title>Dweeting Outside the Box</title>
+      <link>https://ates.dev/posts/2024-12-25-dweeting-outside-the-box/</link>
+      <description>&lt;p&gt;This is a continuation of my &lt;a href=&quot;https://ates.dev/posts/2024-12-20-intro-to-dwitter&quot;&gt;previous post&lt;/a&gt; on Dwitter, where I gave an
+overview of &lt;a href=&quot;https://www.dwitter.net/&quot;&gt;Dwitter&lt;/a&gt; and a few JavaScript golfing tricks.&lt;/p&gt;
+&lt;p&gt;The subject was the &amp;quot;default dweet&amp;quot;, which renders 9 bars swaying back and
+forth. I&#39;ll keep the subject the same, but show rendering those 9 bars in
+different ways.&lt;/p&gt;
+&lt;p&gt;Changing up how you render a scene often opens up new opportunities for visual
+effects because it&#39;s like stepping into another dimension.&lt;/p&gt;
+&lt;p&gt;Let&#39;s start with recalling the default dweet:&lt;/p&gt;
+&lt;pre class=&quot;dweet play&quot;&gt;&lt;code class=&quot;language-js&quot;&gt;c.width|=0;for(i=9;i--;)x.fillRect(400+i*100+S(t)*300,400,50,200)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&quot;scale&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;permalink&quot; href=&quot;https://ates.dev/posts/2024-12-25-dweeting-outside-the-box/#scale&quot;&gt;Scale&lt;/a&gt;&lt;/h3&gt;
+&lt;p&gt;Seeing that the bars click into a 50x50 grid, one might be tempted to scale the
+context to save on digits. Let&#39;s scale the context by 50 and divide all
+dimensions by 50:&lt;/p&gt;
+&lt;pre class=&quot;dweet play&quot;&gt;&lt;code class=&quot;language-js&quot;&gt;c.width|=0;x.scale(50,50);for(i=9;i--;)x.fillRect(8+i*2+S(t)*6,8,1,4)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;In this particular case, the extra length of &lt;code&gt;x.scale(50,50)&lt;/code&gt; is not offset by
+the savings we got from fewer digits. We went from 65 to 69 characters. The
+function call overhead (&lt;code&gt;x.scale()&lt;/code&gt;) costs more characters than what we save by
+using smaller numbers.&lt;/p&gt;
+&lt;p&gt;In tiny-space coding, intuitions often don&#39;t pan out, you just have to try
+things for fit.&lt;/p&gt;
+&lt;h3 id=&quot;transform&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;permalink&quot; href=&quot;https://ates.dev/posts/2024-12-25-dweeting-outside-the-box/#transform&quot;&gt;Transform&lt;/a&gt;&lt;/h3&gt;
+&lt;p&gt;Instead of positioning the elements of the scene by x and y offsets from the top
+left, we can use &lt;code&gt;translate()&lt;/code&gt; to shift the frame of reference to the center of
+the canvas. This can yield two benefits:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;If there are multiple primitives in the scene, we don&#39;t have to repeat adding
+offsets to them and therefore save on characters.&lt;/li&gt;
+&lt;li&gt;We can use &lt;code&gt;rotate()&lt;/code&gt; to rotate them around the center of the canvas.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;code&gt;translate(960, 540)&lt;/code&gt; moves the origin &lt;code&gt;(0, 0)&lt;/code&gt; to the center of the canvas.
+Assuming we want to rotate by angle &lt;code&gt;A&lt;/code&gt; using &lt;code&gt;rotate(A)&lt;/code&gt;, we can combine
+these stacked transformations into a single &lt;code&gt;setTransform()&lt;/code&gt; call, saving
+precious space. Let&#39;s also throw &lt;code&gt;Z&lt;/code&gt;, the zoom factor, into the mix. The verbose
+form is:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-js&quot;&gt;x.setTransform(C(A) * Z, S(A) * Z, -S(A) * Z, C(A) * Z, 960, 540);
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Here&#39;s the default scene using such combined transformations:&lt;/p&gt;
+&lt;pre class=&quot;dweet play&quot;&gt;&lt;code class=&quot;language-js&quot;&gt;for(c.width|=i=9,Z=1,A=0;i--;x.fillRect(-560+i*100+S(t)*300,-140,50,200))x.setTransform(k=C(A)*Z,z=S(A)*Z,-z,k,960,540)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Note the &lt;code&gt;k&lt;/code&gt; and &lt;code&gt;z&lt;/code&gt; variable assignments that reduce repetition. It makes
+intuitive sense to assign repeated expressions to variables, but it only saves
+space when the expression we&#39;re substituting is longer than 2-3 characters, or
+when it&#39;s repeated for more than 2 times.&lt;/p&gt;
+&lt;p&gt;This transformation setup enables perfect-loop animations like &lt;a href=&quot;https://www.dwitter.net/d/21975&quot;&gt;so&lt;/a&gt;:&lt;/p&gt;
+&lt;pre class=&quot;dweet play&quot;&gt;&lt;code class=&quot;language-js&quot;&gt;for(c.width|=i=9;i--;x.fillRect(-425+i*100,-103,99-p**.3*50,206))p=t/2%1,Z=2.26+p*7.34,x.setTransform(k=C(A=1.57*p)*Z,z=S(A)*Z,-z,k,960,540)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;And &lt;a href=&quot;https://www.dwitter.net/d/13859&quot;&gt;so&lt;/a&gt;:&lt;/p&gt;
+&lt;pre class=&quot;dweet play&quot;&gt;&lt;code class=&quot;language-js&quot;&gt;eval(unescape(escape`挮睩摴桼㵦㵢㴾房❣汥慲剥捴✺❦楬汒散琧㭳㵓⡴⤻娽㤵〪猪⨴⬵〻甽䌨琩⩚㭸学⡵㸰⥝⠰ⰰⰲ攳ⰲ攳⤻砮瑲慮獦潲洨甬稽猪娬⵺Ⱶⰹ㘰ⰵ㐰⤻景爨椽ㄸ㭩ⴭ㬩硛昨椦ㄩ崨椭㤬ⴲⰱⰴ⤻`.replace(/u(..)/g,&quot;$1%&quot;)))
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;That gibberish? It&#39;s an oft-used compression hack to stuff more than 140
+characters into a dweet. The raw characters are encoded as UTF-16 code units,
+and then escaped as UTF-8 code units. While this doesn&#39;t technically violate the
+&amp;quot;140 characters&amp;quot; rule of Dwitter (since the rule was about characters, not bytes),
+it&#39;s not as pleasing as fitting a dweet into 140 characters without compression.&lt;/p&gt;
+&lt;p&gt;A quick way to see what the uncompressed version is, is to replace the &lt;code&gt;eval()&lt;/code&gt;
+with a &lt;code&gt;throw&lt;/code&gt;. The &lt;a href=&quot;https://beta.dwitter.net/&quot;&gt;perpetual-beta version of Dwitter&lt;/a&gt; comes with a toggle
+to show uncompressed code.&lt;/p&gt;
+&lt;p&gt;Here&#39;s the uncompressed version of the dweet above:&lt;/p&gt;
+&lt;pre class=&quot;dweet&quot;&gt;&lt;code class=&quot;language-js&quot;&gt;c.width|=f=b=&gt;b?&#39;clearRect&#39;:&#39;fillRect&#39;;s=S(t);Z=950*s**4+50;u=C(t)*Z;x[f(u&gt;0)](0,0,2e3,2e3);x.transform(u,z=s*Z,-z,u,960,540);for(i=18;i--;)x[f(i&amp;1)](i-9,-2,1,4)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;To compress, you can use the wonderful &lt;a href=&quot;https://capjs.3d2k.com/&quot;&gt;CapJS&lt;/a&gt; tool created by the one and
+only &lt;a href=&quot;https://frankforce.com/&quot;&gt;Frank Force&lt;/a&gt;.&lt;/p&gt;
+&lt;h3 id=&quot;slice-and-dice&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;permalink&quot; href=&quot;https://ates.dev/posts/2024-12-25-dweeting-outside-the-box/#slice-and-dice&quot;&gt;Slice and Dice&lt;/a&gt;&lt;/h3&gt;
+&lt;p&gt;We can chop up the bars into tiny squares and perturb their individual positions
+or colors to create interesting effects. Like &lt;a href=&quot;https://www.dwitter.net/d/7283&quot;&gt;this&lt;/a&gt; specular highlight:&lt;/p&gt;
+&lt;pre class=&quot;dweet play&quot;&gt;&lt;code class=&quot;language-js&quot;&gt;c.width|=0;for(j=n=10;--j;)for(i=100;i--;X=i%5+j*n+S(t)*30,Y=i/5|0,x.fillStyle=R(r=255-(X-50)**2-Y**2,r,r),x.fillRect(400+X*n,400+Y*n,n,n));
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;And &lt;a href=&quot;https://www.dwitter.net/d/2384&quot;&gt;this&lt;/a&gt; twirl:&lt;/p&gt;
+&lt;pre class=&quot;dweet play&quot;&gt;&lt;code class=&quot;language-js&quot;&gt;c.width|=0;for(j=9;j--;)for(i=100;i--;X=i%5+j*10+S(t)*30,Y=i/5|0,x.fillRect(400+X*10+S(t+X+Y)*C(t)*9,400+Y*10,10,10));
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Note the &lt;code&gt;i/5|0&lt;/code&gt; expression that exploits the fact that JavaScript floors
+numbers prior to performing binary operations like the binary OR used here. This
+is &lt;strong&gt;much&lt;/strong&gt; shorter than &lt;code&gt;Math.floor(i/5)&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;Another technique to note is the elimination of nested loops for X and Y. There
+is a single loop and the X and Y values are derived through modulo and division.
+This &lt;strong&gt;sometimes&lt;/strong&gt; saves space, depending on how many times the X and Y values
+are used.&lt;/p&gt;
+&lt;p&gt;Also note the abuse of the comma operator to perform multiple operations. This
+is usually shorter than creating a &lt;code&gt;{}&lt;/code&gt; code block with statements separated by
+semicolons.&lt;/p&gt;
+&lt;h3 id=&quot;xor&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;permalink&quot; href=&quot;https://ates.dev/posts/2024-12-25-dweeting-outside-the-box/#xor&quot;&gt;XOR&lt;/a&gt;&lt;/h3&gt;
+&lt;p&gt;We can also play with different &lt;a href=&quot;https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/globalCompositeOperation&quot;&gt;compositing operations&lt;/a&gt;. &lt;a href=&quot;https://www.dwitter.net/d/22551&quot;&gt;Here&lt;/a&gt;, I&#39;m
+overlaying a bunch of rectangles in XOR mode to let them alternate between black
+and white to create the default bars. You have to wait a bit to see the reveal:&lt;/p&gt;
+&lt;pre class=&quot;dweet play&quot;&gt;&lt;code class=&quot;language-js&quot;&gt;c.width=1920
+x.globalCompositeOperation=&#39;xor&#39;
+for(i=18;i--;)x.fillRect(400+i*50+S(t)*300,400+i*S(t/9)**9*200,2e3,200)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&quot;thematic-end&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;permalink&quot; href=&quot;https://ates.dev/posts/2024-12-25-dweeting-outside-the-box/#thematic-end&quot;&gt;Thematic End&lt;/a&gt;&lt;/h3&gt;
+&lt;p&gt;And here&#39;s a &lt;a href=&quot;https://www.dwitter.net/d/29243&quot;&gt;thematic end&lt;/a&gt; to this post. Not quite the default bars, but
+they&#39;re hidden in there:&lt;/p&gt;
+&lt;pre class=&quot;dweet play&quot;&gt;&lt;code class=&quot;language-js&quot;&gt;c.width|=0
+for(i=17;i--;)for(j=5;j--;)[2057,1,32897,0,2057][j]+87380&amp;1&amp;lt;&amp;lt;i&amp;&amp;x.fillRect(1200-i*50+S(t)*300,400+j*40,50,40)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;A Merry Christmas and a Happy New Year!&lt;/p&gt;
+</description>
+      <pubDate>Wed, 25 Dec 2024 24:00:00 GMT</pubDate>
+      <dc:creator>Ateş Göral</dc:creator>
+      <guid>https://ates.dev/posts/2024-12-25-dweeting-outside-the-box/</guid>
+    </item>
+    <item>
+      <title>A Short Introduction to Dwitter and JavaScript Golfing</title>
+      <link>https://ates.dev/posts/2024-12-20-intro-to-dwitter/</link>
+      <description>&lt;p&gt;This is a brief introduction to &lt;a href=&quot;https://en.wikipedia.org/wiki/Code_golf&quot;&gt;JavaScript golfing&lt;/a&gt; — not the competitive
+kind, but the kind on &lt;a href=&quot;https://www.dwitter.net/&quot;&gt;Dwitter&lt;/a&gt;: a community for sharing visual JavaScript
+demos in 140 characters.&lt;/p&gt;
+&lt;p&gt;The Dwitter community has a friendly and collaborative remix culture (where
+users &amp;quot;fork&amp;quot; each other&#39;s works and build on them). And there&#39;s also a culture
+of sharing tips and tricks.&lt;/p&gt;
+&lt;p&gt;Sidestepping the numerous online resources for writing unreadably compact
+JavaScript, I will share the tricks I know and use, and try to present them in
+a progressive manner.&lt;/p&gt;
+&lt;p class=&quot;meta&quot;&gt;Check out my originals and remixes
+over at Dwitter under &quot;&lt;a href=&quot;https://www.dwitter.net/u/magna/top&quot;&gt;magna&lt;/a&gt;&quot; to see some of these tricks in action.&lt;/p&gt;
+&lt;h3 id=&quot;dweet&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;permalink&quot; href=&quot;https://ates.dev/posts/2024-12-20-intro-to-dwitter/#dweet&quot;&gt;Dweet&lt;/a&gt;&lt;/h3&gt;
+&lt;p&gt;Demos posted on Dwitter are called &amp;quot;dweets&amp;quot;. The premise is, there&#39;s a rendering
+loop that keeps calling the function &lt;code&gt;u(t)&lt;/code&gt; where &lt;code&gt;t&lt;/code&gt; is time in seconds since
+the start of the demo, and you have to fit function &lt;code&gt;u&lt;/code&gt;&#39;s body into 140
+characters.&lt;/p&gt;
+&lt;p&gt;You&#39;re using the &lt;code&gt;&amp;lt;canvas&amp;gt;&lt;/code&gt; API, with a 2D context. Dwitter gives you the
+following global variables:&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Variable&lt;/th&gt;
+&lt;th&gt;Value&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;c&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;the 1920x1080 canvas element&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;x&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;the 2D context&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;S&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;the sine function (&lt;code&gt;Math.sin&lt;/code&gt;)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;C&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;the cosine function (&lt;code&gt;Math.cos&lt;/code&gt;)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;T&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;the tangent function (&lt;code&gt;Math.tan&lt;/code&gt;)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;R&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;a function for creating RGBA colors&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;frame&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;a counter, incremented on each frame&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;The &lt;code&gt;R&lt;/code&gt; function takes four optional parameters: red, green, blue, and alpha. e.g. &lt;code&gt;R(255, 0, 0, 0.5)&lt;/code&gt; is a semi-transparent red color. Skipped arguments default to 0 except for alpha, which defaults to 1.&lt;/p&gt;
+&lt;h3 id=&quot;the-default-scene&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;permalink&quot; href=&quot;https://ates.dev/posts/2024-12-20-intro-to-dwitter/#the-default-scene&quot;&gt;The default scene&lt;/a&gt;&lt;/h3&gt;
+&lt;p&gt;When you hit the &lt;strong&gt;New&lt;/strong&gt; button on Dwitter, you&#39;re presented with this default
+scene:&lt;/p&gt;
+&lt;pre class=&quot;dweet play&quot;&gt;&lt;code class=&quot;language-js&quot;&gt;c.width=1920 // clear the canvas
+for(i=0;i&lt;9;i++)
+x.fillRect(400+i*100+S(t)*300,400,50,200) // draw 50x200 rects
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;9 black rectangles, swaying back and forth, following a sine wave.&lt;/p&gt;
+&lt;p&gt;This default scene is the main subject of many dweets, employing different
+creative/surprising techniques to draw the rectangles. Or a subject that makes
+a sudden entrance into an existing scene through a remix.&lt;/p&gt;
+&lt;p&gt;It&#39;s a Dwitter meme.&lt;/p&gt;
+&lt;p&gt;The default dweet is 112 characters in its initial form. Let&#39;s start shaving
+some characters off, bit by bit.&lt;/p&gt;
+&lt;h3 id=&quot;obvious-things&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;permalink&quot; href=&quot;https://ates.dev/posts/2024-12-20-intro-to-dwitter/#obvious-things&quot;&gt;Obvious things&lt;/a&gt;&lt;/h3&gt;
+&lt;p&gt;Let&#39;s start with the banally obvious: Remove comments and whitespace.&lt;/p&gt;
+&lt;pre class=&quot;dweet&quot;&gt;&lt;code class=&quot;language-js&quot;&gt;c.width=1920;for(i=0;i&lt;9;i++)x.fillRect(400+i*100+S(t)*300,400,50,200)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;We&#39;re down to 70.&lt;/p&gt;
+&lt;h3 id=&quot;idempotency&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;permalink&quot; href=&quot;https://ates.dev/posts/2024-12-20-intro-to-dwitter/#idempotency&quot;&gt;Idempotency&lt;/a&gt;&lt;/h3&gt;
+&lt;p&gt;Assigning the width or height of a canvas resets the canvas, even if the value
+is the same as the current value.&lt;/p&gt;
+&lt;p&gt;That&#39;s why the default scene sets the canvas width to 1920: To clear the canvas
+before drawing each frame.&lt;/p&gt;
+&lt;p&gt;But what we really need is a no-op assignment to clear the canvas. Any
+idempotent operation will do. So we can binary OR the canvas width with 0:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-js&quot;&gt;c.width=19&lt;span class=&quot;remove&quot;&gt;20&lt;/span&gt;
+c.width|=0
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;We shave another 2 characters off.&lt;/p&gt;
+&lt;p&gt;We could have added 0 or multiplied by 1. You get the idea.&lt;/p&gt;
+&lt;h3 id=&quot;loop-inversion&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;permalink&quot; href=&quot;https://ates.dev/posts/2024-12-20-intro-to-dwitter/#loop-inversion&quot;&gt;Loop inversion&lt;/a&gt;&lt;/h3&gt;
+&lt;p&gt;When loop order is unimportant, we can invert loops to shave characters.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-js&quot;&gt;for(i=0;i&lt;9;i&lt;span class=&quot;remove&quot;&gt;++)&lt;/span&gt;
+for(i=9;i--;)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;We shave 3 characters off.&lt;/p&gt;
+&lt;pre class=&quot;dweet&quot;&gt;&lt;code class=&quot;language-js&quot;&gt;c.width|=0;for(i=9;i--;)x.fillRect(400+i*100+S(t)*300,400,50,200)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Down to 65.&lt;/p&gt;
+&lt;p&gt;This is the maximum we can shave off, without resorting to other API methods, or
+starting to mess with the scene composition.&lt;/p&gt;
+&lt;h3 id=&quot;compromising&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;permalink&quot; href=&quot;https://ates.dev/posts/2024-12-20-intro-to-dwitter/#compromising&quot;&gt;Compromising&lt;/a&gt;&lt;/h3&gt;
+&lt;p&gt;Well, we often can mess with the scene composition. We can compromise accuracy
+when the result is visually indistinguishable.&lt;/p&gt;
+&lt;p&gt;OR&#39;ing with 0 is idempotent. So is OR&#39;ing with 9, when we&#39;re willing to
+compromise and accept 1929 as the new 1920.&lt;/p&gt;
+&lt;p&gt;OR&#39;ing with 9 results in 1929 (&lt;code&gt;1920 | 9&lt;/code&gt;), but the 9-pixel difference is imperceptible.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-js&quot;&gt;c.width|=0;for(i=9;i--&lt;span class=&quot;remove&quot;&gt;;)&lt;/span&gt;
+for(c.width|=i=9;i--;)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;We shave another 2 characters off.&lt;/p&gt;
+&lt;pre class=&quot;dweet play&quot;&gt;&lt;code class=&quot;language-js&quot;&gt;for(c.width|=i=9;i--;)x.fillRect(400+i*100+S(t)*300,400,50,200)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Down to 63.&lt;/p&gt;
+&lt;p&gt;And with that, one Dwitter article down, &lt;code&gt;n&lt;/code&gt; to go.&lt;/p&gt;
+</description>
+      <pubDate>Fri, 20 Dec 2024 24:00:00 GMT</pubDate>
+      <dc:creator>Ateş Göral</dc:creator>
+      <guid>https://ates.dev/posts/2024-12-20-intro-to-dwitter/</guid>
+    </item>
+    <item>
+      <title>Responsive Canvas Rendering</title>
+      <link>https://ates.dev/posts/2024-12-08-responsive-canvas/</link>
+      <description>&lt;script&gt;
+function clamp(v, min, max) {
+  return Math.min(Math.max(v, min), max);
+}
+
+function initDprDemo(canvas, ctx, forceDpr) {
+  const dpr = window.devicePixelRatio;
+  const usedDpr = forceDpr || dpr;
+  const {width, height} = canvas.getBoundingClientRect();
+
+  canvas.width = width * usedDpr;
+  canvas.height = height * usedDpr;
+
+  ctx.fillStyle = &#39;black&#39;;
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  const RADIUS = 50;
+  const radius = RADIUS * usedDpr;
+
+  ctx.fillStyle = &#39;white&#39;;
+  ctx.beginPath();
+  ctx.arc(
+    canvas.width / 2,
+    canvas.height / 2,
+    radius,
+    0,
+    Math.PI * 2
+  );
+  ctx.fill();
+
+  // Display DPR
+  ctx.font = &#39;2em monospace&#39;;
+  ctx.fillText(usedDpr.toFixed(1), 10, 35);
+
+  // 20x20 pixel reference square
+  ctx.fillRect(10, 50, 20, 20);
+}
+
+window.addEventListener(&#39;DOMContentLoaded&#39;, () =&gt; {
+  const autoResizables = document.querySelectorAll(&#39;.canvas-subcontainer.auto-resize&#39;);
+
+  autoResizables.forEach((el) =&gt; visibilityObserver.observe(el));
+
+  const epoch = performance.now();
+
+  function setWidths() {
+    requestAnimationFrame(setWidths);
+
+    const elapsed = performance.now() - epoch;
+    const width = clamp(Math.sin(elapsed / 1000) * 200 + 200, 100, 300);
+
+    autoResizables.forEach((el) =&gt; {
+      if (el.getAttribute(&#39;data-in-viewport&#39;) === &#39;true&#39;) {
+        el.style.width = `${width}px`;
+      }
+    });
+  }
+
+  requestAnimationFrame(setWidths);
+});
+&lt;/script&gt;
+&lt;p&gt;In web development, &#39;responsive&#39; typically refers to layout. Adjusting the
+layout of a page based on the dimensions of the renderable area. A more formal
+definition from &lt;a href=&quot;https://en.wikipedia.org/wiki/Responsive_web_design&quot;&gt;Wikipedia&lt;/a&gt;:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Responsive web design (RWD) or responsive design is an approach to web design
+that aims to make web pages render well on a variety of devices and window or
+screen sizes from minimum to maximum display size to ensure usability and
+satisfaction.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Here, I will share a few key techniques I always apply when rendering pixels on
+a &lt;a href=&quot;https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API&quot;&gt;&lt;code&gt;&amp;lt;canvas&amp;gt;&lt;/code&gt;&lt;/a&gt; element, while ensuring the rendering properly responds to
+canvas size and &lt;a href=&quot;https://developer.mozilla.org/en-US/docs/Web/API/Window/devicePixelRatio&quot;&gt;Device Pixel Ratio&lt;/a&gt; (DPR).&lt;/p&gt;
+&lt;p&gt;This is not a comprehensive tutorial that aims to teach on canvas rendering from
+scratch. Code excerpts are partial, only highlighting key changes from the
+previous example. Knowledge of JavaScript and some algebra is assumed.&lt;/p&gt;
+&lt;h3 id=&quot;defaults&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;permalink&quot; href=&quot;https://ates.dev/posts/2024-12-08-responsive-canvas/#defaults&quot;&gt;Defaults&lt;/a&gt;&lt;/h3&gt;
+&lt;p&gt;Let&#39;s start with a default canvas:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-html&quot;&gt;&amp;lt;canvas&amp;gt;&amp;lt;/canvas&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p class=&quot;canvas-container&quot;&gt;
+  &lt;canvas id=&quot;canvas-default&quot; class=&quot;bordered&quot;&gt;&lt;/canvas&gt;
+&lt;/p&gt;
+&lt;p&gt;By default, the canvas is a transparent rectangle measuring 300x150 pixels
+(&lt;a href=&quot;https://html.spec.whatwg.org/multipage/canvas.html#the-canvas-element:~:text=The%20width%20attribute%20defaults%20to%20300%2C%20and%20the%20height%20attribute%20defaults%20to%20150.&quot;&gt;spec&lt;/a&gt;). I have added a border around it to clearly define its size and
+position on the page.&lt;/p&gt;
+&lt;h3 id=&quot;reference-square&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;permalink&quot; href=&quot;https://ates.dev/posts/2024-12-08-responsive-canvas/#reference-square&quot;&gt;Reference square&lt;/a&gt;&lt;/h3&gt;
+&lt;p&gt;Now, let&#39;s fill it black and then render a 100x100 white square in its middle:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-html&quot;&gt;&amp;lt;canvas id=&amp;quot;canvas&amp;quot;&amp;gt;&amp;lt;/canvas&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code class=&quot;language-js&quot;&gt;const canvas = document.querySelector(&#39;#canvas&#39;);
+const ctx = canvas.getContext(&#39;2d&#39;);
+
+ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+const SIZE = 100;
+
+ctx.fillStyle = &#39;white&#39;;
+ctx.fillRect(
+  canvas.width / 2 - SIZE / 2,
+  canvas.height / 2 - SIZE / 2,
+  SIZE,
+  SIZE,
+);
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p class=&quot;canvas-container&quot;&gt;
+  &lt;canvas id=&quot;canvas-with-square&quot; class=&quot;black&quot;&gt;&lt;/canvas&gt;
+&lt;/p&gt;
+&lt;script&gt;
+render(&#39;canvas-with-square&#39;, {
+  init(canvas, ctx) {
+    ctx.fillStyle = &#39;black&#39;;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    const SIZE = 100;
+
+    ctx.fillStyle = &#39;white&#39;;
+    ctx.fillRect(
+      canvas.width / 2 - SIZE / 2,
+      canvas.height / 2 - SIZE / 2,
+      SIZE,
+      SIZE
+    );
+  },
+});
+&lt;/script&gt;
+&lt;h3 id=&quot;intrinsic-dimensions&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;permalink&quot; href=&quot;https://ates.dev/posts/2024-12-08-responsive-canvas/#intrinsic-dimensions&quot;&gt;Intrinsic dimensions&lt;/a&gt;&lt;/h3&gt;
+&lt;p&gt;Now let&#39;s stretch the canvas to 100% of the width of the container:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-css&quot;&gt;canvas {
+  width: 100%;
+  height: 150px;
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p class=&quot;canvas-container&quot;&gt;
+  &lt;canvas id=&quot;canvas-with-square-fit&quot; class=&quot;fit black&quot;&gt;&lt;/canvas&gt;
+&lt;/p&gt;
+&lt;script&gt;
+render(&#39;canvas-with-square-fit&#39;, {
+  init(canvas, ctx) {
+    ctx.fillStyle = &#39;black&#39;;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    const SIZE = 100;
+
+    ctx.fillStyle = &#39;white&#39;;
+    ctx.fillRect(
+      canvas.width / 2 - SIZE / 2,
+      canvas.height / 2 - SIZE / 2,
+      SIZE,
+      SIZE
+    );
+  },
+});
+&lt;/script&gt;
+&lt;p&gt;Why is our square no longer square? Because we resized the canvas with
+CSS and didn&#39;t attach &lt;code&gt;width&lt;/code&gt; and &lt;code&gt;height&lt;/code&gt; attributes to the &lt;code&gt;&amp;lt;canvas&amp;gt;&lt;/code&gt; tag, the
+intrinsic dimensions of the canvas are still the defaults, 300x150.&lt;/p&gt;
+&lt;p&gt;We can fix this by setting the &lt;code&gt;width&lt;/code&gt; and &lt;code&gt;height&lt;/code&gt; properties of the canvas
+element to its pixel dimensions:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-js&quot;&gt;const {width, height} = canvas.getBoundingClientRect();
+
+canvas.width = width;
+canvas.height = height;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p class=&quot;canvas-container&quot;&gt;
+  &lt;canvas id=&quot;canvas-with-square-fit-fix&quot; class=&quot;fit black&quot;&gt;&lt;/canvas&gt;
+&lt;/p&gt;
+&lt;script&gt;
+render(&#39;canvas-with-square-fit-fix&#39;, {
+  init(canvas, ctx) {
+    const {width, height} = canvas.getBoundingClientRect();
+
+    canvas.width = width;
+    canvas.height = height;
+
+    ctx.fillStyle = &#39;black&#39;;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    const SIZE = 100;
+
+    ctx.fillStyle = &#39;white&#39;;
+    ctx.fillRect(
+      canvas.width / 2 - SIZE / 2,
+      canvas.height / 2 - SIZE / 2,
+      SIZE,
+      SIZE
+    );
+  },
+});
+&lt;/script&gt;
+&lt;h3 id=&quot;reference-circle&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;permalink&quot; href=&quot;https://ates.dev/posts/2024-12-08-responsive-canvas/#reference-circle&quot;&gt;Reference circle&lt;/a&gt;&lt;/h3&gt;
+&lt;p&gt;Next, let&#39;s switch to rendering a circle to achieve anti-aliased edges. And
+let&#39;s also print &amp;quot;1.0&amp;quot;, and render a reference 20x20 square, both of which will
+become significant soon.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-js&quot;&gt;const RADIUS = 50;
+
+ctx.beginPath();
+ctx.arc(canvas.width / 2, canvas.height / 2, RADIUS, 0, Math.PI * 2);
+ctx.fill();
+
+ctx.font = &#39;2em monospace&#39;;
+ctx.fillText(&#39;1.0&#39;, 10, 35);
+
+// 20x20 pixel reference square
+ctx.fillRect(10, 50, 20, 20);
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p class=&quot;canvas-container&quot;&gt;
+  &lt;canvas id=&quot;canvas-with-circle&quot; class=&quot;fit black&quot;&gt;&lt;/canvas&gt;
+&lt;/p&gt;
+&lt;script&gt;
+render(&#39;canvas-with-circle&#39;, {
+  init: (canvas, ctx) =&gt; initDprDemo(canvas, ctx, 1)
+});
+&lt;/script&gt;
+&lt;h3 id=&quot;crisp-rendering&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;permalink&quot; href=&quot;https://ates.dev/posts/2024-12-08-responsive-canvas/#crisp-rendering&quot;&gt;Crisp rendering&lt;/a&gt;&lt;/h3&gt;
+&lt;p&gt;The CSS dimensions we set on the canvas are the logical pixel dimensions. Your
+browser&#39;s DPR (Device Pixel Ratio) is a multiplier that determines the physical
+pixel density of your screen. For example, if your DPR is &lt;code&gt;2.0&lt;/code&gt;, then for every
+logical pixel, there are 4 physical pixels (2x2). To render this circle in the
+crispiest way possible we apply the DPR as a multiplier to the canvas
+dimensions. We&#39;ll also print your actual DPR instead of the &amp;quot;1.0&amp;quot; we hard-coded
+earlier:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-js&quot;&gt;const dpr = window.devicePixelRatio;
+const {width, height} = canvas.getBoundingClientRect();
+
+canvas.width = width * dpr;
+canvas.height = height * dpr;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;But then, we also have to start factoring in DPR in all size units when using
+the drawing primitives:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-js&quot;&gt;// Adjust for DPR
+const radius = RADIUS * dpr;
+
+ctx.beginPath();
+ctx.arc(canvas.width / 2, canvas.height / 2, radius, 0, Math.PI * 2);
+ctx.fill();
+
+// Display DPR
+ctx.font = &#39;2em monospace&#39;;
+ctx.fillText(dpr.toFixed(2), 10, 35);
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p class=&quot;canvas-container&quot;&gt;
+  &lt;canvas id=&quot;canvas-with-circle-dpr&quot; class=&quot;fit black&quot;&gt;&lt;/canvas&gt;
+&lt;/p&gt;
+&lt;script&gt;
+render(&#39;canvas-with-circle-dpr&#39;, {
+  init: (canvas, ctx) =&gt; initDprDemo(canvas, ctx)
+});
+&lt;/script&gt;
+&lt;h3 id=&quot;dpr-comparison&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;permalink&quot; href=&quot;https://ates.dev/posts/2024-12-08-responsive-canvas/#dpr-comparison&quot;&gt;DPR comparison&lt;/a&gt;&lt;/h3&gt;
+&lt;p&gt;If your DPR is greater than &lt;code&gt;1.0&lt;/code&gt;, you should see the 20x20 pixel reference
+square rendered as something smaller than 20x20 while our circle remains the
+same size. And the anti-aliased edges of the circle should now look as crisp as
+possible on your screen (without getting into subpixel rendering).&lt;/p&gt;
+&lt;p&gt;In case your DPR is &lt;code&gt;1.0&lt;/code&gt;, and you don&#39;t see a difference above, here&#39;s what the
+comparison would have &lt;strong&gt;approximately&lt;/strong&gt; looked like against a DPR of &lt;code&gt;2.0&lt;/code&gt;:&lt;/p&gt;
+&lt;p class=&quot;canvas-container&quot;&gt;
+  &lt;canvas id=&quot;canvas-dpr-compare&quot; class=&quot;fit black&quot;&gt;&lt;/canvas&gt;
+&lt;/p&gt;
+&lt;script&gt;
+render(&#39;canvas-dpr-compare&#39;, {
+  draw: (ctx, t) =&gt; {
+    const canvas = ctx.canvas;
+    const dpr = window.devicePixelRatio;
+    const {width, height} = canvas.getBoundingClientRect();
+
+    canvas.width = width * dpr;
+    canvas.height = height * dpr;
+
+    const s = t / 1000 | 0;
+    const fakeDpr = 2;
+    const virtualDpr = s &amp; 1 ? fakeDpr : 1;
+
+    ctx.reset();
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    const scale = dpr / virtualDpr;
+
+    ctx.scale(scale, scale);
+
+    const RADIUS = 50;
+    const r = RADIUS * virtualDpr * virtualDpr / fakeDpr;
+
+    const x = canvas.width / 2 / scale;
+    const y = canvas.height / 2 / scale;
+
+    ctx.fillStyle = &#39;white&#39;;
+    ctx.beginPath();
+    ctx.arc(x, y, r, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Display DPR
+    ctx.font = &#39;2em monospace&#39;;
+    ctx.fillText(virtualDpr.toFixed(1), 10, 35);
+
+    // 20x20 pixel reference square
+    ctx.fillRect(10, 50, 20, 20);
+
+    ctx.imageSmoothingEnabled = false;
+
+    const u = r * 2 / virtualDpr;
+
+    ctx.drawImage(
+      canvas,
+      (x - r) * scale, (y - r) * scale, r * 2 * scale, r * 2 * scale,
+      x - u, y - u, u * 2, u * 2
+    );
+
+    const zx = x + Math.cos(Math.PI / 4) * u;
+    const zy = y - Math.sin(Math.PI / 4) * u;
+
+    ctx.drawImage(
+      canvas,
+      (zx - u / 6) * scale, (zy - u / 6) * scale, u / 3 * scale, u / 3 * scale,
+      x + u + u / 3, y - u + u / 3, u / 3 * 4, u / 3 * 4,
+    );
+
+    ctx.strokeStyle = &#39;#00c0ff&#39;;
+    ctx.lineWidth = 3 / scale;
+
+    ctx.strokeRect(zx - u / 6, zy - u / 6, u / 3, u / 3);
+    ctx.strokeRect(
+      x + u + u / 3,
+      y - u + u / 3,
+      u / 3 * 4,
+      u / 3 * 4,
+    );
+
+    ctx.strokeStyle = &#39;black&#39;;
+    ctx.lineWidth = 2 / scale;
+
+    ctx.strokeRect(
+      zx - u / 6 + 1 / scale,
+      zy - u / 6 + 1 / scale,
+      u / 3 - 2 / scale,
+      u / 3 - 2 / scale,
+    );
+    ctx.strokeRect(
+      x + u + u / 3 + 1 / scale,
+      y - u + u / 3 + 1 / scale,
+      u / 3 * 4 - 2 / scale,
+      u / 3 * 4 - 2 / scale,
+    );
+  }
+});
+&lt;/script&gt;
+&lt;h3 id=&quot;scene-layout&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;permalink&quot; href=&quot;https://ates.dev/posts/2024-12-08-responsive-canvas/#scene-layout&quot;&gt;Scene layout&lt;/a&gt;&lt;/h3&gt;
+&lt;p&gt;In the examples so far we&#39;ve used hard-coded dimensions for the elements because
+we knew the canvas height was always 150px. A square 100px across or a circle
+50px in radius would nicely fit.&lt;/p&gt;
+&lt;p&gt;Defining the scene in proportions, such as a fraction of the canvas height,
+simplifies dynamic layouts. So, let&#39;s switch to rendering our circle with a
+radius of 1/3 of the canvas height:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-js&quot;&gt;const radius = canvas.height / 3;
+
+ctx.fillStyle = &#39;white&#39;;
+ctx.beginPath();
+ctx.arc(canvas.width / 2, canvas.height / 2, radius, 0, Math.PI * 2);
+ctx.fill();
+&lt;/code&gt;&lt;/pre&gt;
+&lt;script&gt;
+  function drawCircleScene(ctx) {
+    const canvas = ctx.canvas;
+    const dpr = window.devicePixelRatio;
+
+    const {width, height} = canvas.getBoundingClientRect();
+
+    canvas.width = width * dpr;
+    canvas.height = height * dpr;
+
+    ctx.fillStyle = &#39;black&#39;;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    const radius = canvas.height / 3;
+
+    ctx.fillStyle = &#39;white&#39;;
+    ctx.beginPath();
+    ctx.arc(
+      canvas.width / 2,
+      canvas.height / 2,
+      radius,
+      0,
+      Math.PI * 2
+    );
+    ctx.fill();
+  }
+&lt;/script&gt;
+&lt;p class=&quot;canvas-container&quot;&gt;
+  &lt;span class=&quot;canvas-subcontainer&quot;&gt;
+    &lt;canvas id=&quot;canvas-resize-layout&quot; class=&quot;fit black&quot;&gt;&lt;/canvas&gt;
+  &lt;/span&gt;
+&lt;/p&gt;
+&lt;script&gt;
+  render(&#39;canvas-resize-layout&#39;, {
+    resize: false,
+    init: (_canvas, ctx) =&gt; drawCircleScene(ctx)
+  });
+&lt;/script&gt;
+&lt;h3 id=&quot;resizing&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;permalink&quot; href=&quot;https://ates.dev/posts/2024-12-08-responsive-canvas/#resizing&quot;&gt;Resizing&lt;/a&gt;&lt;/h3&gt;
+&lt;p&gt;Typically, a canvas will be set up to be dynamically resized to fit its
+container. After rendering the circle once, let&#39;s start changing the width of
+the canvas container:&lt;/p&gt;
+&lt;p class=&quot;canvas-container&quot;&gt;
+  &lt;span class=&quot;canvas-subcontainer auto-resize&quot;&gt;
+    &lt;canvas id=&quot;canvas-resize-stretch&quot; class=&quot;fit black bordered&quot;&gt;&lt;/canvas&gt;
+  &lt;/span&gt;
+&lt;/p&gt;
+&lt;script&gt;
+  render(&#39;canvas-resize-stretch&#39;, {
+    resize: false,
+    init: (_canvas, ctx) =&gt; drawCircleScene(ctx)
+  });
+&lt;/script&gt;
+&lt;p&gt;As the container width changes, the circle stretches into an ellipse because the
+canvas pixels are resampled to fit the new dimensions.&lt;/p&gt;
+&lt;h4 id=&quot;brute-force-rendering&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;permalink&quot; href=&quot;https://ates.dev/posts/2024-12-08-responsive-canvas/#brute-force-rendering&quot;&gt;Brute-force rendering&lt;/a&gt;&lt;/h4&gt;
+&lt;p&gt;One way to address this is to set up a rendering loop to keep adjusting the
+intrinsic dimensions of the canvas and rendering the scene every frame. This
+way, the entire scene will always be rendered at the correct proportions. We&#39;ll
+use a &lt;a href=&quot;https://developer.mozilla.org/en-US/docs/Web/API/window/requestAnimationFrame&quot;&gt;requestAnimationFrame&lt;/a&gt; (RAF) loop for this:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-js&quot;&gt;function draw() {
+  // Request the next frame before we draw this one
+  requestAnimationFrame(draw);
+
+  const dpr = window.devicePixelRatio;
+  const {width, height} = canvas.getBoundingClientRect();
+
+  canvas.width = width * dpr;
+  canvas.height = height * dpr;
+
+  ctx.fillStyle = &#39;black&#39;;
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  const radius = canvas.height / 6;
+
+  ctx.fillStyle = &#39;white&#39;;
+  ctx.beginPath();
+  ctx.arc(canvas.width / 2, canvas.height / 2, radius, 0, Math.PI * 2);
+  ctx.fill();
+}
+
+// Kick off the loop
+requestAnimationFrame(draw);
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p class=&quot;canvas-container raf&quot;&gt;
+  &lt;span class=&quot;canvas-subcontainer auto-resize&quot;&gt;
+    &lt;canvas id=&quot;canvas-resize-draw&quot; class=&quot;fit black bordered&quot;&gt;&lt;/canvas&gt;
+  &lt;/span&gt;
+&lt;/p&gt;
+&lt;script&gt;
+  render(&#39;canvas-resize-draw&#39;, {
+    resize: false,
+    draw: (ctx) =&gt; drawCircleScene(ctx)
+  });
+&lt;/script&gt;
+&lt;p&gt;The circle remains a circle now.&lt;/p&gt;
+&lt;h4 id=&quot;preserving-the-aspect-ratio&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;permalink&quot; href=&quot;https://ates.dev/posts/2024-12-08-responsive-canvas/#preserving-the-aspect-ratio&quot;&gt;Preserving the aspect ratio&lt;/a&gt;&lt;/h4&gt;
+&lt;p&gt;Instead of rendering a static scene every frame, another option is to preserve
+the aspect ratio of the canvas so that the scene doesn&#39;t stretch or squash. We
+can render the canvas once and let CSS do its thing:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-html&quot;&gt;&amp;lt;div class=&amp;quot;container&amp;quot;&amp;gt;
+  &amp;lt;canvas&amp;gt;&amp;lt;/canvas&amp;gt;
+&amp;lt;/div&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code class=&quot;language-css&quot;&gt;/* How this container itself fits into the layout is up to you */
+.container {
+  aspect-ratio: 300 / 150;
+}
+
+canvas {
+  /* Alternatively, use Flexbox */
+  width: 100%;
+  height: 100%;
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p class=&quot;canvas-container&quot;&gt;
+  &lt;span class=&quot;canvas-subcontainer auto-resize&quot; style=&quot;width: 300px; min-height: 0; height: auto; aspect-ratio: 300 / 150;&quot;&gt;
+    &lt;canvas id=&quot;canvas-resize-stretch-ar&quot; class=&quot;black bordered&quot; style=&quot;width: 100%; height: 100%;&quot;&gt;&lt;/canvas&gt;
+  &lt;/span&gt;
+&lt;/p&gt;
+&lt;script&gt;
+  render(&#39;canvas-resize-stretch-ar&#39;, {
+    resize: false,
+    init: (_canvas, ctx) =&gt; drawCircleScene(ctx)
+  });
+&lt;/script&gt;
+&lt;p&gt;The circle remains a circle.&lt;/p&gt;
+&lt;h4 id=&quot;avoid-resampling&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;permalink&quot; href=&quot;https://ates.dev/posts/2024-12-08-responsive-canvas/#avoid-resampling&quot;&gt;Avoid resampling&lt;/a&gt;&lt;/h4&gt;
+&lt;p&gt;However, the ugly truth is that you will lose all the crispy rendering you got
+at the start by updating the intrinsic dimensions of the canvas with DPR in
+mind. Even when initially rendering big and then scaling down, resampling can
+cause undesirable artifacts. And initially rendering small and then scaling up
+will create blurry results:&lt;/p&gt;
+&lt;p class=&quot;canvas-container&quot;&gt;
+  &lt;span id=&quot;canvas-resize-stretch-tiny-container&quot; class=&quot;canvas-subcontainer&quot; style=&quot;width: 80px; height: 40px;&quot;&gt;
+    &lt;canvas id=&quot;canvas-resize-stretch-tiny&quot; class=&quot;black&quot; style=&quot;width: 100%; height: 100%;&quot;&gt;&lt;/canvas&gt;
+  &lt;/span&gt;
+&lt;/p&gt;
+&lt;script&gt;
+  render(&#39;canvas-resize-stretch-tiny&#39;, {
+    resize: false,
+    init: (canvas, ctx) =&gt; {
+      drawCircleScene(ctx);
+
+      const container = document.querySelector(&#39;#canvas-resize-stretch-tiny-container&#39;);
+      container.style.width = &#39;300px&#39;;
+      container.style.height = &#39;150px&#39;;
+    }
+  });
+&lt;/script&gt;
+&lt;h4 id=&quot;debounced-redraw&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;permalink&quot; href=&quot;https://ates.dev/posts/2024-12-08-responsive-canvas/#debounced-redraw&quot;&gt;Debounced redraw&lt;/a&gt;&lt;/h4&gt;
+&lt;p&gt;We can watch for the resizing of the canvas and redraw the scene on a debounce.
+This approach allows resampling during resizing but ensures accurate proportions
+once resizing stops.&lt;/p&gt;
+&lt;p&gt;Let&#39;s do this efficiently. To watch for resizing, we&#39;ll use the
+&lt;a href=&quot;https://developer.mozilla.org/en-US/docs/Web/API/ResizeObserver&quot;&gt;ResizeObserver&lt;/a&gt; browser API:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-js&quot;&gt;// One could always use Lodash&#39;s debounce
+function tailDebounce(fn, delay) {
+  let timer;
+
+  return function (...args) {
+    clearTimeout(timer);
+    timer = setTimeout(() =&amp;gt; fn.apply(this, args), delay);
+  };
+}
+
+let contentRect = null;
+
+const draw = () =&amp;gt; {
+  // Always draw when the time is right
+  requestAnimationFrame(() =&amp;gt; {
+    const dpr = window.devicePixelRatio;
+    const rect = contentRect || canvas.getBoundingClientRect();
+    const {width, height} = rect;
+
+    canvas.width = width * dpr;
+    canvas.height = height * dpr;
+
+    ctx.fillStyle = &#39;black&#39;;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    const radius = canvas.height / 3;
+
+    ctx.fillStyle = &#39;white&#39;;
+    ctx.beginPath();
+    ctx.arc(canvas.width / 2, canvas.height / 2, radius, 0, Math.PI * 2);
+    ctx.fill();
+  });
+};
+
+const debouncedDraw = tailDebounce(draw, 100);
+
+const resizeObserver = new ResizeObserver((entries) =&amp;gt; {
+  for (const entry of entries) {
+    if (entry.target === canvas &amp;amp;&amp;amp; entry.contentRect) {
+      contentRect = entry.contentRect;
+      debouncedDraw();
+    }
+  }
+});
+
+draw();
+resizeObserver.observe(canvas);
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p class=&quot;canvas-container&quot;&gt;
+  &lt;span id=&quot;canvas-size-update-container&quot; class=&quot;canvas-subcontainer auto-resize&quot; style=&quot;width: 100px; min-height: 0; height: auto; aspect-ratio: 300 / 150;&quot;&gt;
+    &lt;canvas id=&quot;canvas-size-update&quot; class=&quot;black bordered&quot; style=&quot;width: 100%; height: 100%;&quot;&gt;&lt;/canvas&gt;
+  &lt;/span&gt;
+&lt;/p&gt;
+&lt;script&gt;
+  render(&#39;canvas-size-update&#39;, {
+    resize: false,
+    init: (canvas, ctx) =&gt; {
+      let contentRect = null;
+
+      const draw = () =&gt; {
+        requestAnimationFrame(() =&gt; {
+          if (!contentRect) {
+            return;
+          }
+
+          const dpr = window.devicePixelRatio;
+
+          canvas.width = contentRect.width * dpr;
+          canvas.height = contentRect.height * dpr;
+
+          ctx.fillStyle = &#39;black&#39;;
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+          const radius = canvas.height / 3;
+
+          ctx.fillStyle = &#39;white&#39;;
+          ctx.beginPath();
+          ctx.arc(
+            canvas.width / 2,
+            canvas.height / 2,
+            radius,
+            0,
+            Math.PI * 2
+          );
+          ctx.fill();
+        });
+      };
+
+      const debouncedDraw = tailDebounce(draw, 100);
+
+      const resizeObserver = new ResizeObserver((entries) =&gt; {
+        for (const entry of entries) {
+          if (entry.target === canvas &amp;&amp; entry.contentRect) {
+            contentRect = entry.contentRect;
+            debouncedDraw();
+          }
+        }
+      });
+
+      draw();
+      resizeObserver.observe(canvas);
+    }
+  });
+&lt;/script&gt;
+&lt;p&gt;If you look closely, especially when scaling up, you can see the scene being
+resampled, creating a blurry edge around the circle. When the resizing stops
+for at least 100ms, the scene is redrawn and the crispiness is restored.&lt;/p&gt;
+&lt;h3 id=&quot;stroke-width-and-font-size&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;permalink&quot; href=&quot;https://ates.dev/posts/2024-12-08-responsive-canvas/#stroke-width-and-font-size&quot;&gt;Stroke width and font size&lt;/a&gt;&lt;/h3&gt;
+&lt;p&gt;Here&#39;s a hollow circle with a 3px border, with the text &amp;quot;circle&amp;quot; in the middle:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-js&quot;&gt;ctx.lineWidth = 3;
+
+ctx.strokeStyle = &#39;white&#39;;
+ctx.beginPath();
+ctx.arc(canvas.width / 2, canvas.height / 2, radius, 0, Math.PI * 2);
+ctx.stroke();
+
+const fontSize = 1 * dpr;
+const fontFace = &#39;Varela Round&#39;;
+
+ctx.fillStyle = &#39;white&#39;;
+ctx.font = `${fontSize}em ${fontFace}`;
+ctx.textAlign = &#39;center&#39;;
+ctx.textBaseline = &#39;middle&#39;;
+ctx.fillText(&#39;circle&#39;, canvas.width / 2, canvas.height / 2);
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p class=&quot;canvas-container&quot;&gt;
+  &lt;canvas id=&quot;canvas-stroke&quot; class=&quot;fit black&quot;&gt;&lt;/canvas&gt;
+&lt;/p&gt;
+&lt;script&gt;
+function renderStrokeScene(ctx, forceDpr) {
+  const canvas = ctx.canvas;
+  const {width, height} = canvas.getBoundingClientRect();
+
+  const dpr = window.devicePixelRatio;
+  const usedDpr = forceDpr || dpr;
+
+  canvas.width = width * usedDpr;
+  canvas.height = height * usedDpr;
+
+  ctx.fillStyle = &#39;black&#39;;
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  const radius = canvas.height / 3;
+
+  ctx.lineWidth = 3;
+
+  ctx.strokeStyle = &#39;white&#39;;
+  ctx.beginPath();
+  ctx.arc(
+    canvas.width / 2,
+    canvas.height / 2,
+    radius,
+    0,
+    Math.PI * 2
+  );
+  ctx.stroke();
+
+  const fontSize = 1 * usedDpr;
+  const fontFace = &#39;Varela Round&#39;;
+
+  ctx.fillStyle = &#39;white&#39;;
+  ctx.font = `${fontSize}em ${fontFace}`;
+  ctx.textAlign = &#39;center&#39;;
+  ctx.textBaseline = &#39;middle&#39;;
+  ctx.fillText(&#39;circle&#39;, canvas.width / 2, canvas.height / 2);
+
+  const x = canvas.width / 2 + radius;
+  const y = canvas.height / 2;
+
+  const SAMPLE = 11;
+  const ZOOM = 7;
+
+  ctx.strokeStyle = &#39;#00c0ff&#39;;
+  ctx.lineWidth = 2 * usedDpr;
+
+  ctx.strokeRect(
+    x - SAMPLE / 2 * usedDpr | 0,
+    y - SAMPLE / 2 * usedDpr | 0,
+    SAMPLE * usedDpr,
+    SAMPLE * usedDpr
+  );
+
+  ctx.imageSmoothingEnabled = false;
+  ctx.drawImage(
+    canvas,
+    x - SAMPLE / 2 * usedDpr | 0,
+    y - SAMPLE / 2 * usedDpr | 0,
+    SAMPLE * usedDpr,
+    SAMPLE * usedDpr,
+    x + SAMPLE * usedDpr,
+    y - SAMPLE * ZOOM / 2 * usedDpr,
+    SAMPLE * ZOOM * usedDpr,
+    SAMPLE * ZOOM * usedDpr
+  );
+}
+
+render(&#39;canvas-stroke&#39;, {
+  init: (_canvas, ctx) =&gt; renderStrokeScene(ctx),
+});
+&lt;/script&gt;
+&lt;p&gt;The stroke width is not affected by the intrinsic resolution of the canvas. When
+you set the stroke width to 3, it will always be 3 logical pixels wide. Font
+size, however, needs to account for DPR adjustments.&lt;/p&gt;
+&lt;p&gt;Here&#39;s the same scene without the DPR adjustment:&lt;/p&gt;
+&lt;p class=&quot;canvas-container&quot;&gt;
+  &lt;canvas id=&quot;canvas-stroke-no-dpr&quot; class=&quot;fit black&quot;&gt;&lt;/canvas&gt;
+&lt;/p&gt;
+&lt;script&gt;
+render(&#39;canvas-stroke-no-dpr&#39;, {
+  init: (_canvas, ctx) =&gt; renderStrokeScene(ctx, 1)
+});
+&lt;/script&gt;
+&lt;p&gt;If your DPR is greater than 1, the border should still appear more or less the
+same thickness as the previous one, but blurrier.&lt;/p&gt;
+&lt;p&gt;Solid shapes, images, and text should consider DPR for clarity. Strokes not so.&lt;/p&gt;
+</description>
+      <pubDate>Sun, 08 Dec 2024 24:00:00 GMT</pubDate>
+      <dc:creator>Ateş Göral</dc:creator>
+      <guid>https://ates.dev/posts/2024-12-08-responsive-canvas/</guid>
+    </item>
+    <item>
+      <title>We Have a Corner Problem</title>
+      <link>https://ates.dev/posts/2024-11-28-corner-problem/</link>
+      <description>&lt;p&gt;The movement constraints of all 8 drag handles of a crop rectangle can be implemented by reusing the implementation of one corner.&lt;/p&gt;
+&lt;h3 id=&quot;the-complexity-of-a-crop-rectangle&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;permalink&quot; href=&quot;https://ates.dev/posts/2024-11-28-corner-problem/#the-complexity-of-a-crop-rectangle&quot;&gt;The complexity of a crop rectangle&lt;/a&gt;&lt;/h3&gt;
+&lt;p&gt;Oh man. Have you ever tried implementing a draggable crop rectangle from scratch? To give it all the flexibility you&#39;d expect from a mature crop rectangle implementation there are many constraints to solve:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Drag the rectangle itself around by starting the dragging inside. Keep the rectangle inside the image. This is the easiest to implement.&lt;/li&gt;
+&lt;li&gt;Resize the rectangle by dragging any of the four corner drag handles. Each drag handle changes different properties of the rectangle:
+&lt;ul&gt;
+&lt;li&gt;Top left changes the x, y, width, and height.&lt;/li&gt;
+&lt;li&gt;Top right changes the y, width, and height.&lt;/li&gt;
+&lt;li&gt;Bottom left changes the x, width, and height.&lt;/li&gt;
+&lt;li&gt;Bottom right only changes the width and height.&lt;/li&gt;
+&lt;li&gt;Keep the corners inside the image.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Resize the rectangle by dragging any of the four side drag handles. Again, each drag handle changes different properties of the rectangle. Keep the sides inside the image.&lt;/li&gt;
+&lt;li&gt;Don&#39;t allow the rectangle to go smaller than a minimum width and height.&lt;/li&gt;
+&lt;li&gt;Easy so far.&lt;/li&gt;
+&lt;li&gt;Now add optional aspect ratio enforcement while doing all of the above.&lt;/li&gt;
+&lt;li&gt;Make the aspect-ratio-enforced dragging feel natural instead of letting the handles jump around weirdly while trying to follow weird pointer movements. (Solution: project the pointer movement delta vector onto the aspect ratio vector.)&lt;/li&gt;
+&lt;li&gt;Corner drag handles should stay within the image by smartly clamping their x/y coordinates to obey the aspect ratio enforcement.&lt;/li&gt;
+&lt;li&gt;Side drag handles move the sides, but actually move the two adjacent corners symmetrically. Now we have not one but two corners to simultaneously keep inside the image while enforcing the aspect ratio.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&quot;looking-at-things-from-a-different-angle&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;permalink&quot; href=&quot;https://ates.dev/posts/2024-11-28-corner-problem/#looking-at-things-from-a-different-angle&quot;&gt;Looking at things from a different angle&lt;/a&gt;&lt;/h3&gt;
+&lt;p&gt;What do the four corner drag handles have in common? They&#39;re the same corner if you tilt your head at increments of 90 degrees. So all I had to do was to rotate the frame of reference by the appropriate multiple of 90 degrees, apply corner logic for only one of the corners, and rotate back the frame of reference. And which corner do we pick? The simplest one, of course. The bottom right corner only changes the width and height of the rectangle!&lt;/p&gt;
+&lt;p&gt;Here&#39;s all that&#39;s involved in implementing the bottom right corner drag handle:&lt;/p&gt;
+&lt;p class=&quot;center zoomable&quot;&gt;
+  &lt;img src=&quot;https://ates.dev/posts/2024-11-28-corner-problem/i/corner.png&quot; alt=&quot;The vectors involved in moving the bottom right corner of a crop rectangle while obeying the aspect ratio constraint&quot;&gt;
+&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;From the pointer down to the pointer move event, get the pointer movement delta vector: (dx, dy).&lt;/li&gt;
+&lt;li&gt;Project the pointer delta vector onto the aspect ratio vector: (width, height).&lt;/li&gt;
+&lt;li&gt;Clamp the projected vector to the image boundaries while preserving aspect ratio.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;And the frame of reference rotation trick for the bottom right corner looks like this:&lt;/p&gt;
+&lt;p class=&quot;center zoomable&quot;&gt;
+  &lt;img src=&quot;https://ates.dev/posts/2024-11-28-corner-problem/i/rotate.png&quot; alt=&quot;&quot;&gt;
+&lt;/p&gt;
+&lt;p&gt;Once we have a moveCorner method that handles the bottom right corner, and a withFrameOfReference wrapper, the implementation of e.g. the top right corner becomes just:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-js&quot;&gt;export const moveTopRightCorner = withFrameOfReference(moveCorner, Math.PI / 2);
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;The corners are reduced to a single corner problem.&lt;/p&gt;
+&lt;h3 id=&quot;reflecting-on-things&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;permalink&quot; href=&quot;https://ates.dev/posts/2024-11-28-corner-problem/#reflecting-on-things&quot;&gt;Reflecting on things&lt;/a&gt;&lt;/h3&gt;
+&lt;p&gt;What about the sides? A side drag handle can be seen as not dragging the side at all, but causing the dragging of the two adjacent corners while preserving the overall aspect ratio of the rectangle. There&#39;s symmetry across the middle.&lt;/p&gt;
+&lt;p class=&quot;center zoomable&quot;&gt;
+  &lt;img src=&quot;https://ates.dev/posts/2024-11-28-corner-problem/i/side.png&quot; alt=&quot;&quot;&gt;
+&lt;/p&gt;
+&lt;p&gt;If we forget about the two corners and the symmetry among them, and just focus on one of the corners, we&#39;re back to just dealing with the same old bottom right corner.&lt;/p&gt;
+&lt;p&gt;Here&#39;s the first tweak. We have yet another frame of reference: We&#39;re now operating in a squished coordinate system. The aspect ratio that we enforce on the drag handle is half of the original aspect ratio: (width, height / 2):&lt;/p&gt;
+&lt;p class=&quot;center zoomable&quot;&gt;
+  &lt;img src=&quot;https://ates.dev/posts/2024-11-28-corner-problem/i/half.png&quot; alt=&quot;&quot;&gt;
+&lt;/p&gt;
+&lt;p&gt;However, there&#39;s another edge case (oh, the puns!) that we must deal with. The bottom right corner might be free to move vertically more then it&#39;s top right counterpart:&lt;/p&gt;
+&lt;p class=&quot;center zoomable&quot;&gt;
+  &lt;img src=&quot;https://ates.dev/posts/2024-11-28-corner-problem/i/side-oob.png&quot; alt=&quot;&quot;&gt;
+&lt;/p&gt;
+&lt;p&gt;To overcome this issue, here&#39;s the second tweak. We reflect the bounding rectangle (the rectangle representing the image itself) along the axis of symmetry and then intersect the two bounding rectangles to derive a smaller bounding rectangle that keeps both corners within the image:&lt;/p&gt;
+&lt;p class=&quot;center zoomable&quot;&gt;
+  &lt;img src=&quot;https://ates.dev/posts/2024-11-28-corner-problem/i/bounds.png&quot; alt=&quot;&quot;&gt;
+&lt;/p&gt;
+&lt;p&gt;Once we have a moveEdge method that internally uses the moveCorner method, we put our withFrameOfReference wrapper to good use to implement all side drag handles:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-js&quot;&gt;export const moveTopEdge = withFrameOfReference(moveEdge, Math.PI / 2);
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&quot;not-a-corner-problem&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;permalink&quot; href=&quot;https://ates.dev/posts/2024-11-28-corner-problem/#not-a-corner-problem&quot;&gt;Not a corner problem&lt;/a&gt;&lt;/h3&gt;
+&lt;p&gt;One last piece of the puzzle is to prevent the crop rectangle from being shrunk beyond dimensions that would break the UX. To do this, the only thing we need to do is to clip the bounding rectangle:&lt;/p&gt;
+&lt;p class=&quot;center zoomable&quot;&gt;
+  &lt;img src=&quot;https://ates.dev/posts/2024-11-28-corner-problem/i/minimums.png&quot; alt=&quot;&quot;&gt;
+&lt;/p&gt;
+&lt;h3 id=&quot;but-so-much-math&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;permalink&quot; href=&quot;https://ates.dev/posts/2024-11-28-corner-problem/#but-so-much-math&quot;&gt;But so much math!&lt;/a&gt;&lt;/h3&gt;
+&lt;p&gt;This is one of those problem domains where throwing conditional logic (e.g. a boatload of if statements) might have done the job. Might. I doubt it, because there&#39;s only so much you can do by sidestepping vector math in a vector problem domain. Also, reduction of this problem to a few math principles allows us to just rely on well-established math.&lt;/p&gt;
+&lt;p&gt;Another advantage of the reduction of all drag handles into a single corner drag handle problem is, if the implementation of the bottom right corner is right, then everything else is right. You will not find a bug with any of the 8 drag handles if you can&#39;t find a bug with the bottom right corner!&lt;/p&gt;
+&lt;p&gt;We now only have a single corner problem!&lt;/p&gt;
+</description>
+      <pubDate>Thu, 28 Nov 2024 24:00:00 GMT</pubDate>
+      <dc:creator>Ateş Göral</dc:creator>
+      <guid>https://ates.dev/posts/2024-11-28-corner-problem/</guid>
+    </item>
+  </channel>
+</rss>

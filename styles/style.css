@@ -425,6 +425,9 @@ header nav ul li a.logo.bluesky:before {
 header nav ul li a.logo.github:before {
   mask-image: url("/assets/logos/github.svg");
 }
+header nav ul li a.logo.rss:before {
+  mask-image: url("/assets/logos/rss.svg");
+}
 
 main {
   margin-top: 1.5rlh;
