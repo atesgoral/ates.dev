@@ -1,6 +1,7 @@
-import markdownItAnchor from 'markdown-it-anchor';
-import * as sass from 'sass';
 import path from 'path';
+import * as sass from 'sass';
+import markdownItAnchor from 'markdown-it-anchor';
+import {feedPlugin} from '@11ty/eleventy-plugin-rss';
 
 /** @param {import("@11ty/eleventy").UserConfig} eleventyConfig */
 export default function (eleventyConfig) {
@@ -59,6 +60,25 @@ export default function (eleventyConfig) {
       return async (_data) => {
         return result.css;
       };
+    },
+  });
+
+  eleventyConfig.addPlugin(feedPlugin, {
+    type: 'rss',
+    outputPath: '/feed.xml',
+    collection: {
+      name: 'posts',
+      limit: 10, // 0 means no limit
+    },
+    metadata: {
+      language: 'en',
+      title: 'ates.dev',
+      subtitle: 'Personal website of Ateş Göral',
+      base: 'https://ates.dev/',
+      author: {
+        name: 'Ateş Göral',
+        email: 'ates.goral@gmail.com',
+      },
     },
   });
 

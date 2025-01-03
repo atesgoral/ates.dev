@@ -98,6 +98,10 @@ header {
           &.github:before {
             mask-image: url('/assets/logos/github.svg');
           }
+
+          &.rss:before {
+            mask-image: url('/assets/logos/rss.svg');
+          }
         }
       }
     }
