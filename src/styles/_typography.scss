@@ -109,17 +109,3 @@ pre:has(.language-html), pre:has(.language-js), pre:has(.language-css) {
 pre:has(.language-html):before { content: 'HTML'; }
 pre:has(.language-js):before { content: 'JS'; }
 pre:has(.language-css):before { content: 'CSS'; }
-
-/* This silly font doesn't have a "ş" */
-.sh {
-  position: relative;
-
-  &:after {
-    content: ',';
-    text-align: center;
-    position: absolute;
-    left: 0;
-    width: 100%;
-    top: 0.125lh;
-  }
-}

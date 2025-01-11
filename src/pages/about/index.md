@@ -27,7 +27,7 @@ omit: true
   </p>
 </div>
 
-Hi! I'm <strong>Ate<span class="sh">s</span> Göral</strong>. I enjoy writing code, tinkering with graphics, experimenting with electronics, and executing ambitious DIY projects.
+Hi! I'm <strong>Ateş Göral</strong>. I enjoy writing code, tinkering with graphics, experimenting with electronics, and executing ambitious DIY projects.
 
 I'm a self-taught programmer with 25+ years of professional and 35+ years of hobbyist experience. I'm a telco and web veteran with both breadth and depth, spanning multiple programming languages, disciplines, and technologies. I also have an ornamental Associate of Science degree in Molecular Biology and Genetics.
 

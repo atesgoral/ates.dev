@@ -27,7 +27,7 @@ image: assets/i/bd1k.png
   </p>
 </div>
 
-Hi! I'm <strong>Ate<span class="sh">s</span> Göral</strong>. I enjoy writing code, tinkering with graphics, experimenting with electronics, and executing ambitious DIY projects.
+Hi! I'm <strong>Ateş Göral</strong>. I enjoy writing code, tinkering with graphics, experimenting with electronics, and executing ambitious DIY projects.
 [More&hellip;](/pages/about)
 
 <p class="meta">
