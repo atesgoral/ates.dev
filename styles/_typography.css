@@ -1,4 +1,3 @@
-@charset "UTF-8";
 :root {
   --color-background: #1a091a;
   --color-text: #f5ddf5;
@@ -125,17 +124,4 @@ pre:has(.language-js):before {
 
 pre:has(.language-css):before {
   content: "CSS";
-}
-
-/* This silly font doesn't have a "ş" */
-.sh {
-  position: relative;
-}
-.sh:after {
-  content: ",";
-  text-align: center;
-  position: absolute;
-  left: 0;
-  width: 100%;
-  top: 0.125lh;
 }
