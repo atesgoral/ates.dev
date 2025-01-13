@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta property="og:title" content="Accurate Benchmarking" />
+    <meta property="og:type" content="article" />
+    <meta property="og:description" content="A technique for discounting loop overhead when benchmarking code" />
+    
+    <meta
+      property="og:image"
+      content="https://ates.dev/posts/2025-01-07-accurate-benchmarking/i/dweet-bitmap.png"
+    />
+    <meta property="og:image:alt" content="" />
+    
+    <meta property="og:locale" content="en_CA" />
+    <meta property="og:site_name" content="ates.dev" />
+    <title>ates.dev &middot; Accurate Benchmarking</title>
+    <script>
+      (() => {
+        const themeOverride = localStorage.getItem('theme-override');
+        const lightMode = themeOverride && themeOverride === 'light';
+        document.documentElement.classList.toggle('light-mode', lightMode);
+      })();
+    </script>
+    <link
+      rel="preload"
+      href="/assets/fonts/varelaround-regular-webfont.woff2"
+      as="font"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="preload"
+      href="/assets/logos/bluesky.svg"
+      as="image"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="preload"
+      href="/assets/logos/github.svg"
+      as="image"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      href="/assets/icons/favicon-96x96.png"
+      sizes="96x96"
+    />
+    <link rel="icon" type="image/svg+xml" href="/assets/icons/favicon.svg" />
+    <link rel="shortcut icon" href="/assets/icons/favicon.ico" />
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="/assets/icons/apple-touch-icon.png"
+    />
+    <meta name="apple-mobile-web-app-title" content="ates.dev" />
+    <link rel="manifest" href="/assets/icons/site.webmanifest" />
+    <link rel="stylesheet" href="/styles/style.css" />
+    <link rel="me" href="https://bsky.app/profile/ates.dev" />
+    <link rel="me" href="https://www.dwitter.net/u/magna" />
+    <link rel="me" href="https://github.com/atesgoral" />
+    <link rel="me" href="https://www.npmjs.com/~atesgoral" />
+    <link rel="me" href="https://hackaday.io/atesgoral" />
+    <link rel="me" href="https://www.instagram.com/atesgoral" />
+    <link rel="me" href="https://stackoverflow.com/users/23501/ates-goral" />
+    <link rel="me" href="https://www.linkedin.com/in/atesgoral/" />
+    <link rel="me" href="https://twitter.com/atesgoral" />
+    <link rel="me" href="https://x.com/atesgoral" />
+    <link
+      rel="alternate"
+      type="application/rss+xml"
+      title="RSS Feed"
+      href="/feed.xml"
+    />
+    <script src="/assets/js/prog.js?bust=1"></script>
+  </head>
+  <body>
+    
+    <header>
+      <h1>
+        <a href="/">ates.dev</a>
+      </h1>
+      <nav>
+        <ul>
+          <li>
+            <a href="/">Home</a>
+          </li>
+          <li>
+            <a
+              href="/pages/all-posts"
+              >Posts</a
+            >
+          </li>
+          <li>
+            <a
+              href="/pages/all-pages"
+              >Pages</a
+            >
+          </li>
+          <li>
+            <a
+              href="/pages/about"
+              >About</a
+            >
+          </li>
+          <li class="break"></li>
+          <li>
+            <a
+              href="https://bsky.app/profile/ates.dev"
+              rel="me"
+              class="bluesky logo"
+              >Bluesky</a
+            >
+          </li>
+          <li>
+            <a href="https://github.com/atesgoral" rel="me" class="github logo"
+              >GitHub</a
+            >
+          </li>
+          <li>
+            <a href="/feed.xml" rel="me" class="rss logo">RSS</a>
+          </li>
+        </ul>
+      </nav>
+    </header>
+
+    <main>
+<article>
+  <h2>Accurate Benchmarking</h2>
+  <p class="meta">Posted on Jan 12, 2025</p>
+
+  <div class="content"><p>I'll share a mathematical approach to discounting the loop overhead when looping
+over a piece of code in order to measure how long it takes (as compared to some
+alternative piece of code).</p>
+<p>Maybe this is well-known, and possible there are better ways. But it is a method
+I came up with and used in the past.</p>
+<h3 id="the-premise" tabindex="-1"><a class="permalink" href="#the-premise">The premise</a></h3>
+<p>We have a piece of code, <code>method1()</code>, that we want to benchmark to see how fast
+it is as compared to <code>method2()</code>.</p>
+<p>Since computers are very fast, running something once isn't a viable way to
+measure how long it takes to run. We therefore run it many times in a loop and
+measure the total amount of time it takes.</p>
+<h3 id="a-standard-qualitative-approach" tabindex="-1"><a class="permalink" href="#a-standard-qualitative-approach">A standard, qualitative approach</a></h3>
+<p>A straightforward way to set up a <code>benchmark()</code> utility could look something
+like this:</p>
+<pre><code class="language-js">function benchmarkTotal(fn, iterations) {
+  const start = performance.now();
+
+  for (let i = 0; i &lt; iterations; i++) {
+    fn();
+  }
+
+  const end = performance.now();
+  const total = end - start;
+
+  return total;
+}
+
+// Usage:
+const elapsed1 = benchmarkTotal(method1, 1_000_000);
+const elapsed2 = benchmarkTotal(method2, 1_000_000);
+</code></pre>
+<p>This is good enough, when our purpose is to compare <code>method1</code> against <code>method2</code>,
+to qualitatively see which one is faster.</p>
+<ul>
+<li><code>method1</code> is faster than <code>method2</code> if <code>elapsed1</code> &lt; <code>elapsed2</code></li>
+<li><code>method1</code> is slower than <code>method2</code> if <code>elapsed1</code> &gt; <code>elapsed2</code></li>
+</ul>
+<h3 id="factor-in-the-loop-overhead-for-quantitative-comparisons" tabindex="-1"><a class="permalink" href="#factor-in-the-loop-overhead-for-quantitative-comparisons">Factor in the loop overhead for quantitative comparisons</a></h3>
+<p>To get a quantitative &quot;X is p% faster than Y&quot;, we should factor in the loop
+overhead. If <code>method1</code> and <code>method2</code> are both &quot;slow&quot; methods that take many
+computational cycles to run, the tiny overhead of the <code>for</code> loop will be
+insignificant. The faster the methods we're comparing are, the more the loop
+overhead will become significant.</p>
+<p>Let's say the total time it takes <code>method1</code> to run <math><mi>n</mi></math>
+number of times is <math><msub><mi>t</mi><mn>1</mn></msub></math> and the total
+time of the loop overhead of the <math><mi>n</mi></math> iterations of the <code>for</code>
+loop is <math><mi>e</mi></math>. And <code>method2</code> takes
+<math><msub><mi>t</mi><mn>2</mn></msub></math>.</p>
+<p>Then:</p>
+<math>
+  <mtable>
+    <mtr>
+      <mtd>
+        <msub><mi>elapsed</mi><mn>1</mn></msub>
+      </mtd>
+      <mtd>
+        <mo>=</mo>
+      </mtd>
+      <mtd>
+        <msub><mi>t</mi><mn>1</mn></msub>
+        <mo>+</mo>
+        <mi>e</mi>
+      </mtd>
+    </mtr>
+    <mtr>
+      <mtd>
+        <msub><mi>elapsed</mi><mn>2</mn></msub>
+      </mtd>
+      <mtd>
+        <mo>=</mo>
+      </mtd>
+      <mtd>
+        <msub><mi>t</mi><mn>2</mn></msub>
+        <mo>+</mo>
+        <mi>e</mi>
+      </mtd>
+    </mtr>
+  </mtable>
+</math>
+<p>The only mathematically accurate quantitative result we can derive from the
+above is:</p>
+<math>
+  <mtable>
+    <mtr>
+      <mtd>
+        <mi>delta</mi>
+      </mtd>
+      <mtd>
+        <mo>=</mo>
+      </mtd>
+      <mtd>
+        <msub><mi>elapsed</mi><mn>1</mn></msub>
+        <mo>-</mo>
+        <msub><mi>elapsed</mi><mn>2</mn></msub>
+      </mtd>
+    </mtr>
+    <mtr>
+      <mtd></mtd>
+      <mtd>
+        <mo>=</mo>
+      </mtd>
+      <mtd>
+        <mo>(</mo>
+        <msub>
+          <mi>t</mi>
+          <mn>1</mn>
+        </msub>
+        <mo>+</mo>
+        <mi>e</mi>
+        <mo>)</mo>
+        <mo>-</mo>
+        <mo>(</mo>
+        <msub>
+          <mi>t</mi>
+          <mn>2</mn>
+        </msub>
+        <mo>+</mo>
+        <mi>e</mi>
+        <mo>)</mo>
+      </mtd>
+    </mtr>
+    <mtr>
+      <mtd></mtd>
+      <mtd>
+        <mo>=</mo>
+      </mtd>
+      <mtd>
+        <msub>
+          <mi>t</mi>
+          <mn>1</mn>
+        </msub>
+        <mo>+</mo>
+        <mi>e</mi>
+        <mo>-</mo>
+        <msub>
+          <mi>t</mi>
+          <mn>2</mn>
+        </msub>
+        <mo>-</mo>
+        <mi>e</mi>
+      </mtd>
+    </mtr>
+    <mtr>
+      <mtd></mtd>
+      <mtd>
+        <mo>=</mo>
+      </mtd>
+      <mtd>
+        <msub>
+          <mi>t</mi>
+          <mn>1</mn>
+        </msub>
+        <mo>-</mo>
+        <msub>
+          <mi>t</mi>
+          <mn>2</mn>
+        </msub>
+      </mtd>
+    </mtr>
+  </mtable>
+</math>
+<p>We can say that the difference between <code>method1</code> and <code>method2</code> running
+<math><mi>n</mi></math> times is <math><mi>delta</mi></math> milliseconds.</p>
+<p>We can also calculate a percentage, <code>p = delta / elapsed1 * 100</code>, and say:</p>
+<ul>
+<li><code>method2</code> is <code>p</code>% faster than <code>method1</code> if <code>p</code> is negative</li>
+<li><code>method2</code> is <code>p</code>% slower than <code>method1</code> if <code>p</code> is positive</li>
+</ul>
+<p>We can also say the difference between the run time of a single call is
+<code>delta / n</code>, but what if we want to measure a single call to either function? We
+haven't isolated <math><msub><mi>t</mi><mn>1</mn></msub></math> or
+<math><msub><mi>t</mi><mn>2</mn></msub></math> yet. We just know their
+difference.</p>
+<h3 id="timing-a-single-call" tabindex="-1"><a class="permalink" href="#timing-a-single-call">Timing a single call</a></h3>
+<p>Here comes the punchline of this post.</p>
+<p>If we want to loop <math><mi>n</mi></math> times, we can still loop a total of
+<math><mi>n</mi></math> times by looping a bit, and then a bit more. Let's
+partition the loop by first calling the method
+<math><mfrac><mn>1</mn><mn>3</mn></mfrac></math> times and then calling it twice
+<math><mfrac><mn>1</mn><mn>3</mn></mfrac></math> times, to still end up calling
+it a total of <math><mi>n</mi></math> times:</p>
+<pre><code class="language-js">function benchmarkSingle(fn, iterations) {
+  const oneThird = iterations / 3;
+
+  const start1 = performance.now();
+
+  for (let i = 0; i &lt; oneThird; i++) {
+    fn();
+  }
+
+  const end1 = performance.now();
+  const elapsed1 = end1 - start1;
+
+  const start2 = performance.now();
+
+  for (let i = 0; i &lt; oneThird; i++) {
+    fn();
+    fn();
+  }
+
+  const end2 = performance.now();
+  const elapsed2 = end2 - start2;
+
+  const partition = elapsed2 - elapsed1;
+  const single = partition / oneThird;
+
+  return single;
+}
+
+// Usage:
+const elapsed = benchmarkSingle(method, 1_000_000);
+</code></pre>
+<p>Let's break it down:</p>
+<p>If the time it takes for <math><mfrac><mi>n</mi><mn>3</mn></mfrac></math> calls
+to <code>method</code> is <math><msub><mi>t</mi><mi>p</mi></msub></math> and the loop
+overhead of <math><mfrac><mi>n</mi><mn>3</mn></mfrac></math> iterations is
+<math><msub><mi>e</mi><mi>p</mi></msub></math>, then the two loops we have the
+following durations:</p>
+<math>
+  <mtable>
+    <mtr>
+      <mtd>
+        <msub><mi>elapsed</mi><mn>1</mn></msub>
+      </mtd>
+      <mtd>
+        <mo>=</mo>
+      </mtd>
+      <mtd>
+        <msub><mi>t</mi><mi>p</mi></msub>
+        <mo>+</mo>
+        <msub><mi>e</mi><mi>p</mi></msub>
+      </mtd>
+    </mtr>
+    <mtr>
+      <mtd>
+        <msub><mi>elapsed</mi><mn>2</mn></msub>
+      </mtd>
+      <mtd>
+        <mo>=</mo>
+      </mtd>
+      <mtd>
+        <mn>2</mn><msub><mi>t</mi><mi>p</mi></msub>
+        <mo>+</mo>
+        <msub><mi>e</mi><mi>p</mi></msub>
+      </mtd>
+    </mtr>
+  </mtable>
+</math>
+<p>Then their difference is:</p>
+<math>
+  <mtable>
+    <mtr>
+      <mtd>
+        <mi>delta</mi>
+      </mtd>
+      <mtd>
+        <mo>=</mo>
+      </mtd>
+      <mtd>
+        <msub>
+          <mi>elapsed</mi>
+          <mn>2</mn>
+        </msub>
+        <mo>-</mo>
+        <msub>
+          <mi>elapsed</mi>
+          <mn>1</mn>
+        </msub>
+      </mtd>
+    </mtr>
+    <mtr>
+      <mtd></mtd>
+      <mtd>
+        <mo>=</mo>
+      </mtd>
+      <mtd>
+        <mo>(</mo>
+        <mn>2</mn>
+        <msub><mi>t</mi><mi>p</mi></msub>
+        <mo>+</mo>
+        <msub><mi>e</mi><mi>p</mi></msub>
+        <mo>)</mo>
+        <mo>-</mo>
+        <mo>(</mo>
+        <msub><mi>t</mi><mi>p</mi></msub>
+        <mo>+</mo>
+        <msub><mi>e</mi><mi>p</mi></msub>
+        <mo>)</mo>
+      </mtd>
+    </mtr>
+    <mtr>
+      <mtd></mtd>
+      <mtd>
+        <mo>=</mo>
+      </mtd>
+      <mtd>
+        <mn>2</mn>
+        <msub><mi>t</mi><mi>p</mi></msub>
+        <mo>+</mo>
+        <msub><mi>e</mi><mi>p</mi></msub>
+        <mo>-</mo>
+        <msub><mi>t</mi><mi>p</mi></msub>
+        <mo>-</mo>
+        <msub><mi>e</mi><mi>p</mi></msub>
+      </mtd>
+    </mtr>
+    <mtr>
+      <mtd></mtd>
+      <mtd>
+        <mo>=</mo>
+      </mtd>
+      <mtd>
+        <msub><mi>t</mi><mi>p</mi></msub>
+      </mtd>
+    </mtr>
+  </mtable>
+</math>
+<p>We have gotten rid of the loop overhead and isolated
+<math><msub><mi>t</mi><mi>p</mi></msub></math>! Then we can accurately compute
+the time it takes for a single call to the method by diving
+<math><msub><mi>t</mi><mi>p</mi></msub></math> by
+<math><mfrac><mi>n</mi><mn>3</mn></mfrac></math>:</p>
+<math>
+  <mi>single</mi>
+  <mo>=</mo>
+  <mfrac>
+    <mrow>
+      <mn>3</mn>
+      <msub><mi>t</mi><mi>p</mi></msub>
+    </mrow>
+    <mi>n</mi>
+  </mfrac>
+</math>
+<h3 id="sanity-check" tabindex="-1"><a class="permalink" href="#sanity-check">Sanity check</a></h3>
+<p>Let's use each of <code>benchmarkTotal</code> and <code>benchmarkSingle</code> 100 times over 10
+million iterations of <code>Math.atan2()</code> over random numbers and compare results:</p>
+<pre><code class="language-js">// The subject
+const fn = () =&gt; Math.atan2(Math.random(), Math.random());
+const iterations = 10_000_000;
+
+function average(measurer, samples = 100) {
+  let total = 0;
+
+  for (let i = 0; i &lt; samples; i++) {
+    total += measurer();
+  }
+
+  return total / samples;
+}
+
+const totalWithOverhead = average(() =&gt; benchmarkTotal(fn, iterations));
+const single = average(() =&gt; benchmarkSingle(fn, iterations));
+const total = single * iterations;
+</code></pre>
+<p>After a bit of patience:</p>
+<table>
+<thead>
+<tr>
+<th>technique</th>
+<th>variable</th>
+<th>value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>simple</td>
+<td><code>totalWithOverhead</code></td>
+<td><code>130.08399999946357</code></td>
+</tr>
+<tr>
+<td>improved</td>
+<td><code>total</code></td>
+<td><code>127.3620000086725</code></td>
+</tr>
+</tbody>
+</table>
+<p>Conclusion:</p>
+<p>It takes <code>Math.atan2()</code> ~127ms to run 10 million times over random
+numbers. With the simple approach of running a single loop for the measurement,
+there is a ~3ms loop overhead, or 2% of the measurement from the simple
+technique.</p>
+<p>Does a 2% loop overhead really matter? <code>¯\_(ツ)_/¯</code></p>
+</div>
+
+  
+</article>
+</main>
+
+    <footer>
+      <hr />
+      <p class="footer meta">
+        &copy; Ateş Göral &middot;
+        <a href="https://github.com/atesgoral/ates.dev">src</a> &middot;
+        <a href="https://www.11ty.dev/">11ty</a>
+      </p>
+    </footer>
+
+    <div id="dweet-length-template" style="display: none">
+      <div class="length"><span></span>/140</div>
+    </div>
+
+    <div id="dweet-player-template" style="display: none">
+      <p class="canvas-container">
+        <span class="canvas-subcontainer dweet-container">
+          <canvas class="white" width="1920" height="1080"></canvas>
+        </span>
+      </p>
+    </div>
+  </body>
+</html>

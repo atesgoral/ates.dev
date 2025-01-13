@@ -171,6 +171,13 @@ code {
   padding: 0 0.125rlh;
 }
 
+math {
+  font-size: 0.75rlh;
+  background: rgba(47, 127, 207, 0.1568627451);
+  border-radius: 4px;
+  padding: 0.125rlh;
+}
+
 pre {
   margin: 1rlh 0;
   font-size: 0.875rlh;
