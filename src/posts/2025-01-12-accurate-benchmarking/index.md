@@ -12,7 +12,7 @@ over a piece of code in order to measure how long it takes (as compared to some
 alternative piece of code).
 
 This might be a well-known approach, and there may be better methods. But it is
-a method I indepdently came up with and used in the past.
+a method I independently came up with and used in the past.
 
 ### The premise
 
