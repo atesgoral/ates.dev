@@ -9,7 +9,7 @@
     
     <meta
       property="og:image"
-      content="https://ates.dev/posts/2025-01-07-accurate-benchmarking/i/dweet-bitmap.png"
+      content="https://ates.dev/posts/2025-01-12-accurate-benchmarking/i/benchmarking.png"
     />
     <meta property="og:image:alt" content="" />
     
@@ -133,12 +133,12 @@
   <div class="content"><p>I'll share a mathematical approach to discounting the loop overhead when looping
 over a piece of code in order to measure how long it takes (as compared to some
 alternative piece of code).</p>
-<p>Maybe this is well-known, and possible there are better ways. But it is a method
-I came up with and used in the past.</p>
+<p>This might be a well-known approach, and there may be better methods. But it is
+a method I indepdently came up with and used in the past.</p>
 <h3 id="the-premise" tabindex="-1"><a class="permalink" href="#the-premise">The premise</a></h3>
 <p>We have a piece of code, <code>method1()</code>, that we want to benchmark to see how fast
 it is as compared to <code>method2()</code>.</p>
-<p>Since computers are very fast, running something once isn't a viable way to
+<p>Since computers are very fast, running something just once isn't a viable way to
 measure how long it takes to run. We therefore run it many times in a loop and
 measure the total amount of time it takes.</p>
 <h3 id="a-standard-qualitative-approach" tabindex="-1"><a class="permalink" href="#a-standard-qualitative-approach">A standard, qualitative approach</a></h3>
@@ -161,8 +161,8 @@ like this:</p>
 const elapsed1 = benchmarkTotal(method1, 1_000_000);
 const elapsed2 = benchmarkTotal(method2, 1_000_000);
 </code></pre>
-<p>This is good enough, when our purpose is to compare <code>method1</code> against <code>method2</code>,
-to qualitatively see which one is faster.</p>
+<p>This approach is sufficient for qualitatively comparing <code>method1</code> and <code>method2</code>
+to see which one is faster.</p>
 <ul>
 <li><code>method1</code> is faster than <code>method2</code> if <code>elapsed1</code> &lt; <code>elapsed2</code></li>
 <li><code>method1</code> is slower than <code>method2</code> if <code>elapsed1</code> &gt; <code>elapsed2</code></li>
@@ -173,11 +173,10 @@ overhead. If <code>method1</code> and <code>method2</code> are both &quot;slow&q
 computational cycles to run, the tiny overhead of the <code>for</code> loop will be
 insignificant. The faster the methods we're comparing are, the more the loop
 overhead will become significant.</p>
-<p>Let's say the total time it takes <code>method1</code> to run <math><mi>n</mi></math>
-number of times is <math><msub><mi>t</mi><mn>1</mn></msub></math> and the total
-time of the loop overhead of the <math><mi>n</mi></math> iterations of the <code>for</code>
-loop is <math><mi>e</mi></math>. And <code>method2</code> takes
-<math><msub><mi>t</mi><mn>2</mn></msub></math>.</p>
+<p>Let’s denote the total time for <code>method1</code> to run <math><mi>n</mi></math> times
+as <math><msub><mi>t</mi><mn>1</mn></msub></math>, and the total loop overhead
+for <math><mi>n</mi></math> iterations as <math><mi>e</mi></math>. And <code>method2</code>
+takes <math><msub><mi>t</mi><mn>2</mn></msub></math>.</p>
 <p>Then:</p>
 <math>
   <mtable>
@@ -304,13 +303,13 @@ haven't isolated <math><msub><mi>t</mi><mn>1</mn></msub></math> or
 <math><msub><mi>t</mi><mn>2</mn></msub></math> yet. We just know their
 difference.</p>
 <h3 id="timing-a-single-call" tabindex="-1"><a class="permalink" href="#timing-a-single-call">Timing a single call</a></h3>
-<p>Here comes the punchline of this post.</p>
+<p>Here’s the key insight of this post.</p>
 <p>If we want to loop <math><mi>n</mi></math> times, we can still loop a total of
-<math><mi>n</mi></math> times by looping a bit, and then a bit more. Let's
+<math><mi>n</mi></math> times by looping a bit, and then a bit more. We can
 partition the loop by first calling the method
-<math><mfrac><mn>1</mn><mn>3</mn></mfrac></math> times and then calling it twice
-<math><mfrac><mn>1</mn><mn>3</mn></mfrac></math> times, to still end up calling
-it a total of <math><mi>n</mi></math> times:</p>
+<math><mfrac><mn>1</mn><mn>3</mn></mfrac></math> times, followed by calling it
+twice <math><mfrac><mn>1</mn><mn>3</mn></mfrac></math> times, ensuring the total
+number of calls equals<math><mi>n</mi></math>:</p>
 <pre><code class="language-js">function benchmarkSingle(fn, iterations) {
   const oneThird = iterations / 3;
 
@@ -449,7 +448,7 @@ following durations:</p>
 </math>
 <p>We have gotten rid of the loop overhead and isolated
 <math><msub><mi>t</mi><mi>p</mi></msub></math>! Then we can accurately compute
-the time it takes for a single call to the method by diving
+the time it takes for a single call to the method by dividing
 <math><msub><mi>t</mi><mi>p</mi></msub></math> by
 <math><mfrac><mi>n</mi><mn>3</mn></mfrac></math>:</p>
 <math>
@@ -484,7 +483,7 @@ const totalWithOverhead = average(() =&gt; benchmarkTotal(fn, iterations));
 const single = average(() =&gt; benchmarkSingle(fn, iterations));
 const total = single * iterations;
 </code></pre>
-<p>After a bit of patience:</p>
+<p>After waiting for the computations to finish:</p>
 <table>
 <thead>
 <tr>
@@ -511,7 +510,7 @@ const total = single * iterations;
 numbers. With the simple approach of running a single loop for the measurement,
 there is a ~3ms loop overhead, or 2% of the measurement from the simple
 technique.</p>
-<p>Does a 2% loop overhead really matter? <code>¯\_(ツ)_/¯</code></p>
+<p>Does a 2% loop overhead matter in most cases? Probably not. <code>¯\_(ツ)_/¯</code></p>
 </div>
 
   
