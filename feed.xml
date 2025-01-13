@@ -12,8 +12,8 @@
       <description>&lt;p&gt;I&#39;ll share a mathematical approach to discounting the loop overhead when looping
 over a piece of code in order to measure how long it takes (as compared to some
 alternative piece of code).&lt;/p&gt;
-&lt;p&gt;This might be a well-known approach, and there may be better methods. But it is
-a method I independently came up with and used in the past.&lt;/p&gt;
+&lt;p&gt;This might be a well-known approach, and there might be better methods, but it
+is nevertheless a method I independently came up with and have used in the past.&lt;/p&gt;
 &lt;h3 id=&quot;the-premise&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;permalink&quot; href=&quot;https://ates.dev/posts/2025-01-12-accurate-benchmarking/#the-premise&quot;&gt;The premise&lt;/a&gt;&lt;/h3&gt;
 &lt;p&gt;We have a piece of code, &lt;code&gt;method1()&lt;/code&gt;, that we want to benchmark to see how fast
 it is as compared to &lt;code&gt;method2()&lt;/code&gt;.&lt;/p&gt;
