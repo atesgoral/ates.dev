@@ -50,8 +50,8 @@ to see which one is faster.&lt;/p&gt;
 &lt;p&gt;To get a quantitative &amp;quot;X is p% faster than Y&amp;quot;, we should factor in the loop
 overhead. If &lt;code&gt;method1&lt;/code&gt; and &lt;code&gt;method2&lt;/code&gt; are both &amp;quot;slow&amp;quot; methods that take many
 computational cycles to run, the tiny overhead of the &lt;code&gt;for&lt;/code&gt; loop will be
-insignificant. The faster the methods we&#39;re comparing are, the more the loop
-overhead will become significant.&lt;/p&gt;
+insignificant. The faster the methods we&#39;re comparing, the more significant the
+loop overhead becomes.&lt;/p&gt;
 &lt;p&gt;Let’s denote the total time for &lt;code&gt;method1&lt;/code&gt; to run &lt;math&gt;&lt;mi&gt;n&lt;/mi&gt;&lt;/math&gt; times
 as &lt;math&gt;&lt;msub&gt;&lt;mi&gt;t&lt;/mi&gt;&lt;mn&gt;1&lt;/mn&gt;&lt;/msub&gt;&lt;/math&gt;, and the total loop overhead
 for &lt;math&gt;&lt;mi&gt;n&lt;/mi&gt;&lt;/math&gt; iterations as &lt;math&gt;&lt;mi&gt;e&lt;/mi&gt;&lt;/math&gt;. And &lt;code&gt;method2&lt;/code&gt;
@@ -185,9 +185,10 @@ difference.&lt;/p&gt;
 &lt;p&gt;Here’s the key insight of this post.&lt;/p&gt;
 &lt;p&gt;If we want to loop &lt;math&gt;&lt;mi&gt;n&lt;/mi&gt;&lt;/math&gt; times, we can still loop a total of
 &lt;math&gt;&lt;mi&gt;n&lt;/mi&gt;&lt;/math&gt; times by looping a bit, and then a bit more. We can
-partition the loop by first calling the method
-&lt;math&gt;&lt;mfrac&gt;&lt;mn&gt;1&lt;/mn&gt;&lt;mn&gt;3&lt;/mn&gt;&lt;/mfrac&gt;&lt;/math&gt; times, followed by calling it
-twice &lt;math&gt;&lt;mfrac&gt;&lt;mn&gt;1&lt;/mn&gt;&lt;mn&gt;3&lt;/mn&gt;&lt;/mfrac&gt;&lt;/math&gt; times, ensuring the total
+partition the loop by first calling the method &lt;strong&gt;once&lt;/strong&gt;
+&lt;math&gt;&lt;mfrac&gt;&lt;mi&gt;n&lt;/mi&gt;&lt;mn&gt;3&lt;/mn&gt;&lt;/mfrac&gt;&lt;/math&gt; times,
+followed by calling it &lt;strong&gt;twice&lt;/strong&gt;
+&lt;math&gt;&lt;mfrac&gt;&lt;mi&gt;n&lt;/mi&gt;&lt;mn&gt;3&lt;/mn&gt;&lt;/mfrac&gt;&lt;/math&gt; times, ensuring the total
 number of calls equals &lt;math&gt;&lt;mi&gt;n&lt;/mi&gt;&lt;/math&gt;:&lt;/p&gt;
 &lt;pre&gt;&lt;code class=&quot;language-js&quot;&gt;function benchmarkSingle(fn, iterations) {
   const oneThird = iterations / 3;
@@ -342,8 +343,9 @@ the time it takes for a single call to the method by dividing
   &lt;/mfrac&gt;
 &lt;/math&gt;
 &lt;h3 id=&quot;sanity-check&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;permalink&quot; href=&quot;https://ates.dev/posts/2025-01-12-accurate-benchmarking/#sanity-check&quot;&gt;Sanity check&lt;/a&gt;&lt;/h3&gt;
-&lt;p&gt;Let&#39;s use each of &lt;code&gt;benchmarkTotal&lt;/code&gt; and &lt;code&gt;benchmarkSingle&lt;/code&gt; 100 times over 10
-million iterations of &lt;code&gt;Math.atan2()&lt;/code&gt; over random numbers and compare results:&lt;/p&gt;
+&lt;p&gt;Let&#39;s use both &lt;code&gt;benchmarkTotal&lt;/code&gt; and &lt;code&gt;benchmarkSingle&lt;/code&gt; 100 times over 10
+million iterations of &lt;code&gt;Math.atan2()&lt;/code&gt; with random numbers and compare the
+results:&lt;/p&gt;
 &lt;pre&gt;&lt;code class=&quot;language-js&quot;&gt;// The subject
 const fn = () =&amp;gt; Math.atan2(Math.random(), Math.random());
 const iterations = 10_000_000;

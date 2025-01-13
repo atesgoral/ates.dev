@@ -171,8 +171,8 @@ to see which one is faster.</p>
 <p>To get a quantitative &quot;X is p% faster than Y&quot;, we should factor in the loop
 overhead. If <code>method1</code> and <code>method2</code> are both &quot;slow&quot; methods that take many
 computational cycles to run, the tiny overhead of the <code>for</code> loop will be
-insignificant. The faster the methods we're comparing are, the more the loop
-overhead will become significant.</p>
+insignificant. The faster the methods we're comparing, the more significant the
+loop overhead becomes.</p>
 <p>Let’s denote the total time for <code>method1</code> to run <math><mi>n</mi></math> times
 as <math><msub><mi>t</mi><mn>1</mn></msub></math>, and the total loop overhead
 for <math><mi>n</mi></math> iterations as <math><mi>e</mi></math>. And <code>method2</code>
@@ -306,9 +306,10 @@ difference.</p>
 <p>Here’s the key insight of this post.</p>
 <p>If we want to loop <math><mi>n</mi></math> times, we can still loop a total of
 <math><mi>n</mi></math> times by looping a bit, and then a bit more. We can
-partition the loop by first calling the method
-<math><mfrac><mn>1</mn><mn>3</mn></mfrac></math> times, followed by calling it
-twice <math><mfrac><mn>1</mn><mn>3</mn></mfrac></math> times, ensuring the total
+partition the loop by first calling the method <strong>once</strong>
+<math><mfrac><mi>n</mi><mn>3</mn></mfrac></math> times,
+followed by calling it <strong>twice</strong>
+<math><mfrac><mi>n</mi><mn>3</mn></mfrac></math> times, ensuring the total
 number of calls equals <math><mi>n</mi></math>:</p>
 <pre><code class="language-js">function benchmarkSingle(fn, iterations) {
   const oneThird = iterations / 3;
@@ -463,8 +464,9 @@ the time it takes for a single call to the method by dividing
   </mfrac>
 </math>
 <h3 id="sanity-check" tabindex="-1"><a class="permalink" href="#sanity-check">Sanity check</a></h3>
-<p>Let's use each of <code>benchmarkTotal</code> and <code>benchmarkSingle</code> 100 times over 10
-million iterations of <code>Math.atan2()</code> over random numbers and compare results:</p>
+<p>Let's use both <code>benchmarkTotal</code> and <code>benchmarkSingle</code> 100 times over 10
+million iterations of <code>Math.atan2()</code> with random numbers and compare the
+results:</p>
 <pre><code class="language-js">// The subject
 const fn = () =&gt; Math.atan2(Math.random(), Math.random());
 const iterations = 10_000_000;
