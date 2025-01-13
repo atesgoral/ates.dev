@@ -58,8 +58,8 @@ to see which one is faster.
 To get a quantitative "X is p% faster than Y", we should factor in the loop
 overhead. If `method1` and `method2` are both "slow" methods that take many
 computational cycles to run, the tiny overhead of the `for` loop will be
-insignificant. The faster the methods we're comparing are, the more the loop
-overhead will become significant.
+insignificant. The faster the methods we're comparing, the more significant the
+loop overhead becomes.
 
 Let’s denote the total time for `method1` to run <math><mi>n</mi></math> times
 as <math><msub><mi>t</mi><mn>1</mn></msub></math>, and the total loop overhead
@@ -203,9 +203,10 @@ Here’s the key insight of this post.
 
 If we want to loop <math><mi>n</mi></math> times, we can still loop a total of
 <math><mi>n</mi></math> times by looping a bit, and then a bit more. We can
-partition the loop by first calling the method
-<math><mfrac><mn>1</mn><mn>3</mn></mfrac></math> times, followed by calling it
-twice <math><mfrac><mn>1</mn><mn>3</mn></mfrac></math> times, ensuring the total
+partition the loop by first calling the method **once**
+<math><mfrac><mi>n</mi><mn>3</mn></mfrac></math> times,
+followed by calling it **twice**
+<math><mfrac><mi>n</mi><mn>3</mn></mfrac></math> times, ensuring the total
 number of calls equals <math><mi>n</mi></math>:
 
 ```js
@@ -371,8 +372,9 @@ the time it takes for a single call to the method by dividing
 
 ### Sanity check
 
-Let's use each of `benchmarkTotal` and `benchmarkSingle` 100 times over 10
-million iterations of `Math.atan2()` over random numbers and compare results:
+Let's use both `benchmarkTotal` and `benchmarkSingle` 100 times over 10
+million iterations of `Math.atan2()` with random numbers and compare the
+results:
 
 ```js
 // The subject
