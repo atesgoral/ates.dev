@@ -2,9 +2,8 @@
 layout: layouts/post
 title: 'Accurate Benchmarking'
 description: 'A technique for discounting loop overhead when benchmarking code'
-image: i/dweet-bitmap.png
+image: i/benchmarking.png
 date: 2025-01-12
-draft: true
 ---
 
 I'll share a mathematical approach to discounting the loop overhead when looping
