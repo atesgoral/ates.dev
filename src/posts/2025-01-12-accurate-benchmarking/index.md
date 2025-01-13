@@ -4,6 +4,7 @@ title: 'Accurate Benchmarking'
 description: 'A technique for discounting loop overhead when benchmarking code'
 image: i/benchmarking.png
 date: 2025-01-12
+bluesky: https://bsky.app/profile/ates.dev/post/3lfll6ywwbs2s
 ---
 
 I'll share a mathematical approach to discounting the loop overhead when looping
