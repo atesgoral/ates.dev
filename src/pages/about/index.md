@@ -38,6 +38,7 @@ Past: [Orium](https://orium.com/) (Myplanet), [Genesys](https://www.genesys.com/
 ## Elsewhere
 
 - [Bluesky](https://bsky.app/profile/ates.dev): I project-log and dad-joke.
+- [Mastodon](https://mastodon.social/@magna): Not actively using it, yet.
 - [Dwitter](https://www.dwitter.net/u/magna/top) (JavaScript golfing): By day, a paragon of verbose, readable code – by night, a wizard of terse, cryptic JavaScript.
 - [GitHub](https://github.com/atesgoral): I open-source whatever I can. Usually fringe stuff.
 - [npm](https://www.npmjs.com/~atesgoral): I publish whatever I can. Usually fringe stuff.
