@@ -246,7 +246,7 @@ Let's break it down:
 If the time it takes for <math><mfrac><mi>n</mi><mn>3</mn></mfrac></math> calls
 to `method` is <math><msub><mi>t</mi><mi>p</mi></msub></math> and the loop
 overhead of <math><mfrac><mi>n</mi><mn>3</mn></mfrac></math> iterations is
-<math><msub><mi>e</mi><mi>p</mi></msub></math>, then these two loops have the
+<math><msub><mi>e</mi><mi>p</mi></msub></math>, then the two loops have the
 following durations:
 
 <math>
