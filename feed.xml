@@ -188,7 +188,7 @@ difference.&lt;/p&gt;
 partition the loop by first calling the method
 &lt;math&gt;&lt;mfrac&gt;&lt;mn&gt;1&lt;/mn&gt;&lt;mn&gt;3&lt;/mn&gt;&lt;/mfrac&gt;&lt;/math&gt; times, followed by calling it
 twice &lt;math&gt;&lt;mfrac&gt;&lt;mn&gt;1&lt;/mn&gt;&lt;mn&gt;3&lt;/mn&gt;&lt;/mfrac&gt;&lt;/math&gt; times, ensuring the total
-number of calls equals&lt;math&gt;&lt;mi&gt;n&lt;/mi&gt;&lt;/math&gt;:&lt;/p&gt;
+number of calls equals &lt;math&gt;&lt;mi&gt;n&lt;/mi&gt;&lt;/math&gt;:&lt;/p&gt;
 &lt;pre&gt;&lt;code class=&quot;language-js&quot;&gt;function benchmarkSingle(fn, iterations) {
   const oneThird = iterations / 3;
 
