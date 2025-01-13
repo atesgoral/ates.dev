@@ -10,15 +10,15 @@ I'll share a mathematical approach to discounting the loop overhead when looping
 over a piece of code in order to measure how long it takes (as compared to some
 alternative piece of code).
 
-Maybe this is well-known, and possible there are better ways. But it is a method
-I came up with and used in the past.
+This might be a well-known approach, and there may be better methods. But it is
+a method I indepdently came up with and used in the past.
 
 ### The premise
 
 We have a piece of code, `method1()`, that we want to benchmark to see how fast
 it is as compared to `method2()`.
 
-Since computers are very fast, running something once isn't a viable way to
+Since computers are very fast, running something just once isn't a viable way to
 measure how long it takes to run. We therefore run it many times in a loop and
 measure the total amount of time it takes.
 
@@ -46,8 +46,8 @@ const elapsed1 = benchmarkTotal(method1, 1_000_000);
 const elapsed2 = benchmarkTotal(method2, 1_000_000);
 ```
 
-This is good enough, when our purpose is to compare `method1` against `method2`,
-to qualitatively see which one is faster.
+This approach is sufficient for qualitatively comparing `method1` and `method2`
+to see which one is faster.
 
 * `method1` is faster than `method2` if `elapsed1` < `elapsed2`
 * `method1` is slower than `method2` if `elapsed1` > `elapsed2`
@@ -60,11 +60,10 @@ computational cycles to run, the tiny overhead of the `for` loop will be
 insignificant. The faster the methods we're comparing are, the more the loop
 overhead will become significant.
 
-Let's say the total time it takes `method1` to run <math><mi>n</mi></math>
-number of times is <math><msub><mi>t</mi><mn>1</mn></msub></math> and the total
-time of the loop overhead of the <math><mi>n</mi></math> iterations of the `for`
-loop is <math><mi>e</mi></math>. And `method2` takes
-<math><msub><mi>t</mi><mn>2</mn></msub></math>.
+Let’s denote the total time for `method1` to run <math><mi>n</mi></math> times
+as <math><msub><mi>t</mi><mn>1</mn></msub></math>, and the total loop overhead
+for <math><mi>n</mi></math> iterations as <math><mi>e</mi></math>. And `method2`
+takes <math><msub><mi>t</mi><mn>2</mn></msub></math>.
 
 Then:
 
@@ -199,14 +198,14 @@ difference.
 
 ### Timing a single call
 
-Here comes the punchline of this post.
+Here’s the key insight of this post.
 
 If we want to loop <math><mi>n</mi></math> times, we can still loop a total of
-<math><mi>n</mi></math> times by looping a bit, and then a bit more. Let's
+<math><mi>n</mi></math> times by looping a bit, and then a bit more. We can
 partition the loop by first calling the method
-<math><mfrac><mn>1</mn><mn>3</mn></mfrac></math> times and then calling it twice
-<math><mfrac><mn>1</mn><mn>3</mn></mfrac></math> times, to still end up calling
-it a total of <math><mi>n</mi></math> times:
+<math><mfrac><mn>1</mn><mn>3</mn></mfrac></math> times, followed by calling it
+twice <math><mfrac><mn>1</mn><mn>3</mn></mfrac></math> times, ensuring the total
+number of calls equals<math><mi>n</mi></math>:
 
 ```js
 function benchmarkSingle(fn, iterations) {
@@ -353,7 +352,7 @@ Then their difference is:
 
 We have gotten rid of the loop overhead and isolated
 <math><msub><mi>t</mi><mi>p</mi></msub></math>! Then we can accurately compute
-the time it takes for a single call to the method by diving
+the time it takes for a single call to the method by dividing
 <math><msub><mi>t</mi><mi>p</mi></msub></math> by
 <math><mfrac><mi>n</mi><mn>3</mn></mfrac></math>:
 
@@ -394,7 +393,7 @@ const single = average(() => benchmarkSingle(fn, iterations));
 const total = single * iterations;
 ```
 
-After a bit of patience:
+After waiting for the computations to finish:
 
 | technique | variable | value |
 | - | - | - |
@@ -408,4 +407,4 @@ numbers. With the simple approach of running a single loop for the measurement,
 there is a ~3ms loop overhead, or 2% of the measurement from the simple
 technique.
 
-Does a 2% loop overhead really matter? `¯\_(ツ)_/¯`
+Does a 2% loop overhead matter in most cases? Probably not. `¯\_(ツ)_/¯`
