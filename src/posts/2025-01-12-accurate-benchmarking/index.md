@@ -206,7 +206,7 @@ If we want to loop <math><mi>n</mi></math> times, we can still loop a total of
 partition the loop by first calling the method
 <math><mfrac><mn>1</mn><mn>3</mn></mfrac></math> times, followed by calling it
 twice <math><mfrac><mn>1</mn><mn>3</mn></mfrac></math> times, ensuring the total
-number of calls equals<math><mi>n</mi></math>:
+number of calls equals <math><mi>n</mi></math>:
 
 ```js
 function benchmarkSingle(fn, iterations) {
