@@ -224,7 +224,7 @@ const elapsed = benchmarkSingle(method, 1_000_000);
 &lt;p&gt;If the time it takes for &lt;math&gt;&lt;mfrac&gt;&lt;mi&gt;n&lt;/mi&gt;&lt;mn&gt;3&lt;/mn&gt;&lt;/mfrac&gt;&lt;/math&gt; calls
 to &lt;code&gt;method&lt;/code&gt; is &lt;math&gt;&lt;msub&gt;&lt;mi&gt;t&lt;/mi&gt;&lt;mi&gt;p&lt;/mi&gt;&lt;/msub&gt;&lt;/math&gt; and the loop
 overhead of &lt;math&gt;&lt;mfrac&gt;&lt;mi&gt;n&lt;/mi&gt;&lt;mn&gt;3&lt;/mn&gt;&lt;/mfrac&gt;&lt;/math&gt; iterations is
-&lt;math&gt;&lt;msub&gt;&lt;mi&gt;e&lt;/mi&gt;&lt;mi&gt;p&lt;/mi&gt;&lt;/msub&gt;&lt;/math&gt;, then the two loops we have the
+&lt;math&gt;&lt;msub&gt;&lt;mi&gt;e&lt;/mi&gt;&lt;mi&gt;p&lt;/mi&gt;&lt;/msub&gt;&lt;/math&gt;, then these two loops have the
 following durations:&lt;/p&gt;
 &lt;math&gt;
   &lt;mtable&gt;
