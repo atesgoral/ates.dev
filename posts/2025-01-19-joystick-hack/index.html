@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta property="og:title" content="Joystick Hack" />
+    <meta property="og:type" content="article" />
+    <meta property="og:description" content="A joystick hack" />
+    
+    <meta
+      property="og:image"
+      content="https://ates.dev/posts/2025-01-19-joystick-hack/i/joystick-hack.png"
+    />
+    <meta property="og:image:alt" content="" />
+    
+    <meta property="og:locale" content="en_CA" />
+    <meta property="og:site_name" content="ates.dev" />
+    <title>ates.dev &middot; Joystick Hack</title>
+    <script>
+      (() => {
+        const themeOverride = localStorage.getItem('theme-override');
+        const lightMode = themeOverride && themeOverride === 'light';
+        document.documentElement.classList.toggle('light-mode', lightMode);
+      })();
+    </script>
+    <link
+      rel="preload"
+      href="/assets/fonts/varelaround-regular-webfont.woff2"
+      as="font"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="preload"
+      href="/assets/logos/bluesky.svg"
+      as="image"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="preload"
+      href="/assets/logos/github.svg"
+      as="image"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      href="/assets/icons/favicon-96x96.png"
+      sizes="96x96"
+    />
+    <link rel="icon" type="image/svg+xml" href="/assets/icons/favicon.svg" />
+    <link rel="shortcut icon" href="/assets/icons/favicon.ico" />
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="/assets/icons/apple-touch-icon.png"
+    />
+    <meta name="apple-mobile-web-app-title" content="ates.dev" />
+    <link rel="manifest" href="/assets/icons/site.webmanifest" />
+    <link rel="stylesheet" href="/styles/style.css" />
+    <link rel="me" href="https://bsky.app/profile/ates.dev" />
+    <link rel="me" href="https://www.dwitter.net/u/magna" />
+    <link rel="me" href="https://github.com/atesgoral" />
+    <link rel="me" href="https://www.npmjs.com/~atesgoral" />
+    <link rel="me" href="https://hackaday.io/atesgoral" />
+    <link rel="me" href="https://www.instagram.com/atesgoral" />
+    <link rel="me" href="https://stackoverflow.com/users/23501/ates-goral" />
+    <link rel="me" href="https://www.linkedin.com/in/atesgoral/" />
+    <link rel="me" href="https://twitter.com/atesgoral" />
+    <link rel="me" href="https://x.com/atesgoral" />
+    <link rel="me" href="https://mastodon.social/@magna" />
+    <link
+      rel="alternate"
+      type="application/rss+xml"
+      title="RSS Feed"
+      href="/feed.xml"
+    />
+    <script src="/assets/js/prog.js?bust=1"></script>
+  </head>
+  <body>
+    
+    <header>
+      <h1>
+        <a href="/">ates.dev</a>
+      </h1>
+      <nav>
+        <ul>
+          <li>
+            <a href="/">Home</a>
+          </li>
+          <li>
+            <a
+              href="/pages/all-posts"
+              >Posts</a
+            >
+          </li>
+          <li>
+            <a
+              href="/pages/all-pages"
+              >Pages</a
+            >
+          </li>
+          <li>
+            <a
+              href="/pages/about"
+              >About</a
+            >
+          </li>
+          <li class="break"></li>
+          <li>
+            <a
+              href="https://bsky.app/profile/ates.dev"
+              rel="me"
+              class="bluesky logo"
+              >Bluesky</a
+            >
+          </li>
+          <li>
+            <a href="https://github.com/atesgoral" rel="me" class="github logo"
+              >GitHub</a
+            >
+          </li>
+          <li>
+            <a href="/feed.xml" rel="me" class="rss logo">RSS</a>
+          </li>
+        </ul>
+      </nav>
+    </header>
+
+    <main>
+<article>
+  <h2>Joystick Hack</h2>
+  <p class="meta">Posted on Jan 19, 2025</p>
+
+  <div class="content"><p>What follows is the first electronics mod I did as a child, with no artifacts to
+show for it. Circa late 1980s.</p>
+<p>We didn't have digital cameras back then and I didn't have the foresight to take
+process photos using a regular camera, and didn't even think of keeping the
+modded monstosity as a keepsake. You'll just have to take my word for it. All
+images shown are others' photos from the Internet. Sigh.</p>
+<h3 id="the-priming" tabindex="-1"><a class="permalink" href="#the-priming">The priming</a></h3>
+<p>Growing up, we had an Atari 2600 Video Game Console, with CX10 joysticks to go
+with it. An issue with the joytics, or our forceful use of them was, the
+tripod-like metal contacts/springs that were taped to the PCB used to crack and
+flatten. And the joystick would stop working for the direction of the flattened
+contact.</p>
+<p>My dad, an architect/photographer household handyman and an audophile, wasn't
+shy of cracking open electronics to do simple repairs. To spark the DIY
+electronics repairer in me, all he had to do was to demonstrate how to open the
+joysticks to unbend/reposition the metal contacts. I did all future joystick
+repairs.</p>
+<p>And the PCB + wiring was very simple to understand: Just 6 wires
+connected to ground, and 5 contacts: One for each direction and one for the fire
+button.</p>
+<h3 id="the-opportunity" tabindex="-1"><a class="permalink" href="#the-opportunity">The opportunity</a></h3>
+<p>Fast forward to many years later. I'm visiting my cousin and we're gaming on his
+Commodore 64. My cousing as autofire joysticks, which I never bothered buying.
+One of his autofire joysticks was physically broken and he was preparing to toss
+it out in the garbage. I said I wanted to examing it and took it from him.
+After my innate understanding of a standard non-autofire joystick, I was very
+curious about what made these autofire joysticks tick.</p>
+<p>I know nothing beyond &quot;if you touch to metals, electricity flows through them&quot;
+at this point.</p>
+<h3 id="the-hack" tabindex="-1"><a class="permalink" href="#the-hack">The hack</a></h3>
+<p>I take the joystick home, unscrew the housing and start examinig the PCB. The
+jostick is physically broken (I don't remember the specifics), but the PCB is
+intact. Superimposing my knowledge of a basic joystick on top of the
+incomprehensible circuit elements of the autofire PCB, I was able to
+reverse-engineer this much: An extra wire runs into the joystick. I use my dad's
+circuit tester to see that it's supplying +5V. The contact parts are mostly the
+same, but there's this island of circuity that must be the source of the
+autofire.</p>
+<p>And here's the literal hack: I hacksawed the autofire bit out of the broken
+joystick, and soldered it into a standard joystick that I was using with my
+Atari ST. I ran a single wire I salvaged from on old headphone and superglued it
+along the 6-pole wire of the standard joystick. I replaced the top fire button
+of my joystick with a lamp toggle switch, which fit perfectly into the opening.
+IT WORKED! I had a Frankenstein's monster of a joystick with an autofire circuit
+retrofitted on it like a parasite. I had click the toggle switch on the top to
+turn on autofire and click again to turn it off.</p>
+<p>Courage, luck, success. Whatever confidence I had in all the other electronics
+mods I did in later life, I trace back to this first hack.</p>
+<p>Literal hack, with a hacksaw involved.</p>
+</div>
+
+  
+</article>
+</main>
+
+    <footer>
+      <hr />
+      <p class="footer meta">
+        &copy; Ateş Göral &middot;
+        <a href="https://github.com/atesgoral/ates.dev">src</a> &middot;
+        <a href="https://www.11ty.dev/">11ty</a>
+      </p>
+    </footer>
+
+    <div id="dweet-length-template" style="display: none">
+      <div class="length"><span></span>/140</div>
+    </div>
+
+    <div id="dweet-player-template" style="display: none">
+      <p class="canvas-container">
+        <span class="canvas-subcontainer dweet-container">
+          <canvas class="white" width="1920" height="1080"></canvas>
+        </span>
+      </p>
+    </div>
+  </body>
+</html>
