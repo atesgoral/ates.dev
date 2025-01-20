@@ -9,7 +9,7 @@
     
     <meta
       property="og:image"
-      content="https://ates.dev/posts/2025-01-19-joystick-hack/i/joystick-hack.png"
+      content="https://ates.dev/posts/2025-01-19-joystick-hack/i/joystick-hack.webp"
     />
     <meta property="og:image:alt" content="" />
     
@@ -138,39 +138,49 @@ process photos using a regular camera, and didn't even think of keeping the
 modded monstosity as a keepsake. You'll just have to take my word for it. All
 images shown are others' photos from the Internet. Sigh.</p>
 <h3 id="the-priming" tabindex="-1"><a class="permalink" href="#the-priming">The priming</a></h3>
-<p>Growing up, we had an Atari 2600 Video Game Console, with CX10 joysticks to go
-with it. An issue with the joytics, or our forceful use of them was, the
-tripod-like metal contacts/springs that were taped to the PCB used to crack and
-flatten. And the joystick would stop working for the direction of the flattened
-contact.</p>
-<p>My dad, an architect/photographer household handyman and an audophile, wasn't
-shy of cracking open electronics to do simple repairs. To spark the DIY
-electronics repairer in me, all he had to do was to demonstrate how to open the
-joysticks to unbend/reposition the metal contacts. I did all future joystick
-repairs.</p>
-<p>And the PCB + wiring was very simple to understand: Just 6 wires
-connected to ground, and 5 contacts: One for each direction and one for the fire
-button.</p>
+<p>Growing up, we had an <a href="https://en.wikipedia.org/wiki/Atari_2600">Atari 2600 Video Game Console</a>, with
+<a href="https://en.wikipedia.org/wiki/Atari_CX40_joystick">CX40 joysticks</a> to go with it. An issue with the joytics, or our forceful
+usage of them was, the metal dome switches on the circuit board used to crack
+and flatten, causing the joystick to malfunction towards one or more directions.</p>
+<p class="center zoomable">
+  <img src="i/atari-and-joystick.webp" alt="An Atari 2600 Video Game Console and a CX40 joystick standing next to it">
+</p>
+<p>My architect/photographer/audiophile dad wasn't shy of cracking open electronics
+to do simple repairs. A single demonstration on how to open a joystick to unbend
+and reposition the metal contacts launched me on my DIY electronics repair
+journey. I performed all future joystick repairs.</p>
+<p>The circuit board and its wiring was very simple to intuitively understand for
+an uninitiated kid: Just 6 wires for ground, the 4 directions and the fire
+button. (See: <a href="https://archive.org/details/atari-2600-field-service-manual/page/n125/mode/2up">Atari 2600 Field Service Manual, 7-1 &amp; 7-2</a>.)</p>
+<p class="center zoomable">
+  <img src="i/atari-cx40-pcb.webp" alt="The circuit board of an Atari CX40 joystick">
+</p>
+<p class="meta">Photo lifted from <a href="https://forums.atariage.com/topic/346435-identify-if-cx40-is-genuine/#comment-5189662">a post</a> by Atari2600PAL on AtariAge</p>
 <h3 id="the-opportunity" tabindex="-1"><a class="permalink" href="#the-opportunity">The opportunity</a></h3>
 <p>Fast forward to many years later. I'm visiting my cousin and we're gaming on his
-Commodore 64. My cousing as autofire joysticks, which I never bothered buying.
-One of his autofire joysticks was physically broken and he was preparing to toss
-it out in the garbage. I said I wanted to examing it and took it from him.
+Commodore 64. My cousin has autofire joysticks, which I never bothered buying.
+One of his autofire joysticks is physically broken and he was preparing to toss
+it out in the garbage. I said I wanted to examine it and took it from him.
 After my innate understanding of a standard non-autofire joystick, I was very
 curious about what made these autofire joysticks tick.</p>
-<p>I know nothing beyond &quot;if you touch to metals, electricity flows through them&quot;
-at this point.</p>
+<p>I know nothing about electronics beyond &quot;if you touch two metals, electricity
+flows through them&quot; at this point.</p>
 <h3 id="the-hack" tabindex="-1"><a class="permalink" href="#the-hack">The hack</a></h3>
 <p>I take the joystick home, unscrew the housing and start examinig the PCB. The
 jostick is physically broken (I don't remember the specifics), but the PCB is
 intact. Superimposing my knowledge of a basic joystick on top of the
 incomprehensible circuit elements of the autofire PCB, I was able to
-reverse-engineer this much: An extra wire runs into the joystick. I use my dad's
-circuit tester to see that it's supplying +5V. The contact parts are mostly the
+reverse-engineer this much: An extra +5V wire runs into the joystick. I use my
+dad's circuit tester to verify. The contact parts are mostly the
 same, but there's this island of circuity that must be the source of the
 autofire.</p>
+<p>https://www.c64-wiki.com/wiki/Quickshot
+https://www.petervis.com/Sinclair/Commodore_Atari_Sinclair_Spectrum_Joystick/Commodore_Atari_Sinclair_Spectrum_Joystick_Inside.html</p>
+<p>https://www.oldcomputr.com/spectravideo-quickshot-ii-1983/</p>
+<p>https://www.rodusilighting.com.au/product-page/double-pole-push-button-switch
+https://www.vintagecaravanspares.com.au/product-details/1149</p>
 <p>And here's the literal hack: I hacksawed the autofire bit out of the broken
-joystick, and soldered it into a standard joystick that I was using with my
+joystick, and soldered it into a non-autofire joystick (QuickShot I) that I was using with my
 Atari ST. I ran a single wire I salvaged from on old headphone and superglued it
 along the 6-pole wire of the standard joystick. I replaced the top fire button
 of my joystick with a lamp toggle switch, which fit perfectly into the opening.
