@@ -44,7 +44,7 @@ button. (See: [Atari 2600 Field Service Manual, 7-1 & 7-2][3].)
   <img src="i/atari-cx40-pcb.webp" alt="The circuit board of an Atari CX40 joystick">
 </p>
 
-<p class="meta">Photo lifted from <a href="https://forums.atariage.com/topic/346435-identify-if-cx40-is-genuine/#comment-5189662">a post</a> by Atari2600PAL on AtariAge</p>
+<p class="meta">Photo from <a href="https://forums.atariage.com/topic/346435-identify-if-cx40-is-genuine/#comment-5189662">a post</a> by Atari2600PAL on <a href="https://atariage.com/">AtariAge</a> (permission pending)</p>
 
 ### The opportunity
 
@@ -60,33 +60,47 @@ flows through them" at this point.
 
 ### The hack
 
-I take the joystick home, unscrew the housing and start examinig the PCB. The
-jostick is physically broken (I don't remember the specifics), but the PCB is
-intact. Superimposing my knowledge of a basic joystick on top of the
-incomprehensible circuit elements of the autofire PCB, I was able to
-reverse-engineer this much: An extra +5V wire runs into the joystick. I use my
-dad's circuit tester to verify. The contact parts are mostly the
-same, but there's this island of circuity that must be the source of the
-autofire.
+I take the joystick home, unscrew the housing and start examining the circuit
+board. Extrapolating my understanding of a basic joystick's circuit over the
+incomprehensible circuit elements of the autofire circuit, I visually isolate
+a section that is most likely responsible for the autofire action. I use my
+dad's circuit tester to verify.
 
-https://www.c64-wiki.com/wiki/Quickshot
+I don't remember the make and model, but it probably looked something like the
+bottom right of this QuickShot II circuit board:
+
+<p class="center zoomable">
+  <img src="i/quickshot-ii-pcb.webp" alt="The circuit board of a QuickShot II joystick">
+</p>
+
+<p class="meta">Photo from <a href="https://www.oldcomputr.com/spectravideo-quickshot-ii-1983/">a post</a> by Giacomo Vernoni on <a href="https://www.oldcomputr.com/">oldcomputr.com</a> (permission pending)</p>
+
+And here's comes the literal hack.
+
+<p class="center zoomable">
+  <img src="i/hacksaw.webp" alt="A hacksaw with a red handle">
+</p>
+
+I **hacksaw** the autofire section out of the circuit board, and franken-solder
+it to the circuit board of my non-autofire [QuickShot I][4] joystick with wires
+and tuck it sideways inside the joystick housing. I run a single wire I salvage
+from on old headphone and superglue it along the 6-lead wire of the standard
+joystick (since I need 7 leads). I replace the top fire button of my joystick
+with a pole push button, which happens to fit perfectly in the shaft.
+
+[4]: https://www.c64-wiki.com/wiki/Quickshot
+
+**And it worked!**
+
+I had a Frankenstein's monster of a joystick with an autofire circuit
+retrofitted on it like a parasite. I was clicking the toggle switch on the top
+to turn on autofire and clicking it again to turn it off.
+
+Courage, luck, success. Whatever confidence I had for all the other electronics
+mods I did in later life, I trace them back to this very first hack &mdash;
+literal hack, with a hacksaw involved.
+
+<!--
 https://www.petervis.com/Sinclair/Commodore_Atari_Sinclair_Spectrum_Joystick/Commodore_Atari_Sinclair_Spectrum_Joystick_Inside.html
-
-https://www.oldcomputr.com/spectravideo-quickshot-ii-1983/
-
-https://www.rodusilighting.com.au/product-page/double-pole-push-button-switch
 https://www.vintagecaravanspares.com.au/product-details/1149
-
-And here's the literal hack: I hacksawed the autofire bit out of the broken
-joystick, and soldered it into a non-autofire joystick (QuickShot I) that I was using with my
-Atari ST. I ran a single wire I salvaged from on old headphone and superglued it
-along the 6-pole wire of the standard joystick. I replaced the top fire button
-of my joystick with a lamp toggle switch, which fit perfectly into the opening.
-IT WORKED! I had a Frankenstein's monster of a joystick with an autofire circuit
-retrofitted on it like a parasite. I had click the toggle switch on the top to
-turn on autofire and click again to turn it off.
-
-Courage, luck, success. Whatever confidence I had in all the other electronics
-mods I did in later life, I trace back to this first hack.
-
-Literal hack, with a hacksaw involved.
+-->
