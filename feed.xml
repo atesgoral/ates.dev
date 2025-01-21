@@ -58,13 +58,13 @@ bottom right of this QuickShot II circuit board:&lt;/p&gt;
 &lt;/p&gt;
 &lt;p class=&quot;credit&quot;&gt;Credit: Giacomo Vernoni, &lt;a href=&quot;https://www.oldcomputr.com/spectravideo-quickshot-ii-1983/&quot;&gt;blog post on oldcomputr.com&lt;/a&gt;, permission pending.&lt;/p&gt;
 &lt;h3 id=&quot;the-hack&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;permalink&quot; href=&quot;https://ates.dev/posts/2025-01-20-joystick-hack/#the-hack&quot;&gt;The hack&lt;/a&gt;&lt;/h3&gt;
-&lt;p&gt;And here&#39;s comes the hack.&lt;/p&gt;
+&lt;p&gt;And here comes the hack.&lt;/p&gt;
 &lt;p class=&quot;center zoomable&quot;&gt;
   &lt;img src=&quot;https://ates.dev/posts/2025-01-20-joystick-hack/i/hacksaw.webp&quot; alt=&quot;A hacksaw with a red handle&quot;&gt;
 &lt;/p&gt;
 &lt;p&gt;I &lt;strong&gt;hacksaw&lt;/strong&gt; the autofire section out of the circuit board, and franken-solder
 it to the circuit board of my non-autofire &lt;a href=&quot;https://www.c64-wiki.com/wiki/Quickshot&quot;&gt;QuickShot I&lt;/a&gt; joystick with wires
-and tuck it sideways inside the joystick housing. I superglue a single wire
+and tuck it sideways inside the joystick housing. I super-glue a single wire
 along the original 6-lead wire of the joystick to upgrade it to 7 leads. The
 stripped end of this extra wire is inserted into the +5V hole of the female DE-9
 connector. I replace the top fire button of my joystick with a pole push button,
@@ -76,7 +76,7 @@ which happens to fit perfectly in the shaft.&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;And it worked!&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;I had a Frankenstein&#39;s monster of a joystick with an autofire circuit
 retrofitted on it like a parasite. I was clicking the toggle switch on the top
-to turn on autofire and clicking it again to turn it off.&lt;/p&gt;
+to turn on autofire, and clicking it again to turn it off.&lt;/p&gt;
 &lt;p&gt;Courage, luck, success. Whatever confidence I had for all the other electronics
 mods I did in later life, I trace them back to this very first hack —
 literal hack, with a hacksaw involved.&lt;/p&gt;
