@@ -43,7 +43,7 @@ button. (See: [Atari 2600 Field Service Manual, 7-1 & 7-2][3].)
   <img src="i/atari-cx40-pcb.webp" alt="The circuit board of an Atari CX40 joystick">
 </p>
 
-<p class="meta">Photo from <a href="https://forums.atariage.com/topic/346435-identify-if-cx40-is-genuine/#comment-5189662">a post</a> by Atari2600PAL on <a href="https://atariage.com/">AtariAge</a> (permission pending)</p>
+<p class="credit">Photo from <a href="https://forums.atariage.com/topic/346435-identify-if-cx40-is-genuine/#comment-5189662">a post</a> by Atari2600PAL on <a href="https://atariage.com/">AtariAge</a> (permission pending)</p>
 
 ### The opportunity
 
@@ -72,7 +72,7 @@ bottom right of this QuickShot II circuit board:
   <img src="i/quickshot-ii-pcb.webp" alt="The circuit board of a QuickShot II joystick">
 </p>
 
-<p class="meta">Photo from <a href="https://www.oldcomputr.com/spectravideo-quickshot-ii-1983/">a post</a> by Giacomo Vernoni on <a href="https://www.oldcomputr.com/">oldcomputr.com</a> (permission pending)</p>
+<p class="credit">Photo from <a href="https://www.oldcomputr.com/spectravideo-quickshot-ii-1983/">a post</a> by Giacomo Vernoni on <a href="https://www.oldcomputr.com/">oldcomputr.com</a> (permission pending)</p>
 
 And here's comes the literal hack.
 
@@ -82,12 +82,19 @@ And here's comes the literal hack.
 
 I **hacksaw** the autofire section out of the circuit board, and franken-solder
 it to the circuit board of my non-autofire [QuickShot I][4] joystick with wires
-and tuck it sideways inside the joystick housing. I run a single wire I salvage
-from on old headphone and superglue it along the 6-lead wire of the standard
-joystick (since I need 7 leads). I replace the top fire button of my joystick
-with a pole push button, which happens to fit perfectly in the shaft.
+and tuck it sideways inside the joystick housing. I superglue a single wire
+along the original 6-lead wire of the joystick to upgrade it to 7 leads. The
+stripped end of this extra wire is inserted into the +5V hole of the female DE-9
+connector. I replace the top fire button of my joystick with a pole push button,
+which happens to fit perfectly in the shaft.
 
 [4]: https://www.c64-wiki.com/wiki/Quickshot
+
+<p class="center zoomable">
+  <img src="i/top-button.webp" alt="The top of the inside of the handle of a QuickShot I joystick, with a push button next to it">
+</p>
+
+<p class="credit">Photo from <a href="https://www.petervis.com/Sinclair/Commodore_Atari_Sinclair_Spectrum_Joystick/Commodore_Atari_Sinclair_Spectrum_Joystick_Inside.html">a post</a> by Peter Vis on <a href="https://www.petervis.com/">petervis.com</a> (permission pending)</p>
 
 **And it worked!**
 
