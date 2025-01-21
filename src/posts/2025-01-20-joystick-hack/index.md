@@ -81,7 +81,7 @@ bottom right of this QuickShot II circuit board:
 
 ### The hack
 
-And here's comes the hack.
+And here comes the hack.
 
 <p class="center zoomable">
   <img src="i/hacksaw.webp" alt="A hacksaw with a red handle">
@@ -89,7 +89,7 @@ And here's comes the hack.
 
 I **hacksaw** the autofire section out of the circuit board, and franken-solder
 it to the circuit board of my non-autofire [QuickShot I][4] joystick with wires
-and tuck it sideways inside the joystick housing. I superglue a single wire
+and tuck it sideways inside the joystick housing. I super-glue a single wire
 along the original 6-lead wire of the joystick to upgrade it to 7 leads. The
 stripped end of this extra wire is inserted into the +5V hole of the female DE-9
 connector. I replace the top fire button of my joystick with a pole push button,
@@ -107,7 +107,7 @@ which happens to fit perfectly in the shaft.
 
 I had a Frankenstein's monster of a joystick with an autofire circuit
 retrofitted on it like a parasite. I was clicking the toggle switch on the top
-to turn on autofire and clicking it again to turn it off.
+to turn on autofire, and clicking it again to turn it off.
 
 Courage, luck, success. Whatever confidence I had for all the other electronics
 mods I did in later life, I trace them back to this very first hack &mdash;
