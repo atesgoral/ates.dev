@@ -57,7 +57,7 @@ curious about what made these autofire joysticks tick.
 I know nothing about electronics beyond "if you touch two metals, electricity
 flows through them" at this point.
 
-### The hack
+### The inspection
 
 I take the joystick home, unscrew the housing and start examining the circuit
 board. Extrapolating my understanding of a basic joystick's circuit over the
@@ -74,7 +74,9 @@ bottom right of this QuickShot II circuit board:
 
 <p class="credit">Photo from <a href="https://www.oldcomputr.com/spectravideo-quickshot-ii-1983/">a post</a> by Giacomo Vernoni on <a href="https://www.oldcomputr.com/">oldcomputr.com</a> (permission pending)</p>
 
-And here's comes the literal hack.
+### The hack
+
+And here's comes the hack.
 
 <p class="center zoomable">
   <img src="i/hacksaw.webp" alt="A hacksaw with a red handle">
