@@ -101,6 +101,13 @@ blockquote:before {
   font-size: 0.625rlh;
 }
 
+.credit {
+  text-align: center;
+  font-size: 0.625rlh;
+  position: relative;
+  top: -1rlh;
+}
+
 .project-thumbnail > img {
   float: left;
   aspect-ratio: 240/135;
