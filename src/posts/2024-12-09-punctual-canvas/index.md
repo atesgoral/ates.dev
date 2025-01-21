@@ -1,8 +1,9 @@
 ---
 layout: layouts/post
 title: "Punctual Canvas Rendering"
-description: "The techniques I use for punctual canvas rendering, to maintain a consistent frame rate."
+description: "The techniques I use for punctual canvas rendering, to maintain a consistent frame rate"
 image: i/punctual-canvas.png
+alt:
 date: 2024-12-09
 draft: true
 ---

@@ -1,8 +1,9 @@
 ---
 layout: layouts/post
 title: 'Dweeting Outside the Box'
-description: 'Demonstration of JavaScript golfing techniques by rendering the "default dweet" in different ways.'
+description: 'Demonstration of JavaScript golfing techniques by rendering the "default dweet" in different ways'
 image: i/default-dweet.png
+alt: 'A screenshot of a canvas with 9 black rectangles on a white background'
 date: 2024-12-25
 libs:
   - render

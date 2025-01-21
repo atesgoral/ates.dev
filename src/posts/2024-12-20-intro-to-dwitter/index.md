@@ -1,8 +1,9 @@
 ---
 layout: layouts/post
 title: 'A Short Introduction to Dwitter and JavaScript Golfing'
-description: 'A very short introduction to JavaScript golfing on Dwitter, with a focus on the "default dweet".'
+description: 'A very short introduction to JavaScript golfing on Dwitter, with a focus on the "default dweet"'
 image: i/default-dweet.png
+alt: 'A screenshot of a canvas with 9 black rectangles on a white background'
 date: 2024-12-20
 libs:
   - render

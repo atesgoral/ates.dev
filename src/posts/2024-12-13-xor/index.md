@@ -3,6 +3,7 @@ layout: layouts/post
 title: 'A Brain Teaser and a Digression into XOR'
 description: ''
 image: i/missing-item-with-xor.png
+alt:
 date: 2024-12-13
 draft: true
 ---

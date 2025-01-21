@@ -1,10 +1,10 @@
 ---
 layout: layouts/post
 title: 'Joystick Hack'
-description: 'A joystick hack'
+description: 'A childhood adventure into electronics through a DIY joystick modification'
 image: i/joystick-hack.webp
+alt: 'An Atari 2600 video game console, a CX40 joystick, with schematics of the joystick overlaid'
 date: 2025-01-20
-draft: true
 ---
 
 What follows is the first electronics mod I did as a child, with no artifacts to

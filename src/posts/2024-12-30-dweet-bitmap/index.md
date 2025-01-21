@@ -3,6 +3,7 @@ layout: layouts/post
 title: 'Using Bitmaps in Dweets'
 description: 'A technique for encoding, decoding, and rendering bitmaps in dweets'
 image: i/dweet-bitmap.png
+alt: 'A screenshot of a canvas with a black mouse pointer over a white background'
 date: 2024-12-30
 libs:
   - render
