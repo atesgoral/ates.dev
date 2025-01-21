@@ -11,9 +11,8 @@ What follows is the first electronics mod I did as a child, with no artifacts to
 show for it. Circa late 1980s.
 
 We didn't have digital cameras back then and I didn't have the foresight to take
-process photos using a regular camera, and didn't even think of keeping the
-modded monstosity as a keepsake. You'll just have to take my word for it. All
-images shown are others' photos from the Internet. Sigh.
+process photos using a regular camera, and didn't even think of preserving the
+modded monstrosity as a keepsake. You'll just have to take my word for it.
 
 ### The priming
 
