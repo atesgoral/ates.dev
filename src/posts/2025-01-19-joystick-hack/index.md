@@ -17,9 +17,10 @@ modded monstrosity as a keepsake. You'll just have to take my word for it.
 ### The priming
 
 Growing up, we had an [Atari 2600 Video Game Console][1], with
-[CX40 joysticks][2] to go with it. An issue with the joytics, or our forceful
-usage of them was, the metal dome switches on the circuit board used to crack
-and flatten, causing the joystick to malfunction towards one or more directions.
+[CX40 joysticks][2] to go with it. An issue with the joysticks, possibly due to
+our forceful usage, was that the metal dome switches on the circuit board would
+crack and flatten, causing the joystick to malfunction in one or more
+directions.
 
 [1]: https://en.wikipedia.org/wiki/Atari_2600
 [2]: https://en.wikipedia.org/wiki/Atari_CX40_joystick
@@ -43,16 +44,19 @@ button. (See: [Atari 2600 Field Service Manual, 7-1 & 7-2][3].)
   <img src="i/atari-cx40-pcb.webp" alt="The circuit board of an Atari CX40 joystick">
 </p>
 
-<p class="credit">Photo from <a href="https://forums.atariage.com/topic/346435-identify-if-cx40-is-genuine/#comment-5189662">a post</a> by Atari2600PAL on <a href="https://atariage.com/">AtariAge</a> (permission pending)</p>
+<p class="credit">Credit: Atari2600PAL, <a href="https://forums.atariage.com/topic/346435-identify-if-cx40-is-genuine/#comment-5189662">forum post on AtariAge</a>, used with permission.</p>
 
 ### The opportunity
 
 Fast forward to many years later. I'm visiting my cousin and we're gaming on his
-Commodore 64. My cousin has autofire joysticks, which I never bothered buying.
-One of his autofire joysticks is physically broken and he was preparing to toss
-it out in the garbage. I said I wanted to examine it and took it from him.
-After my innate understanding of a standard non-autofire joystick, I was very
-curious about what made these autofire joysticks tick.
+Commodore 64. My cousin has autofire joysticks (a feature that allows a joystick
+to automatically send repeated fire signals without the need for the user to
+press the fire button repeatedly), which I never bothered buying.
+
+One of his autofire joysticks is physically broken and he's thinking of tossing
+it out in the garbage. I said I wanted to examine it and took it from him. Given
+my understanding of a standard non-autofire joystick, I was very curious about
+what made these autofire joysticks tick.
 
 I know nothing about electronics beyond "if you touch two metals, electricity
 flows through them" at this point.
@@ -72,7 +76,7 @@ bottom right of this QuickShot II circuit board:
   <img src="i/quickshot-ii-pcb.webp" alt="The circuit board of a QuickShot II joystick">
 </p>
 
-<p class="credit">Photo from <a href="https://www.oldcomputr.com/spectravideo-quickshot-ii-1983/">a post</a> by Giacomo Vernoni on <a href="https://www.oldcomputr.com/">oldcomputr.com</a> (permission pending)</p>
+<p class="credit">Credit: Giacomo Vernoni, <a href="https://www.oldcomputr.com/spectravideo-quickshot-ii-1983/">blog post on oldcomputr.com</a>, permission pending.</p>
 
 ### The hack
 
@@ -96,7 +100,7 @@ which happens to fit perfectly in the shaft.
   <img src="i/top-button.webp" alt="The top of the inside of the handle of a QuickShot I joystick, with a push button next to it">
 </p>
 
-<p class="credit">Photo from <a href="https://www.petervis.com/Sinclair/Commodore_Atari_Sinclair_Spectrum_Joystick/Commodore_Atari_Sinclair_Spectrum_Joystick_Inside.html">a post</a> by Peter Vis on <a href="https://www.petervis.com/">petervis.com</a> (permission pending)</p>
+<p class="credit">Credit: Peter Vis, <a href="https://www.petervis.com/Sinclair/Commodore_Atari_Sinclair_Spectrum_Joystick/Commodore_Atari_Sinclair_Spectrum_Joystick_Inside.html">page on petervis.com</a>, permission pending.</p>
 
 **And it worked!**
 
@@ -107,8 +111,3 @@ to turn on autofire and clicking it again to turn it off.
 Courage, luck, success. Whatever confidence I had for all the other electronics
 mods I did in later life, I trace them back to this very first hack &mdash;
 literal hack, with a hacksaw involved.
-
-<!--
-https://www.petervis.com/Sinclair/Commodore_Atari_Sinclair_Spectrum_Joystick/Commodore_Atari_Sinclair_Spectrum_Joystick_Inside.html
-https://www.vintagecaravanspares.com.au/product-details/1149
--->
