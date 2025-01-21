@@ -3,7 +3,7 @@ layout: layouts/post
 title: 'Joystick Hack'
 description: 'A joystick hack'
 image: i/joystick-hack.webp
-date: 2025-01-19
+date: 2025-01-20
 draft: true
 ---
 
