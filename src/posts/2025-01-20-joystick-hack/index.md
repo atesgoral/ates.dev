@@ -5,6 +5,7 @@ description: 'A childhood adventure into electronics through a DIY joystick modi
 image: i/joystick-hack.webp
 alt: 'An Atari 2600 video game console, a CX40 joystick, with schematics of the joystick overlaid'
 date: 2025-01-20
+bluesky: https://bsky.app/profile/ates.dev/post/3lga3fvssm22d
 ---
 
 What follows is the first electronics mod I did as a child, with no artifacts to
