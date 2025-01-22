@@ -101,7 +101,7 @@ which happens to fit perfectly in the shaft.
   <img src="i/top-button.webp" alt="The top of the inside of the handle of a QuickShot I joystick, with a push button next to it">
 </p>
 
-<p class="credit">Credit: Peter Vis, <a href="https://www.petervis.com/Sinclair/Commodore_Atari_Sinclair_Spectrum_Joystick/Commodore_Atari_Sinclair_Spectrum_Joystick_Inside.html">page on petervis.com</a>, permission pending.</p>
+<p class="credit">Credit: Peter Vis, <a href="https://www.petervis.com/Sinclair/Commodore_Atari_Sinclair_Spectrum_Joystick/Commodore_Atari_Sinclair_Spectrum_Joystick_Inside.html">page on petervis.com</a>, used with permission.</p>
 
 **And it worked!**
 
