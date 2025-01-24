@@ -67,7 +67,7 @@ window.addEventListener('DOMContentLoaded', () => {
     const src = dweet.querySelector('code').textContent.trim();
     const length = lengthTemplate.querySelector('div').cloneNode(true);
 
-    length.querySelector('span').innerText = src.length;
+    length.querySelector('span').innerText = [...src].length;
 
     if (src.length > 140) {
       length.classList.add('too-long');
