@@ -135,7 +135,30 @@
   <h2>Gosper Curve</h2>
   <p class="meta">Posted on Jan 25, 2025</p>
 
-  <div class="content"><pre class="dweet play"><code class="language-js">eval(unescape(escape`󨼮󭽩󩍴󪌽󞜶󜌻󮌮󫝯󭭥󥍯󚍘󟜶󝜰󛍙󟜸󝜩󞽧󟜨󫼬󨬩󟜾󫼿󦼮󛬮󨬿󘬳󜌱󜬲󜜱󜬱󜌳󜼰󜼲󘬺󘬰󜜲󜜱󜬳󜌳󜼰󜌳󜬱󘭝󛭭󨝰󚍣󟜾󚍣󚬽󜜩󙬱󟽔󚼽󨼭󜬺󩼨󫼭󜜬󨼦󜬩󚜺󮌮󫍩󫭥󥍯󚍘󚼽󞜪󠼨󨜽󥌪󜜮󜌴󝼩󛍙󚼽󞜪󤼨󨜩󚜻󩼨󥌽󝌩󞽸󛭳󭍲󫽫󩜨󚜻`.replace(/u../g,'')))
+  <div class="content"><p>import turtle</p>
+<p>def gosper_curve(order: int, size: int, is_A: bool = True) -&gt; None:
+&quot;&quot;&quot;Draw the Gosper curve.&quot;&quot;&quot;
+if order == 0:
+turtle.forward(size)
+return
+for op in &quot;A-B--B+A++AA+B-&quot; if is_A else &quot;+A-BB--B-A++A+B&quot;:
+gosper_op_map[op](order - 1, size)</p>
+<p>gosper_op_map = {
+&quot;A&quot;: lambda o, size: gosper_curve(o, size, True),
+&quot;B&quot;: lambda o, size: gosper_curve(o, size, False),
+&quot;-&quot;: lambda o, size: turtle.right(60),
+&quot;+&quot;: lambda o, size: turtle.left(60),
+}
+size = 10
+order = 3
+gosper_curve(order, size)</p>
+<pre class="dweet play"><code class="language-js">c.width=960
+x.moveTo(X=650,Y=85)
+g=(o,b)=>o?[...b?"301221121033032":"012112303300321"].map(c=>(c*=1)&1?T+=c-2:g(o-1,c&2)):x.lineTo(X+=9*C(a=T*1.047),Y+=9*S(a))
+g(T=4)
+x.stroke();
+</code></pre>
+<pre class="dweet play"><code class="language-js">eval(unescape(escape`󨼮󭽩󩍴󪌽󞜶󜌻󮌮󫝯󭭥󥍯󚍘󟜶󝜰󛍙󟜸󝜩󞽧󟜨󫼬󨬩󟜾󫼿󦼮󛬮󨬿󘬳󜌱󜬲󜜱󜬱󜌳󜼰󜼲󘬺󘬰󜜲󜜱󜬳󜌳󜼰󜌳󜬱󘭝󛭭󨝰󚍣󟜾󚍣󚬽󜜩󙬱󟽔󚼽󨼭󜬺󩼨󫼭󜜬󨼦󜬩󚜺󮌮󫍩󫭥󥍯󚍘󚼽󞜪󠼨󨜽󥌪󜜮󜌴󝼩󛍙󚼽󞜪󤼨󨜩󚜻󩼨󥌽󝌩󞽸󛭳󭍲󫽫󩜨󚜻`.replace(/u../g,'')))
 </code></pre>
 </div>
 
