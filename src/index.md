@@ -22,7 +22,7 @@ image: assets/i/bd1k.png
         <span class="p-country-name">Canada</span>
       </div>
       <div class="p-org">Shopify</div>
-      <div class="p-job-title">Senior Staff Developer</div>
+      <div class="p-job-title">Principal Engineer</div>
     </div>
   </p>
 </div>

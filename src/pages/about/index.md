@@ -22,7 +22,7 @@ omit: true
         <span class="p-country-name">Canada</span>
       </div>
       <div class="p-org">Shopify</div>
-      <div class="p-job-title">Senior Staff Developer</div>
+      <div class="p-job-title">Principal Engineer</div>
     </div>
   </p>
 </div>
@@ -31,7 +31,7 @@ Hi! I'm <strong>Ateş Göral</strong>. I enjoy writing code, tinkering with grap
 
 I'm a self-taught programmer with 25+ years of professional and 35+ years of hobbyist experience. I'm a telco and web veteran with both breadth and depth, spanning multiple programming languages, disciplines, and technologies. I also have an ornamental Associate of Science degree in Molecular Biology and Genetics.
 
-Currently: Senior Staff Developer at [Shopify](https://www.shopify.com), working with AI.
+Currently: Principal Engineer at [Shopify](https://www.shopify.com), working with AI.
 
 Past: [Orium](https://orium.com/) (Myplanet), [Genesys](https://www.genesys.com/) (Alcatel-Lucent, VoiceGenie), PhonoClick, Turk Nokta Net. And a whole bunch of odd jobs.
 
