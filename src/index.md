@@ -30,13 +30,6 @@ image: assets/i/bd1k.png
 Hi! I'm <strong>Ateş Göral</strong>. I enjoy writing code, tinkering with graphics, experimenting with electronics, and executing ambitious DIY projects.
 [More&hellip;](/pages/about)
 
-<p class="meta">
-  Jump to:
-  <a href="#projects">Projects</a> &middot;
-  <a href="#blog-posts">Blog Posts</a> &middot;
-  <a href="#talks">Talks</a>
-</p>
-
 ## Latest Post
 
 I write about code, techniques, stories from the IT realm.
@@ -45,8 +38,10 @@ I write about code, techniques, stories from the IT realm.
 
 #### [{{ latest_post.data.title }}]({{ latest_post.url }})
 
-<p class="project-thumbnail zoomable">
-  <img src="{{ baseUrl }}{{ latest_post.url }}{{ latest_post.data.image }}" alt="{{ latest_post.data.alt}}">
+<p class="project-thumbnail">
+  <a href="{{ latest_post.url }}">
+    <img src="{{ baseUrl }}{{ latest_post.url }}{{ latest_post.data.image }}" alt="{{ latest_post.data.alt}}">
+  </a>
 </p>
 
 <p class="meta">{{ latest_post.date | date: "%b %d, %Y" }}</p>
@@ -54,6 +49,11 @@ I write about code, techniques, stories from the IT realm.
 {{ latest_post.data.description }}
 
 <div class="clear"></div>
+
+<p class="meta">
+  Also see:
+  <a href="/pages/all-posts">All Posts</a>
+</p>
 
 ## Projects
 
