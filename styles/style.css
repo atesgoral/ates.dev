@@ -108,7 +108,7 @@ blockquote:before {
   top: -1rlh;
 }
 
-.project-thumbnail > img {
+.project-thumbnail img {
   float: left;
   aspect-ratio: 240/135;
   height: 6rlh;
@@ -116,7 +116,7 @@ blockquote:before {
   margin-bottom: 0.5rlh;
 }
 @media (max-width: 35rlh) {
-  .project-thumbnail > img {
+  .project-thumbnail img {
     float: none;
     width: 100%;
     height: auto;
