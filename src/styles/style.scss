@@ -337,6 +337,10 @@ html {
     }
   }
 
+  a>img:hover {
+    box-shadow: 0 0 10px 2px rgba(255, 164, 132, 0.5);
+  }
+
   .zoomable>img {
     max-width: 100%;
     transition: transform 0.3s ease-in-out;
