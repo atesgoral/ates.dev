@@ -51,7 +51,7 @@ Depending on the coding agent that you use, you may have to edit an MCP configur
 &lt;li&gt;The &lt;code&gt;component&lt;/code&gt; property is the DOM node for the WebComponent.&lt;/li&gt;
 &lt;li&gt;The &lt;code&gt;server&lt;/code&gt; property is a &lt;code&gt;Proxy&lt;/code&gt; that lets the tool remote-call the defined server-side methods.&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;The built-in screenshot tools demonstrates all of these features. The tool&#39;s &lt;code&gt;handler&lt;/code&gt; function:&lt;/p&gt;
+&lt;p&gt;The built-in screenshot tool demonstrates all of these features. The tool&#39;s &lt;code&gt;handler&lt;/code&gt; function is:&lt;/p&gt;
 &lt;pre&gt;&lt;code class=&quot;language-js&quot;&gt;handler: async function (this: ToolContext) {
   const { dataUrl, quality, saveToDisk } = await this.component.captureScreenshot();
 
