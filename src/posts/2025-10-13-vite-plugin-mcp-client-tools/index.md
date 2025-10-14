@@ -14,7 +14,7 @@ bluesky: https://bsky.app/profile/ates.dev/post/3m355kdy4v223
 
 ### Short story
 
-I've been enamored with getting coding agents to self-improve by telling them to write MCP servers for themselves.
+I've been enamoured with getting coding agents to self-improve by telling them to write MCP servers for themselves.
 
 This is the outcome of one such experiment where I was getting frustrated by the agent's enthusiastic "Perfect!" exclamations while it had no idea what the UI it was modifying looked like. I told the agent to add an MCP server to the existing Vite server that's serving the UI, and to add two tools: A screenshot tool so it can see the browser window whenever it wants, and a console log tool so it can see errors and diagnostic messages.
 
