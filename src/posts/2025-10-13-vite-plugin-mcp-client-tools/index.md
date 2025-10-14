@@ -29,12 +29,8 @@ Adding the Vite plugin and its tools to a project looks like this:
 
 <pre><code class="language-js">import { defineConfig } from 'vite';
 import { viteMcpPlugin } from "vite-plugin-mcp-client-tools";
-import {
-  readConsoleTool,
-} from "vite-plugin-mcp-client-tools/tools/read-console";
-import {
-  takeScreenshotTool,
-} from "vite-plugin-mcp-client-tools/tools/take-screenshot";
+import { readConsoleTool } from "vite-plugin-mcp-client-tools/tools/read-console";
+import { takeScreenshotTool } from "vite-plugin-mcp-client-tools/tools/take-screenshot";
 
 export default defineConfig({
   plugins: [
