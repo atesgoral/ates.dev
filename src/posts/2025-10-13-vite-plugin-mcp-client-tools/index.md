@@ -5,7 +5,7 @@ description: 'A Vite plugin that brings client-side MCP tools to allow your codi
 image: i/vite-plugin-mcp-client-tools.webp
 alt: 'A diagram depicting how the plugin components interact with each other'
 date: 2025-10-13
-draft: false
+bluesky: https://bsky.app/profile/ates.dev/post/3m355kdy4v223
 ---
 
 ### tl;dr
