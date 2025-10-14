@@ -21,12 +21,8 @@
 &lt;/code&gt;&lt;/pre&gt;
 &lt;pre&gt;&lt;code class=&quot;language-js&quot;&gt;import { defineConfig } from &#39;vite&#39;;
 import { viteMcpPlugin } from &quot;vite-plugin-mcp-client-tools&quot;;
-import {
-  readConsoleTool,
-} from &quot;vite-plugin-mcp-client-tools/tools/read-console&quot;;
-import {
-  takeScreenshotTool,
-} from &quot;vite-plugin-mcp-client-tools/tools/take-screenshot&quot;;
+import { readConsoleTool } from &quot;vite-plugin-mcp-client-tools/tools/read-console&quot;;
+import { takeScreenshotTool } from &quot;vite-plugin-mcp-client-tools/tools/take-screenshot&quot;;
 
 export default defineConfig({
   plugins: [
