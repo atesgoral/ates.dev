@@ -66,7 +66,7 @@ The `handler` receives the `component` and `server` as properties on `this`:
 - The `component` property is the DOM node for the WebComponent.
 - The `server` property is a `Proxy` that lets the tool remote-call the defined server-side methods.
 
-The built-in screenshot tools demonstrates all of these features. The tool's `handler` function:
+The built-in screenshot tool demonstrates all of these features. The tool's `handler` function is:
 
 <pre><code class="language-js">handler: async function (this: ToolContext) {
   const { dataUrl, quality, saveToDisk } = await this.component.captureScreenshot();
