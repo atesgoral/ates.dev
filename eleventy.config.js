@@ -7,6 +7,13 @@ import {feedPlugin} from '@11ty/eleventy-plugin-rss';
 export default function (eleventyConfig) {
   const isDev = process.env.ELEVENTY_RUN_MODE === 'serve';
 
+  // Enable polling for file watching in WSL2 environments
+  // This ensures file changes are detected when running from /mnt/c or similar
+  eleventyConfig.setChokidarConfig({
+    usePolling: true,
+    interval: 500,
+  });
+
   eleventyConfig.addPassthroughCopy('src/service-worker.js');
   eleventyConfig.addPassthroughCopy('assets/**/*');
   eleventyConfig.addPassthroughCopy('src/pages/*/i/*');
