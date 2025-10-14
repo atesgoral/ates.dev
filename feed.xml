@@ -7,6 +7,96 @@
     <description>Personal website of Ateş Göral</description>
     <language>en</language>
     <item>
+      <title>Vite MCP Client Tools Plugin</title>
+      <link>https://ates.dev/posts/2025-10-13-vite-plugin-mcp-client-tools/</link>
+      <description>&lt;h3 id=&quot;tldr&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;permalink&quot; href=&quot;https://ates.dev/posts/2025-10-13-vite-plugin-mcp-client-tools/#tldr&quot;&gt;tl;dr&lt;/a&gt;&lt;/h3&gt;
+&lt;p&gt;&lt;a href=&quot;https://www.npmjs.com/package/vite-plugin-mcp-client-tools&quot;&gt;A Vite plugin&lt;/a&gt; that brings client-side MCP tools to allow your coding agent to see your app in action. Uses your existing Vite development server, so you don&#39;t have to run a separate MCP server.&lt;/p&gt;
+&lt;h3 id=&quot;short-story&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;permalink&quot; href=&quot;https://ates.dev/posts/2025-10-13-vite-plugin-mcp-client-tools/#short-story&quot;&gt;Short story&lt;/a&gt;&lt;/h3&gt;
+&lt;p&gt;I&#39;ve been enamored with getting coding agents to self-improve by telling them to write MCP servers for themselves.&lt;/p&gt;
+&lt;p&gt;This is the outcome of one such experiment where I was getting frustrated by the agent&#39;s enthusiastic &amp;quot;Perfect!&amp;quot; exclamations while it had no idea what the UI it was modifying looked like. I told the agent to add an MCP server to the existing Vite server that&#39;s serving the UI, and to add two tools: A screenshot tool so it can see the browser window whenever it wants, and a console log tool so it can see errors and diagnostic messages.&lt;/p&gt;
+&lt;p&gt;Once the proof of concept worked, I put aside the agent to properly (manually) architect the plugin and made it extensible for new tools.&lt;/p&gt;
+&lt;h3 id=&quot;installation-and-configuration&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;permalink&quot; href=&quot;https://ates.dev/posts/2025-10-13-vite-plugin-mcp-client-tools/#installation-and-configuration&quot;&gt;Installation and configuration&lt;/a&gt;&lt;/h3&gt;
+&lt;p&gt;Adding the Vite plugin and its tools to a project looks like this:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-sh&quot;&gt;npm install vite-plugin-mcp-client-tools
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code class=&quot;language-js&quot;&gt;import { defineConfig } from &#39;vite&#39;;
+import { viteMcpPlugin } from &quot;vite-plugin-mcp-client-tools&quot;;
+import {
+  readConsoleTool,
+} from &quot;vite-plugin-mcp-client-tools/tools/read-console&quot;;
+import {
+  takeScreenshotTool,
+} from &quot;vite-plugin-mcp-client-tools/tools/take-screenshot&quot;;
+
+export default defineConfig({
+  plugins: [
+    viteMcpPlugin({
+      tools: [readConsoleTool, takeScreenshotTool],
+    }),
+  ],
+});
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&quot;usage&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;permalink&quot; href=&quot;https://ates.dev/posts/2025-10-13-vite-plugin-mcp-client-tools/#usage&quot;&gt;Usage&lt;/a&gt;&lt;/h3&gt;
+&lt;p&gt;Then the agent needs to be configured with the MCP server exposed by the plugin, running on the very same Vite development server.
+Depending on the coding agent that you use, you may have to edit an MCP configuration file. For Claude Code, you can run something like this:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-sh&quot;&gt;claude mcp add vite-server-client-tools --transport http http://localhost:3000/mcp
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Once the agent knows about these tools, it will automatically start using them, unprompted. Magic will ensue. It will start taking screenshots to see the result of its changes (and the reason for your complaints) and it will start peeking at the console to see what&#39;s happening in JavaScript land in the browser. Unless it doesn&#39;t. Then you might have to nudge it to start using the tools.&lt;/p&gt;
+&lt;p&gt;Hint: If you let your agent start the Vite development server as a background process, it can also see how the server is doing, by tailing its output.&lt;/p&gt;
+&lt;h3 id=&quot;tool-contract&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;permalink&quot; href=&quot;https://ates.dev/posts/2025-10-13-vite-plugin-mcp-client-tools/#tool-contract&quot;&gt;Tool contract&lt;/a&gt;&lt;/h3&gt;
+&lt;p&gt;Beyond the standard MCP tool definition components, &lt;code&gt;name&lt;/code&gt;, &lt;code&gt;description&lt;/code&gt;, &lt;code&gt;inputSchema&lt;/code&gt;, and &lt;code&gt;outputSchema&lt;/code&gt;, each tool consists of:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;A &lt;code&gt;handler&lt;/code&gt; function that implements the tool&#39;s logic.&lt;/li&gt;
+&lt;li&gt;An optional &lt;code&gt;component&lt;/code&gt; factory function for a WebComponent that gets mounted on the document&#39;s body. This is useful for tools that require user interaction or configurability.&lt;/li&gt;
+&lt;li&gt;An optional &lt;code&gt;server&lt;/code&gt; hash of helper methods that get mounted on the Vite server (namespaced by the tool&#39;s name).&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;The &lt;code&gt;handler&lt;/code&gt; receives the &lt;code&gt;component&lt;/code&gt; and &lt;code&gt;server&lt;/code&gt; as properties on &lt;code&gt;this&lt;/code&gt;:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;The &lt;code&gt;component&lt;/code&gt; property is the DOM node for the WebComponent.&lt;/li&gt;
+&lt;li&gt;The &lt;code&gt;server&lt;/code&gt; property is a &lt;code&gt;Proxy&lt;/code&gt; that lets the tool remote-call the defined server-side methods.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;The built-in screenshot tools demonstrates all of these features. The tool&#39;s &lt;code&gt;handler&lt;/code&gt; function:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-js&quot;&gt;handler: async function (this: ToolContext) {
+  const { dataUrl, quality, saveToDisk } = await this.component.captureScreenshot();
+
+  const base64Data = dataUrl.split(&quot;,&quot;)[1];
+
+  let savedPath: string | undefined;
+
+  if (saveToDisk) {
+    const { path } = await this.server.saveScreenshot({ dataUrl });
+    savedPath = path;
+  }
+
+  const textContent = savedPath
+    ? `Screenshot of current browser tab captured (quality: ${quality}, saved to: ${savedPath})`
+    : `Screenshot of current browser tab captured (quality: ${quality})`;
+
+  return {
+    content: [
+      {
+        type: &quot;text&quot;,
+        text: textContent,
+      },
+      {
+        type: &quot;image&quot;,
+        mimeType: &quot;image/jpeg&quot;,
+        data: base64Data,
+      },
+    ],
+  };
+},
+...
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&quot;under-the-hood&quot; tabindex=&quot;-1&quot;&gt;&lt;a class=&quot;permalink&quot; href=&quot;https://ates.dev/posts/2025-10-13-vite-plugin-mcp-client-tools/#under-the-hood&quot;&gt;Under the hood&lt;/a&gt;&lt;/h3&gt;
+&lt;p&gt;The plugin uses Vite&#39;s existing HMR (Hot Module Replacement) WebSocket connection for bi-directional RPC (Remote Procedure Call) with a bridge that gets injected into the page as a virtual module (so that &lt;code&gt;import.meta.hot&lt;/code&gt; can be present). Tools&#39; WebComponents are defined using additional script tags and get mounted on the document&#39;s body.&lt;/p&gt;
+&lt;p&gt;In the scripts injected into the page by the plugin, there&#39;s generous use of IIFE (Immediately Invoked Function Expression) for serialization and deserialization of server-defined functions while performing dependency injection. I&#39;m not going to cover all the tips and tricks here. You can see them in action in the &lt;a href=&quot;https://github.com/atesgoral/vite-plugin-mcp-client-tools/tree/main/src&quot;&gt;source code&lt;/a&gt; of the plugin.&lt;/p&gt;
+</description>
+      <pubDate>Mon, 13 Oct 2025 24:00:00 GMT</pubDate>
+      <dc:creator>Ateş Göral</dc:creator>
+      <guid>https://ates.dev/posts/2025-10-13-vite-plugin-mcp-client-tools/</guid>
+    </item>
+    <item>
       <title>Joystick Hack</title>
       <link>https://ates.dev/posts/2025-01-20-joystick-hack/</link>
       <description>&lt;p&gt;What follows is the first electronics mod I did as a child, with no artifacts to
