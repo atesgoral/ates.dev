@@ -10,10 +10,8 @@ type: article
   <div class="content">{{ content }}</div>
 
   {% if bluesky %}
-  <h3>Discourse</h3>
-  <p class="meta">
-    Comments, questions, corrections? Please drop them on
-    <a href="{{ bluesky }}">Bluesky!</a>
-  </p>
+  <h3>Comments</h3>
+  <div id="bluesky-comments" data-post-url="{{ bluesky }}"></div>
+  <script src="/lib/bluesky-comments.js"></script>
   {% endif %}
 </article>
