@@ -460,3 +460,86 @@ th {
     width: 100%;
   }
 }
+
+/* Bluesky Comments */
+
+#bluesky-comments {
+  margin-top: 0.5rlh;
+}
+
+.bsky-loading,
+.bsky-error,
+.bsky-no-comments {
+  color: #888;
+  font-style: italic;
+}
+
+.bsky-stats {
+  display: flex;
+  gap: 1rem;
+  font-size: 0.875rem;
+  color: #888;
+  margin-bottom: 1rlh;
+
+  a {
+    margin-left: auto;
+  }
+}
+
+.bsky-comments-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rlh;
+}
+
+.bsky-comment {
+  padding-left: 0;
+}
+
+.bsky-reply {
+  margin-top: 0.5rlh;
+  padding-left: 1rem;
+  border-left: 2px solid #d084ff40;
+}
+
+.bsky-comment-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+}
+
+.bsky-avatar {
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
+  box-shadow: none;
+}
+
+.bsky-author {
+  font-weight: bold;
+}
+
+.bsky-handle,
+.bsky-date {
+  color: #888;
+}
+
+.bsky-comment-text {
+  margin: 0.25rlh 0;
+  white-space: pre-wrap;
+}
+
+.bsky-comment-meta {
+  display: flex;
+  gap: 1rem;
+  font-size: 0.75rem;
+  color: #888;
+}
+
+.bsky-more-replies {
+  display: block;
+  margin-top: 0.5rlh;
+  font-size: 0.875rem;
+}
