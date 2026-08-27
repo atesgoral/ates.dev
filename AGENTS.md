@@ -143,6 +143,7 @@ Before committing changes:
 
 - Main branch: `main` (source code)
 - Deployment branch: `gh-pages` (generated, auto-managed)
+- **PRs must be created against `main`, not `gh-pages`**
 - Create clear, descriptive commit messages
 - Don't commit the `_site/` directory or `node_modules/`
 
