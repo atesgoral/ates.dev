@@ -4,6 +4,7 @@
   "type": "module",
   "description": "My personal website, running on GitHub Pages, because simple is good.",
   "main": "index.js",
+  "packageManager": "pnpm@10",
   "scripts": {
     "serve": "eleventy --serve",
     "build": "eleventy",
